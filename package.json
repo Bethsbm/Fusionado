@@ -1,0 +1,32 @@
+{
+  "name": "proyecto-modulo-seguridad-backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "supervisor index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AndreaLozanoCortes/Proyecto-Modulo-Seguridad-Backend.git"
+  },
+  "author": "Andrea Lozano",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/AndreaLozanoCortes/Proyecto-Modulo-Seguridad-Backend/issues"
+  },
+  "homepage": "https://github.com/AndreaLozanoCortes/Proyecto-Modulo-Seguridad-Backend#readme",
+  "dependencies": {
+    "body-parser": "^1.14.1",
+    "cors": "^2.8.5",
+    "express": "^4.13.3",
+    "express-method-override": "0.0.3",
+    "jade": "^1.11.0",
+    "morgan": "^1.6.1",
+    "mysql": "^2.9.0",
+    "pg": "^8.8.0",
+    "responsimple": "^1.0.1",
+    "serve-favicon": "^2.3.0",
+    "supervisor": "^0.12.0"
+  }
+}
