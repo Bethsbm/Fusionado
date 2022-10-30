@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import './Registro.css';
 import burridogs from './loginbg.jpg';
 import axios from 'axios';
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { render } from '@testing-library/react';
 
 const URL = "http://190.53.243.69:3001/ms_registro/autoregistro";
@@ -108,8 +108,12 @@ const Registro = () => {
 
                         />
                     </div>
-                    <button className='btn'>Registrarse</button>
-
+                    <button className='btn'>Crear Cuenta</button>
+                    <div className="buttom-container">
+                        <Link to="/login">
+                            Cancelar
+                        </Link>
+                    </div>
                 </div>
             </div >
         </form>

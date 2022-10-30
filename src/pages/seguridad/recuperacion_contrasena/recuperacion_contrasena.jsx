@@ -1,4 +1,5 @@
 import React, { useRef } from 'react';
+import { Link } from 'react-router-dom';
 import '../recuperacion_contrasena/login.css';
 import burridogs from '../recuperacion_contrasena/loginbg.jpg';
 
@@ -60,7 +61,14 @@ export default function RecuperacionContra(props) {
 
                     <button
                         //onClick={handleLogin}
-                        className='btn'>Recuperar vía preguntas secretas</button>
+                        className='btn'>Recuperar vía preguntas secretas
+                        </button>
+
+                    <div className="buttom-container">
+                        <Link to="/login">
+                            Cancelar
+                        </Link>
+                    </div>
                 </div>
             </div>
         </div>

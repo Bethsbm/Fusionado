@@ -24,10 +24,8 @@ const Usuarios = () => {
         obtenerData()
   
 
-    return <div className="background">
-        <div>
-            <h1>Datos</h1>
-         </div>
-    </div>
+    return (
+        <h1>Listado de usuarios</h1>
+    )
 }
 export default Usuarios;

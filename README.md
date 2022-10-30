@@ -3,6 +3,7 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 ## Table of Contents
 
 * [Terminal Commands](#Terminal)
@@ -10,6 +11,8 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 * [Pre requisitos](#Pre)
 * [Instalación](#Instalación)
 =======
+=======
+>>>>>>> parent of d284641 (Charlies|27102022|Primer comiit, creacion del proyecto en react)
 ## Available Scripts
 
 In the project directory, you can run:
@@ -76,4 +79,7 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 ### `npm run build` fails to minify
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+<<<<<<< HEAD
+>>>>>>> parent of d284641 (Charlies|27102022|Primer comiit, creacion del proyecto en react)
+=======
 >>>>>>> parent of d284641 (Charlies|27102022|Primer comiit, creacion del proyecto en react)

@@ -1,138 +1,176 @@
-import React from 'react';
-//import React, { Component, useRef } from 'react';
+import React, { useRef ,useState} from 'react';
 import './login.css';
 import burridogs from './loginbg.jpg';
-import { Link } from "react-router-dom";
-import axios from 'axios';
+import { Link ,useNavigate} from "react-router-dom";
+import { Alert } from 'reactstrap';
+import md5 from 'md5';
+// import { UserContext } from '../../../App';
+
+//  import {Registro} from "./../registro/Registro";
+// const axios = require('axios').default;
 
 
-const URL = "http://190.53.243.69:3001/ms_login/login";
+const urlAPi="http://localhost:3001"
+// 
+export default function Login(props) {
+    // const { history } = this.props;
+    let navigate = useNavigate();
+//   var message=''
+//   let state = {
+//     show: false
+//   };
+const [message, setMesagge] = useState("");
+const [color, setColor] = useState("danger");
+const [isValid, setIsValid] = useState(false);
+    // const onDismiss = () => setVisible(false);
+    
+    const enviarData =  (url, data) => {
 
-
-class Login extends React.Component {
-
-
-    //capturar los datos ingresados
-    state = {
-        form: {
-            nombre_usuario: "",
-            contrasena: ""
-        },
-        error: false,
-        errorMsg: ""
-    }
-
-    manejadorSubmit = e => {
-        e.preventDefault();
-    }
-
-    manejadorChange = async e => {
-        await this.setState({
-            form: {
-                ...this.state.form,
-                [e.target.name]: e.target.value
+        // axios.post(urlAPi+"/login", {
+        //     body: JSON.stringify(data),
+        //   })
+        //   .then(function (response) {
+        //     console.log(response);
+        //   })
+        //   .catch(function (error) {
+        //     console.log(error);
+        //   })
+        //   .finally(function () {
+        //     // always executed
+        //   });
+        setColor("danger")
+        fetch(url+'/login'
+            , {
+            method: 'POST',
+            body: JSON.stringify(data),
+            headers: {
+                'Content-type': 'application/json'
             }
         })
+        .then(response => response.json())
+        .then(responseJson => {  
+            console.log("responseJson",responseJson)
+            console.log("responseJson.status",responseJson.status)
+            setIsValid(true)
+            if(!responseJson.status){
+                setColor("danger")
+                setMesagge(responseJson.message)
+                setTimeout(1000,()=>{
+                    setIsValid(false)
+                   }) 
+                   return
+            }
+            let dataUser={
+                "x-token":responseJson["x-token"],
+                data:responseJson.data
+            }
+            localStorage.setItem('data', JSON.stringify(dataUser))
+           navigate("/admin/home");
+            // }
+        })
+        .catch(error=>{
+            setColor("danger")
+            setTimeout(1000,()=>{
+                setIsValid(false)
+               }) 
+        })
+        .finally(()=>{
+           setTimeout(1000,()=>{
+            setIsValid(false)
+           })
+        })
+    
+    }
+    //capturar los datos ingresados
+    const refNombreUsuario = useRef(null);
+    const RefContrasena = useRef(null);
+
+    const handleLogin =async() => {
+        const data = {
+            "nombre_usuario": refNombreUsuario.current.value,
+            "contrasena": md5(RefContrasena.current.value) 
+
+        };
+        console.log(data);
+       await enviarData (urlAPi, data);
+
     }
 
-    manejadorBoton = () => {
+    return (
+        
+        <div className="background">
+            <img
+                src={burridogs}
+                alt="burridogs" />
 
-            console.log(this.state.form)
-            axios.get(URL, this.state.form)
-                .then(response => {
-                    console.log(response)
-                    if (response.data === 200) {
-                        console.log(response)
-                        //  localStorage.setItem
-                        console.log("entro correctamente")
-                    } else {
-                        this.setState({
-                            error: true,
-                            errorMsg: "fallamos"
+            <div className="formulario">
+                     <Alert 
+                     isOpen={isValid} 
+                     color={color}
+                     >{message}</Alert>
 
-                        })
-                    }
-                }).catch(error => {
-                    console.log(error);
-                    this.setState({
-                        error: true,
-                        errorMsg: "Error al conectar con la api"
-                    })
-                })
-     };
-
-
-    render() {
-        return (
-            <React.Fragment>
-                <div className="background">
-                    <img
-                        src={burridogs}
-                        alt="burridogs" />
-
-                    <div className="formulario">
-
-                        <h1>Inicio de Sesión</h1>
-                        <form onSubmit={this.manejadorSubmit}>
-                            <div className="inputs">
-                                {this.state.error === true &&
-                                    <div className="alert alert-danger" role="alert">
-                                        {this.state.errorMsg}
-                                    </div>
-                                }
-                                <label>Usuario</label>
-                                <div className="username">
-                                    <div className="fa fa-user-o"></div>
-                                    <input
-                                        type="text"
-                                        name='nombre_usuario'
-                                        placeholder="Ingrese su usuario"
-                                        onChange={this.manejadorChange}
-                                    />
-                                </div>
-
-                                <label>Contraseña</label>
-                                <div className="username">
-                                    <input
-                                        type='password'
-                                        name='contrasena'
-                                        placeholder="Ingrese su contraseña" required
-                                        onChange={this.manejadorChange}
-                                    />
-                                </div>
-
-                                <button
-                                    onClick={this.manejadorBoton}
-                                    className="btn">Ingresar
-
-                                </button>
-
-
-                                <Link
-                                    to="/recuperacion_contrasena"
-                                    type="btn"
-                                    className="btn btn-danger mb-3 me-2"
-                                >
-                                    ¿Olvidó su contraseña?
-                                </Link>
-
-
-                                <Link
-                                    to="/registro"
-                                    type="btn"
-                                    className="btn btn-danger mb-3 me-2"
-                                >
-                                    Registrarse
-                                </Link>
-
-                            </div>
-                        </form>
+                <h2>Panel administrativo</h2>
+                <h4>Inicio de Sesión</h4>
+                <div className="inputs">
+                    {/* <label>Nombre de usuario</label> */}
+                    <div className="username">
+                        <div className="fa fa-user-o"></div>
+                        <input
+                            type="text"
+                            placeholder="Usuario"
+                            ref={refNombreUsuario}
+                        />
                     </div>
 
-                </div>
-            </React.Fragment>
-        )
-    }
-}
-export default Login
+                    {/* <label>Contraseña</label> */}
+                    <div className="username">
+                        <input
+                            type='password'
+                            placeholder="Contraseña"
+                            ref={RefContrasena}
+                       /* secureTextEntry={isSecureEntry}
+                        icon={
+                            <TouchableOpacity
+                                onPress={() => { 
+                                    setIsSecureEntry((prev) => !prev);
+                                }}>
+                                <Text>{isSecureEntry ? 'show' : 'Hide'}</Text>
+                            </TouchableOpacity>
+                        }
+                        iconPosition="right"
+                        onChangeText={(value) => {
+                            onChange({name: 'password',value});
+                        }}*/
+                        />
+                        
+                    </div>
 
+                    <button
+                        onClick={handleLogin}
+                        className="btn">Ingresar</button>
+
+                    {/* <div id="recordar" className='card-footer'>
+                        <a href="https://">¿Olvidó su contraseña?</a>
+                    </div> */}
+
+                    <div className="buttom-container">
+
+                        <Link to="/recuperacion_contrasena">
+                            ¿Olvidaste tu contraseña?
+                        </Link>
+
+                        <Link to="/registro">
+                            Crear cuenta
+                        </Link>
+                    </div>
+
+                    {/* <button className='btn'>Registrarse</button> */}
+                </div>
+
+            </div>
+        </div>
+
+   
+        
+    )
+}
