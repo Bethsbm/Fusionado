@@ -1,6 +1,7 @@
 import React, { useRef } from 'react';
 import '../cambio_contrasena/login.css';
 import burridogs from '../cambio_contrasena/loginbg.jpg';
+import { useParams , Link } from 'react-router-dom';
 
 //url 
 /*const URL_LOGIN = ""
@@ -17,7 +18,9 @@ const enviarData = async (url, data) => {
 }*/
 
 export default function CambioContra(props) {
-
+    const { id ,token} = useParams();
+    console.log("id",id)
+    console.log("token",token)
     //capturar los datos ingresados
     /* const refPregunta = useRef(null);
      const RefRespuesta = useRef(null);
@@ -40,14 +43,14 @@ export default function CambioContra(props) {
 
                 <h1>Cambio de contraseña</h1>
                 <div className="inputs">
-                    <label>Contraseña anterior</label>
+                    {/* <label>Contraseña anterior</label>
                     <div className="username">
                         <div className="fa fa-user-o"></div>
                         <input
                             type="text"
                             placeholder="Ingrese su contraseña anterior"
                         />
-                    </div>
+                    </div> */}
 
                     <label>Contraseña nueva</label>
                     <div className="username">

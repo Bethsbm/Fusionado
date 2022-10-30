@@ -1,5 +1,7 @@
-import React, { useRef } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useRef, useState } from 'react';
+import { useParams , Link, useNavigate } from 'react-router-dom';
+import { Alert } from 'reactstrap';
+// import { FormFeedback, FormGroup, FormText, Input, Label } from 'reactstrap';
 import '../recuperacion_contrasena/login.css';
 import burridogs from '../recuperacion_contrasena/loginbg.jpg';
 
@@ -16,20 +18,60 @@ const enviarData = async (url, data) => {
     });
     const json = await resp.json();
 }*/
-
+const urlAPi="http://localhost:3001"
 export default function RecuperacionContra(props) {
-
+    let navigate = useNavigate();
     //capturar los datos ingresados
-    /* const refPregunta = useRef(null);
-     const RefRespuesta = useRef(null);
- 
+    //  const refPregunta = useRef(null);
+    //  const RefRespuesta = useRef(null);
+     const refNombreUsuario = useRef(null);
+     const [message, setMesagge] = useState("");
+     const [color, setColor] = useState("danger");
+     const [isValid, setIsValid] = useState(false);
+
      const handleLogin = () => {
          const data = {
-           //  "usuario": refPregunta.current.value,
-             "contra": RefRespuesta.current.value
+             "nombre_usuario": refNombreUsuario.current.value
          };
-         console.log(data);
-         //enviarData (URL_LOGIN, data);*/
+         console.log("data",data);
+        //  console.log('hacer recuperaicon de pass');
+        setIsValid(true)
+        
+            fetch(urlAPi+'/reset'
+                , {
+                method: 'POST',
+                body: JSON.stringify(data),
+                headers: {
+                    'Content-type': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(responseJson => {  
+                console.log("responseJson",responseJson)
+                console.log("responseJson.status",responseJson.status)
+           
+                if(!responseJson.status){
+                    setColor("danger")
+                    setMesagge(responseJson.message)
+                       console.log('ha ocurrido un erorr al enviar el correo')
+                }
+                setColor("success")
+                 navigate("/login");
+
+                
+            })
+            .catch(error=>{
+               console.log(error)
+               setIsValid(false)
+               setColor("danger")
+            })
+            .finally(()=>{
+               console.log('asdasda')
+               setIsValid(false)
+            })
+        
+        
+        }
 
     return (
         <div className="background">
@@ -39,29 +81,35 @@ export default function RecuperacionContra(props) {
 
             <div className="formulario">
 
+            <Alert 
+                     isOpen={isValid} 
+                     color={color}
+                     >{message}</Alert>
+
                 <h1>Recuperación de contraseña</h1>
                 <div class="inputs">
-                    <div class="mensaje">¿Olvidó su contraseña?</div>
-                    <div class="mensaje">Ingrese su nombre de usuario y seleccione el medio por el cual desea reiniciar su contraseña.</div>
+                    <div class="mensaje">¿Olvidaste tu contraseña?</div>
+                    <div class="mensaje">Ingresa tu nombre de usuario y selecciona metodo de reinicio.</div>
 
-                    <label>Nombre de usuario</label>
+                    {/* <label>Nombre de usuario</label> */}
 
                     <div class="username">
                         <i class="fa fa-user"></i>
                         <input
                             type="text"
-                            placeholder="Ingrese su usuario" />
+                            placeholder="Nombre de usuario"
+                            ref={refNombreUsuario} />
 
                     </div>
 
                     <button
-                        //onClick={handleLogin}
-                        className='btn'>Enviar contraseña por correo</button>
+                        onClick={handleLogin}
+                        className='btn'>Restablecer v&iacute;a correo</button>
 
 
                     <button
                         //onClick={handleLogin}
-                        className='btn'>Recuperar vía preguntas secretas
+                        className='btn'>Restablecer v&iacute;a preguntas
                         </button>
 
                     <div className="buttom-container">

@@ -103,7 +103,7 @@ const [isValid, setIsValid] = useState(false);
                 src={burridogs}
                 alt="burridogs" />
 
-            <div className="formulario">
+            <div className="formulario" >
                      <Alert 
                      isOpen={isValid} 
                      color={color}

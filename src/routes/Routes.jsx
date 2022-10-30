@@ -85,7 +85,7 @@ function Rutas() {
           <Route path="/login" element={<Login />} />
           <Route path="/registro" element={<Registro />} />
           <Route path="/Preguntas" element={<Pregunta />} />
-          <Route path="/cambio_contrasena" element={<CambioContra />} />
+          <Route path="/cambio_contrasena/:id/:token" element={<CambioContra />} />
           <Route path="/recuperacion_contrasena" element={<RecuperacionContra />} />
           <Route path="/recuperacion_correo" element={<RecuperacionCorreo />} />
           <Route path="/recuperacion_preguntas" element={<RecuperacionPreguntas />} />
