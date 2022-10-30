@@ -172,6 +172,9 @@ router
   //⮊⮊⮊⮊ SEGURIDAD SEGURIDAD SEGURIDAD ⮈⮈⮈⮈ 🖐
   //Login
   .post("/login", LoginController.login)
+  .post("/reset", LoginController.resetPassUser)
+  .get("/validateUser/:id/:token", LoginController.validateUser)
+  .post("/changePass", LoginController.changePassUser)
   //Registro
   .get("/registro/getall", UsuarioController.getAll)
   .get("/getById/:id_usuario", UsuarioController.getOne)
