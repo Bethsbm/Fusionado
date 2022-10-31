@@ -74,28 +74,15 @@ LogsController.getOne = (req, res, next) => {
 }
 
 LogsController.save = (req, res, next) => {
-	let usuario = {
-        id_usuario : req.body.id_usuario,
-        usuario : req.body.usuario,
-        nombre_usuario : req.body.nombre_usuario,
-        estado_usuario : req.body.estado_usuario,
-        contrasena : req.body.contrasena,
-        id_rol : req.body.id_rol,
-        fecha_ultima_conexion : req.body.fecha_ultima_conexion,
-        preguntas_contestadas : req.body.preguntas_contestadas,
-        primer_ingreso : req.body.primer_ingreso,
-        fecha_vencimiento : req.body.fecha_vencimiento,
-        correo_electronico : req.body.correo_electronico,
-        creado_por : req.body.creado_por,
-        fecha_creacion : req.body.fecha_creacion,
-        modificado_por : req.body.modificado_por,
-        fecha_modificacion : req.body.fecha_modificacion,
-        intentos_login : req.body.intentos_login
+	let data = {
+		fecha:req.body.fecha,
+		id_usuario:req.body.id_usuario,
+		accion:req.body.accion,
+		descripcion:req.body.descripcion,
 	}
+	console.log(data)
 
-	console.log(usuario)
-
-	LogsModel.save(usuario, (err) => {
+	LogsModel.save(data, (err) => {
 		if(err)
 		{
 			let locals = {
@@ -106,10 +93,15 @@ LogsController.save = (req, res, next) => {
 
 			res.render('error', locals)
 		}
-		else
-		{
-			res.send('Success')
-			//res.redirect('/')
+		else{
+			res.status(200).json(
+				{
+					status:true,
+					code:200,
+					message:"Información guardada exitosamente",
+					object:[],
+				}
+			)
 		}
 	})
 }

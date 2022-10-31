@@ -2,8 +2,19 @@
 
 var UsuarioModel = require('../../models/modulo_seguridad/registro-model'),
 	UsuarioController = () => {}
+	const nodemailer = require("nodemailer");
 
-	UsuarioController.getAll = (req, res, next) => {
+	const urlPanel = "http://localhost:3000";
+	const JWT_SECRET = "PR0Y3CT0_M0DUL0_D3_S3GUR1D4D";
+	const timeExpired = "24h";
+	const mailConfigSender = {
+	  user: "dazzebnn@gmail.com",
+	  pass: "zdvcmiwfpstkebwy",
+	};
+	
+
+
+UsuarioController.getAll = (req, res, next) => {
 	
 		UsuarioModel.getAll((err, rows) => {
 		if(err)
@@ -119,12 +130,13 @@ UsuarioController.autoregistro = (req, res, next) => {
         nombre_usuario : req.body.nombre_usuario,
         correo_electronico : req.body.correo_electronico,
         contrasena : req.body.contrasena,
+        otp : req.body.otp,
         
 	}
 
 	console.log(usuario)
 
-	UsuarioModel.autoregistro(usuario, (err) => {
+	UsuarioModel.autoregistro(usuario, async (err,row) => {
 		if(err)
 		{
 			let locals = {
@@ -137,8 +149,66 @@ UsuarioController.autoregistro = (req, res, next) => {
 		}
 		else
 		{
-			res.send('Success')
-			//res.redirect('/')
+
+
+
+			const link = `${urlPanel}/login`;
+	
+			const transporter = nodemailer.createTransport({
+			  service: "gmail",
+			  auth: mailConfigSender,
+			});
+	
+			let html = `
+			<span>
+				<br>
+				Hola <strong > <span style="text-transform: capitalize;">${usuario.nombre_usuario}</span></strong> 
+				<br/>
+				Se ha creado tu cuenta en <strong > plataforma administrativa de BURRI DOGS S.A.</strong>
+				<br/>
+				Para ingresar da clic <a href="${link}">aquí</a>
+				<br/>
+				Tus credenciales de acceso son
+				<br>
+				Usuario: <strong>${usuario.nombre_usuario}</strong>
+				<br />
+				OTP: <strong>${usuario.otp}</strong>
+						<br>
+				Recuerda cambiar tu contraseña
+						<br>
+						<br>
+							Módulo desarrollado por el equipo (2)
+			
+						</span>	
+			`;
+	
+			const mailOptions = {
+			  from: mailConfigSender.mail,
+			  to: usuario.correo_electronico,
+			  subject: "Bienvenido a BURRI DOGS S.A.",
+			  html: html,
+			};
+	
+			await transporter.sendMail(mailOptions, function (error, info) {
+			  if (error) {
+				console.log(error);
+				response = res.status(400).send({
+				  status: true,
+				  code: 400,
+				  message: "ha ocurrido un error el enviar el correo",
+				  object: error,
+				});
+			  } else {
+				// console.log("Email sent: " + info.response);
+				response = res.status(200).send({
+				  status: true,
+				  code: 200,
+				  message: "Se ha enviado link a tu correo",
+				  object: usuario,
+				});
+			  }
+			});
+		// return response
 		}
 	})
 }

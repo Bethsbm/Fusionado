@@ -179,6 +179,7 @@ router
   .post("/changePass", LoginController.changePassUser)
   //bitacoras
   .get("/logs/getall", LogsController.getAll)
+  .post("/logs/save", LogsController.save)
 
   //Registro
   .get("/registro/getall", UsuarioController.getAll)
