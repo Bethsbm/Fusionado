@@ -9,6 +9,37 @@ import "./Usuarios.css";
 const urlapi = "http://localhost:3001";
 
 const Usuarios = () => {
+/** 
+   ** Creando bitacora  
+   * enviado infromacion de bitacora a la BD
+   * */ 
+   const saveLog = async () => {
+    const userdata= JSON.parse(localStorage.getItem('data')) 
+    let log={
+       fecha: new Date(),
+       id_usuario:userdata.data.id || 0,
+       accion:'READ',
+       descripcion:'Ingreso a pantalla USUARIOS',
+  }
+    fetch(urlapi + "/logs/save"
+    , {
+    method: 'POST',
+    body:JSON.stringify(log),
+    headers: {
+        'Content-type': 'application/json'
+    }
+    })
+    .then(response => response.json())
+    .then(responseJson => {  
+        console.log("responseJson",responseJson)
+    })
+    .catch(error=>{
+        console.log(error)   
+    })
+};
+
+  
+
 
   const [registros, setRegistros] = useState([]);
 
@@ -32,6 +63,7 @@ const Usuarios = () => {
 };
 
   useEffect(() => {
+    saveLog();
     getRegistros();
   }, []);
 
@@ -105,7 +137,7 @@ const Usuarios = () => {
               aria-label="First group"
             >
               <Link
-                to="/crearcategoria"
+                to="/admin/createUser"
                 type="button"
                 className="btn btn-primary"
                 title="Agregar Nuevo"

@@ -1,38 +1,36 @@
-import React, { useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { Form, FormGroup, Input, Label } from 'reactstrap';
 import '../recuperacion_preguntas/login.css';
 import burridogs from '../recuperacion_preguntas/loginbg.jpg';
 
-//url 
-/*const URL_LOGIN = ""
 
-
-const enviarData = async (url, data) => {
-
-    const resp = await fetch(url, {
-        method: 'POST',
-        body: JSON.stringify(data),
-        headers: {
-            'Content-type': 'application/json'
-        }
-    });
-
-    const json = await resp.json();
-}*/
-
+const urlAPi="http://localhost:3001"
 export default function RecuperacionPreguntas(props) {
 
-    //capturar los datos ingresados
-   /* const refPregunta = useRef(null);
-    const RefRespuesta = useRef(null);
-
-    const handleLogin = () => {
-        const data = {
-          //  "usuario": refPregunta.current.value,
-            "contra": RefRespuesta.current.value
-        };
-        console.log(data);
-        //enviarData (URL_LOGIN, data);*/
+    const [registros, setRegistros] = useState([]);
+    const getRegistros = async () => {
+      fetch(urlAPi + "/ms_pregunta/getall"
+      , {
+      method: 'GET',
+      headers: {
+          'Content-type': 'application/json'
+      }
+      })
+      .then(response => response.json())
+      .then(responseJson => {  
+          console.log("responseJson",responseJson)
+          console.log("responseJson.status",responseJson.status)
+          setRegistros(responseJson.object);
+      })
+      .catch(error=>{
+          console.log(error)   
+      })
+  };
+  
+    useEffect(() => {
+      getRegistros();
+    }, []);
 
     return (
         <div className="background">
@@ -43,14 +41,23 @@ export default function RecuperacionPreguntas(props) {
             <div className="formulario">
 
                 <h1>Recuperacion preguntas secretas</h1>
+                <Form>
+                    
+               
                 <div className="inputs">
-                    <label>Pregunta</label>
-                    <div className="username">
+                    <label>Pregunta 1</label>
+                    <div className="">
                         <div className="fa fa-user-o"></div>
-                        <input
+                        {/* <input
                             type="text"
                             placeholder="Seleccione su pregunta"
-                        />
+                        /> */}
+                          <FormGroup>
+                            <Label for="exampleSelectMulti">Select Multiple</Label>
+                            <Input  type="select" name="selectMulti" id="exampleSelectMulti" multiple>
+                                <option>1</option>
+                            </Input>
+                            </FormGroup>
                     </div>
 
                     <label>Respuesta</label>
@@ -58,12 +65,10 @@ export default function RecuperacionPreguntas(props) {
                         <input
                             type='password'
                             placeholder="Ingrese su respuesta"
-                            //ref={RefRespuesta}
                         />
                     </div>
 
                     <button
-                       // onClick={handleLogin}
                         className='btn'>Ingresar</button>
                         <div className="buttom-container">
                         <Link to="/login">
@@ -72,6 +77,8 @@ export default function RecuperacionPreguntas(props) {
                     </div>
                 </div>
 
+
+                </Form>
             </div>
         </div>
     )

@@ -1,10 +1,42 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { Card, CardBody, CardHeader, CardText, CardTitle, Col, Row } from "reactstrap";
+
+const urlapi = "http://localhost:3001";
 function Home() {
-  // console.log(route)
-  // console.log(route.params)
-  // console.log(route.params.text)
+ /** 
+   ** Creando bitacora  
+   * enviado infromacion de bitacora a la BD
+   * */ 
+   const saveLog = async () => {
+    const userdata= JSON.parse(localStorage.getItem('data')) 
+    let log={
+       fecha: new Date(),
+       id_usuario:userdata.data.id || 0,
+       accion:'READ',
+       descripcion:'Ingreso entro a HOME',
+  }
+    fetch(urlapi + "/logs/save"
+    , {
+    method: 'POST',
+    body:JSON.stringify(log),
+    headers: {
+        'Content-type': 'application/json'
+    }
+    })
+    .then(response => response.json())
+    .then(responseJson => {  
+        console.log("responseJson",responseJson)
+    })
+    .catch(error=>{
+        console.log(error)   
+    })
+};
+
+useEffect(() => {
+  saveLog()
+}, []);
+
   return (
     <Row>
     <Col className="">
@@ -95,6 +127,10 @@ function Home() {
     </CardBody>
   </Card>
     </Col>
+
+
+
+    
 
   </Row>
   

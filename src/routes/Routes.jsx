@@ -11,6 +11,7 @@ import CrearSucursal from "../components/administracion_pos/sucursales/PruebaCre
 import EditarSucursal from "../components/administracion_pos/sucursales/EditarSucursal";
 import MostrarCategorias from "../components/administracion_pos/categorias/MostrarCategorias";
 import CrearCategoria from "../components/administracion_pos/categorias/CrearCategoria";
+
 import MostrarDescuentos from "../components/administracion_pos/descuentos/MostrarDescuentos";
 import CrearDescuento from "../components/administracion_pos/descuentos/CrearDescuentos";
 import MostrarImpuestos from "../components/administracion_pos/impuestos/MostrarImpuestos";
@@ -65,6 +66,7 @@ import Layout from "../Layout/Layout";
 //import Registro from "../pages/seguridad/registro/Registro"
 
 import Registro from "../pages/seguridad/registro/Registro"
+import CreateUser from "../pages/seguridad/createUser/CreateUser"
 // import Pregunta from "../pages/seguridad/preguntas/Preguntas"
 // import Usuarios from "../pages/seguridad/usuarios/Usuarios"
 import CambioContra from "../pages/seguridad/cambio_contrasena/cambio_contrasena"
@@ -95,6 +97,7 @@ function Rutas() {
             <Route path="/admin" element={<Layout />}>
             <Route path="home" element={<Home />} />
             <Route path="users" element={<MostrarUsuarios />} />
+            <Route path="createUser" element={<CreateUser />} />
             <Route path="params" element={<Parametros />} />
             <Route path="roles" element={<Roles />} />
             <Route path="permits" element={<Permits />} />

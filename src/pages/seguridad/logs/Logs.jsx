@@ -34,14 +34,8 @@ export default function Logs(props) {
     //Configuramos las columnas de la tabla
     const columns = [
       {
-        name: "ID",
-        selector: (row) => row.id_bitacora || 'No aplica',
-        sortable: true,
-      
-      },
-      {
         name: "Nombre",
-        selector: (row) => row.id_usuario || 'No aplica',
+        selector: (row) => row.nombre_usuario || 'No aplica',
         sortable: true,
       
       },

@@ -29,6 +29,7 @@ export default function CambioContra(props) {
   const [isValid, setIsValid] = useState(false);
   const refContrasena = useRef(null);
   const refConfirmContrasena = useRef(null);
+
   const { id, token } = useParams();
   //   console.log("id", id);
   //   console.log("token", token);
@@ -72,8 +73,8 @@ export default function CambioContra(props) {
     console.log("form submitted ✅");
     let data = {
       id_user: id,
-      newPassword: md5(refContrasena.current.value,),
-      confirmPassword: md5(refConfirmContrasena.current.value,),
+      newPassword: md5(refContrasena.current.value),
+      confirmPassword: md5(refConfirmContrasena.current.value),
     };
     setIsValid(false);
     fetch(urlAPi + "/changePass", {
@@ -174,8 +175,7 @@ export default function CambioContra(props) {
                 />
               </div>
               <button type="submit" className="btn">
-                {" "}
-                Cambiar Contrase&ntilde;a{" "}
+                Cambiar Contrase&ntilde;a
               </button>
             </form>
 

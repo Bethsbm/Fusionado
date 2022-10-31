@@ -110,12 +110,11 @@ export default function RecuperacionContra(props) {
                         className='btn'>Restablecer v&iacute;a correo</button>
 
 
-                    <button
-                        //onClick={handleLogin}
-                        className='btn'>Restablecer v&iacute;a preguntas
-                        </button>
 
                     <div className="buttom-container">
+                        <Link to="/recuperacion_preguntas">
+                            Cambia tu contrase&ntilde;a via preguntas
+                        </Link>
                         <Link to="/login">
                             Cancelar
                         </Link>
