@@ -270,23 +270,41 @@ LoginController.resetPassUser = async (req, res, next) => {
 };
 
 LoginController.validateUser = async (req, res, next) => {
-  const { id, token } = req.params;
+  const { id, token } = req.body;
   try {
     let userValidation = await LoginModel.getOne(id);
-
+    // console.log("userValidation",userValidation)
     if (!userValidation.rows[0]) {
-      return res.status(400).send({
+      return res.status(404).send({
         ok: false,
-        code: 400,
+        code: 404,
         message: "Usuario NO encontrado",
         object: [],
       });
     }
+    // validaodn que el tolen no haya sido usado anteriormente
+    let tonkenValidation = await LoginModel.searchToken(token);
+    console.log('tonkenValidation',tonkenValidation.rows[0])
+    if (tonkenValidation.rows[0]) {
+      return res.status(403).send({
+        ok: false,
+        code: 403,
+        message: "En enlace que estas visitando ya no esta disponible o no es válido",
+        object: [],
+      });
+    }
+    
+   await LoginModel.saveToken(token,(err, row) => {
+    if (err) {
+        console.log('err',err)
+    }
+    console.log('row',row.rows[0])
+  });
     //Usuario Valido
     const secret = JWT_SECRET;
 
     // const payload = await jwt.verify(token, secret);
-    await jwt.verify(token, secret, function(err, decoded) {
+    await jwt.verify(token, secret, async (err, decoded)=>{
         if (err) {
           return res.status(404).json({
             status: false,
@@ -295,14 +313,28 @@ LoginController.validateUser = async (req, res, next) => {
             object: [],
           });
         }
+        // guardando el token en la tabla historica
+        // UsuarioModel.save = (data) => {
+        //   conn.query(
+        //     "SELECT * FROM seguridad.tbl_ms_usuario WHERE id_usuario = $1",
+        //     [data.id_usuario],
+        //     (err, rows) => {
+        //       console.log(`Número de registros: ${rows.rows.length}`);
+        //       console.log(`Número de registros: ${err}`);
+        
+        //     }
+        //   );
+        // };
+
         res.status(200).json({
           status: true,
           code: 200,
           message: "Usuario encontrado",
-          object: [decoded],
+          object: [],
         });
       });
   } catch (error) {
+    console.log('error',error)
     return res.status(500).send({
       ok: false,
       code: 500,
@@ -316,56 +348,34 @@ LoginController.changePassUser = async (req, res, next) => {
     const bodyParams = req.body;
   
     try {
-      if (bodyParams.password && 
-          bodyParams.confirmPassword && 
+      if (
           bodyParams.newPassword && 
-          bodyParams.id_user && 
-          bodyParams.email) {
-              // console.log("Email sent: " + info.response);
-              
-              
-              
+          bodyParams.confirmPassword && 
+          bodyParams.id_user){
               LoginModel.changuePassById(
-                bodyParams.id_user,
-                bodyParams.password,
                 bodyParams.newPassword,
+                bodyParams.id_user,
                  (err, row) => {
-                    
                 if (err) {
                     console.log('err',err)
                   return res.status(300).send({
                     status: false,
                     code: 300,
-                    message: "usuario y/o contrasena incorrectos",
+                    message: "Ha ocurrido un error al ejecutar acción",
                     object: [],
                   });
                 }
-                console.log('row',row)
                 response = res.status(200).send({
                   status: true,
                   code: 200,
-                  message: "Login Exitoso",
-                  object:row
-                //   data: payload,
+                  message: "Datos actualizados correctamente",
+                  object: row.rows
                 });
               });
-            //   response = res.status(200).send({
-            //     status: true,
-            //     code: 200,
-            //     message: "funcioando enpoint",
-            //     object: [],
-            //   });
-            
-            
-  
         return response;
       }
   
       let emptyParam = "";
-  
-      if (!bodyParams.password) {
-        emptyParam = "password";
-      }
       if (!bodyParams.confirmPassword) {
         emptyParam = "confirmPassword";
       }
@@ -375,10 +385,6 @@ LoginController.changePassUser = async (req, res, next) => {
       if (!bodyParams.id_user) {
         emptyParam = "id_user";
       }
-      if (!bodyParams.email) {
-        emptyParam = "email";
-      }
-  
       response = res.status(400).send({
         ok: false,
         code: 400,

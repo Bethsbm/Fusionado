@@ -17,12 +17,20 @@ var PermisosModel = require('../../models/modulo_seguridad/permisos-model'),
 		}
 		else
 		{
-			let locals = {
-				title : 'Lista de permisos',
-				data : rows
-			}
-			res.status(200).send(rows.rows)
+			// let locals = {
+			// 	title : 'Lista de permisos',
+			// 	data : rows
+			// }
+			// res.status(200).send(rows.rows)
 			//res.render('index', locals)
+			res.status(200).json(
+				{
+					status:true,
+					code:200,
+					message:"Información encontrada exitosamente",
+					object:rows.rows,
+				}
+			)
 		}
 	})
 }

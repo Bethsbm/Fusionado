@@ -1,5 +1,7 @@
 "use strict";
 
+const LogsController = require("../controllers/modulo_seguridad/logs-controller");
+
 var CategoriaController = require("../controllers/categoria-controller"),
   DescuentoController = require("../controllers/descuento-controller"),
   ImpuestoController = require("../controllers/impuesto-controller"),
@@ -173,8 +175,11 @@ router
   //Login
   .post("/login", LoginController.login)
   .post("/reset", LoginController.resetPassUser)
-  .get("/validateUser/:id/:token", LoginController.validateUser)
+  .post("/validateUser", LoginController.validateUser)
   .post("/changePass", LoginController.changePassUser)
+  //bitacoras
+  .get("/logs/getall", LogsController.getAll)
+
   //Registro
   .get("/registro/getall", UsuarioController.getAll)
   .get("/getById/:id_usuario", UsuarioController.getOne)
