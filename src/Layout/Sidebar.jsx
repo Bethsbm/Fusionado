@@ -24,6 +24,12 @@ function Sidebar() {
             <i className="bi bi-gear"></i> <span>Par&aacute;metros</span>
           </Link>
         </li>
+        <li className="nav-item">
+          <Link className="nav-link " to="/admin/logs">
+                <i className="bi bi-list-columns"></i>
+                <span>Bit&aacute;coras</span>
+          </Link>
+        </li>
 
         <li className="nav-item">
           <Link
@@ -59,6 +65,7 @@ function Sidebar() {
                 <span>Preguntas de Seguridad</span>
               </Link>
             </li>
+            
           </ul>
         </li>
 

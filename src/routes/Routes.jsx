@@ -66,7 +66,7 @@ import Layout from "../Layout/Layout";
 
 import Registro from "../pages/seguridad/registro/Registro"
 // import Pregunta from "../pages/seguridad/preguntas/Preguntas"
-import Usuarios from "../pages/seguridad/usuarios/Usuarios"
+// import Usuarios from "../pages/seguridad/usuarios/Usuarios"
 import CambioContra from "../pages/seguridad/cambio_contrasena/cambio_contrasena"
 import RecuperacionContra from "../pages/seguridad/recuperacion_contrasena/recuperacion_contrasena"
 import RecuperacionCorreo from "../pages/seguridad/recuperacion_correo/recuperacion_correo"

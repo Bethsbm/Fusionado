@@ -22,7 +22,11 @@ export default function Login(props) {
 const [message, setMesagge] = useState("");
 const [color, setColor] = useState("danger");
 const [isValid, setIsValid] = useState(false);
-    // const onDismiss = () => setVisible(false);
+
+const [passwordShown, setPasswordShown] = useState(false);
+const togglePassword = () => {
+  setPasswordShown(!passwordShown);
+};
     
     const enviarData =  (url, data) => {
 
@@ -125,7 +129,7 @@ const [isValid, setIsValid] = useState(false);
                     {/* <label>Contraseña</label> */}
                     <div className="username">
                         <input
-                            type='password'
+                            type={passwordShown ? "text" : "password"}
                             placeholder="Contraseña"
                             ref={RefContrasena}
                        /* secureTextEntry={isSecureEntry}
@@ -142,7 +146,9 @@ const [isValid, setIsValid] = useState(false);
                             onChange({name: 'password',value});
                         }}*/
                         />
-                        
+                        <span className="showPass" onClick={togglePassword}>
+                    Ver
+                  </span>
                     </div>
 
                     <button

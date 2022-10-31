@@ -25,18 +25,20 @@ export default function RecuperacionContra(props) {
     //  const refPregunta = useRef(null);
     //  const RefRespuesta = useRef(null);
      const refNombreUsuario = useRef(null);
+     
      const [message, setMesagge] = useState("");
-     const [color, setColor] = useState("danger");
-     const [isValid, setIsValid] = useState(false);
+  const [color, setColor] = useState("danger");
+  const [isValid, setIsValid] = useState(false);
 
      const handleLogin = () => {
          const data = {
              "nombre_usuario": refNombreUsuario.current.value
          };
-         console.log("data",data);
+        //  console.log("data",data);
         //  console.log('hacer recuperaicon de pass');
         setIsValid(true)
-        
+        setColor("primary");
+        setMesagge('Enviado solicitud....');
             fetch(urlAPi+'/reset'
                 , {
                 method: 'POST',
@@ -49,16 +51,19 @@ export default function RecuperacionContra(props) {
             .then(responseJson => {  
                 console.log("responseJson",responseJson)
                 console.log("responseJson.status",responseJson.status)
-           
+                
                 if(!responseJson.status){
                     setColor("danger")
                     setMesagge(responseJson.message)
-                       console.log('ha ocurrido un erorr al enviar el correo')
+                    console.log('ha ocurrido un erorr al enviar el correo')
                 }
-                setColor("success")
-                 navigate("/login");
-
-                
+                setMesagge(responseJson.message);
+                setColor("success");
+                setIsValid(true)
+                setTimeout(() => {
+                    setIsValid(false)
+                  navigate("/login");
+                }, 3000);
             })
             .catch(error=>{
                console.log(error)
@@ -80,11 +85,9 @@ export default function RecuperacionContra(props) {
                 alt="burridogs" />
 
             <div className="formulario">
-
-            <Alert 
-                     isOpen={isValid} 
-                     color={color}
-                     >{message}</Alert>
+            <Alert isOpen={isValid} color={color}>
+              {message}
+            </Alert>
 
                 <h1>Recuperación de contraseña</h1>
                 <div class="inputs">

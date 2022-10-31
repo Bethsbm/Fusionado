@@ -155,3 +155,10 @@ body{
     text-decoration: underline;
     letter-spacing: 0.5px;
 }
+.showPass{
+    color: #e1e1e0;
+    background: #e22828;
+    padding: 2px 8px;
+    border-radius: 9px;
+    cursor: pointer;
+}

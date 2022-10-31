@@ -1,9 +1,9 @@
-img{
+.card img{
     background-size: cover;
     position: fixed;
-    filter: blur(5px);
+    filter: blur(0px);
     width: 100%;
-    height: 110%;
+    height: 100% !important;
 }
 body{
     margin: 0;
@@ -124,3 +124,10 @@ body{
     transition: .5s;
 }
 
+.showPass{
+    color: #e1e1e0;
+    background: #e22828;
+    padding: 2px 8px;
+    border-radius: 9px;
+    cursor: pointer;
+}
