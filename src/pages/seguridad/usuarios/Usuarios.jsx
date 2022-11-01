@@ -70,12 +70,19 @@ const Usuarios = () => {
 
   //Configuramos las columnas de la tabla
   const columns = [
+    // {
+    //   name: "ID",
+    //   selector: (row) => row.id_usuario || 'No aplica',
+    //   sortable: true,
+    
+    // }, 
     {
-      name: "ID",
-      selector: (row) => row.id_usuario || 'No aplica',
+      name: "ESTADO",
+      selector: (row) => row.estado_usuario || 'No aplica',
       sortable: true,
     
     },
+  
     {
       name: "Nombre",
       selector: (row) => row.usuario || 'No aplica',
@@ -83,14 +90,20 @@ const Usuarios = () => {
     
     },
     {
-      name: "Nombre",
+      name: "Usuario",
       selector: (row) => row.nombre_usuario || 'No aplica',
       sortable: true,
     
     },
     {
-      name: "CREADO POR",
-      selector: (row) => row.creado_por || 'No aplica',
+      name: "CORREO",
+      selector: (row) => row.correo_electronico || 'No aplica',
+      sortable: true,
+    
+    },
+    {
+      name: "ROLE",
+      selector: (row) => row.id_rol || 'No aplica',
       sortable: true,
     
     },
@@ -99,13 +112,7 @@ const Usuarios = () => {
       selector: (row) => row.fecha_creacion || 'No aplica',
       sortable: true,
     
-    },
-    {
-      name: "ESTADO",
-      selector: (row) => row.estado_usuario || 'No aplica',
-      sortable: true,
-    
-    },
+    }
   ];
 
   //Configurar la paginación de la tabla

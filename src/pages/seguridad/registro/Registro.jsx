@@ -175,6 +175,12 @@ const Registro = () => {
             <button onClick={onSubmit} className="btn">
               Cambiar Contrase&ntilde;a
             </button>
+
+            <div className="buttom-container">
+                        <Link to="/login">
+                            Cancelar
+                        </Link>
+                    </div>
           </form>
         </div>
       </div>

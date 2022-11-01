@@ -91,7 +91,7 @@ const togglePassword = () => {
 
     const handleLogin =async() => {
         const data = {
-            "nombre_usuario": refNombreUsuario.current.value,
+            "nombre_usuario":((refNombreUsuario.current.value).trim()).toUpperCase() ,
             "contrasena": md5(RefContrasena.current.value) 
 
         };
