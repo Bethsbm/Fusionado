@@ -2,13 +2,13 @@ var LoginModel = require("../../models/modulo_seguridad/login-model");
 // var regexMail= '/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/'
 var regexText = "^[a-zA-Z 0-9]*$";
 const jwt = require("jsonwebtoken");
-const nodemailer = require("nodemailer");
 var validator = require("validator");
+const nodemailer = require("nodemailer");
 
 // Configuraciones
 const urlThisAPi = "http://localhost:3001";
 const urlPanel = "http://localhost:3000";
-const JWT_SECRET = "PR0Y3CT0_M0DUL0_D3_S3GUR1D4D";
+const  JWT_SECRET = "PR0Y3CT0_M0DUL0_D3_S3GUR1D4D";
 const timeExpired = "24h";
 const mailConfigSender = {
   user: "dazzebnn@gmail.com",

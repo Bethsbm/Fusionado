@@ -25,7 +25,7 @@ app
 	.use( bodyParser.urlencoded({extended: false}) )
 	.use(restFul)
 	.use( morgan('dev') )
-	// .use(publicDir)
+	// .use(mv)
 	.use(routes)
 	
 	

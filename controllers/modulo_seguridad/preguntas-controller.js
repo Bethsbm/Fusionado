@@ -80,11 +80,13 @@ PreguntasController.save = (req, res, next) => {
 			}
 
 			res.render('error', locals)
-		}
-		else
-		{
-			res.send('Success')
-			//res.redirect('/')
+		}else{
+			res.status(200).send({
+				status: true,
+				code: 200,
+				message: "Datos almacenados correctamente",
+				object: [],
+			  });
 		}
 	})
 }

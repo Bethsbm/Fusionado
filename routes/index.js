@@ -1,5 +1,5 @@
 "use strict";
-
+const mw = require('../middlewares/autentication')
 const LogsController = require("../controllers/modulo_seguridad/logs-controller");
 
 var CategoriaController = require("../controllers/categoria-controller"),
@@ -184,9 +184,13 @@ router
   //Registro
   .get("/registro/getall", UsuarioController.getAll)
   .get("/getById/:id_usuario", UsuarioController.getOne)
-  .put("/ms_registro/actualizar-insertar/:id_usuario", UsuarioController.save)
+  // .put("/ms_registro/actualizar-insertar/:id_usuario", UsuarioController.save)
   .delete("/ms_registro/eliminar/:id_usuario", UsuarioController.delete)
   .post("/ms_registro/autoregistro", UsuarioController.autoregistro)
+  .post("/ms_registro/createUser", UsuarioController.save)
+  .post("/ms_registro/validateUserState", UsuarioController.validateUserState)
+  .post("/ms_registro/updateUserState", UsuarioController.updateUserState)
+  
   //Estado
   .get("/ms_estado/getall", EstadoController.getAll)
   .get("/ms_estado/getone/:id", EstadoController.getOne)
@@ -195,10 +199,7 @@ router
   //Preguntas
   .get("/ms_pregunta/getall", PreguntasController.getAll)
   .get("/ms_pregunta/getone/:id_pregunta", PreguntasController.getOne)
-  .put(
-    "/ms_pregunta/actualizar-insertar/:id_pregunta",
-    PreguntasController.save
-  )
+  .post("/ms_pregunta/save",PreguntasController.save)
   .delete("/ms_pregunta/eliminar/:id_pregunta", PreguntasController.delete)
   //Preguntas Usuario
   .get("/ms_pregunta_usuario/getall", PreguntasUsuarioController.getAll)
