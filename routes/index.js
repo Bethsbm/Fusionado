@@ -1,5 +1,5 @@
 "use strict";
-const mw = require('../middlewares/autentication')
+// const mw = require('../middlewares/autentication')
 const LogsController = require("../controllers/modulo_seguridad/logs-controller");
 
 var CategoriaController = require("../controllers/categoria-controller"),

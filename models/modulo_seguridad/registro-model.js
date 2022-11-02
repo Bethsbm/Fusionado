@@ -107,39 +107,81 @@ INSERT INTO seguridad.tbl_ms_usuario(
 
 UsuarioModel.autoregistro = (data, cb) => {
   conn.query(
-    "SELECT * FROM seguridad.tbl_ms_usuario WHERE nombre_usuario= $1",
-    [data.nombre_usuario],
-    (err, rows) => {
-      console.log(`Número de registros: ${rows.rows.length}`);
-      console.log(`Número de registros: ${err}`);
-
-      if (err) {
-        return err;
-      } else {
-        return rows.rows.length === 1
-          ? conn.query(
-            "SELECT seguridad.()",
-            [
-              
-            ],
-            cb
-            )
-          : 
-              
-            conn.query(
-              "SELECT seguridad.ft_insert_autoregistro($1,$2,$3)",
-                [
-                data.nombre_usuario,
-                data.correo_electronico,
-                data.contrasena,
-                      
-                ],
-                cb
-            );
-      }
-    }
+    `
+    INSERT INTO seguridad.tbl_ms_usuario(
+      usuario, 
+      nombre_usuario, 
+      estado_usuario, 
+      contrasena, 
+      id_rol, 
+      preguntas_contestadas,
+      primer_ingreso,
+      fecha_vencimiento,
+      correo_electronico,
+      creado_por,
+      fecha_creacion,
+      intentos_login
+    )
+      VALUES ( 
+        $1, 
+        $2, 
+        1,
+        $3, 
+        1,
+        0,
+        1,
+        (NOW() + interval '3 days'), 
+        $4,
+        'Autoregistro',
+        NOW(),
+        0
+        )
+        `,
+      [
+        data.usuario,
+        data.nombre_usuario,
+        data.contrasena,
+        data.correo_electronico,
+            
+      ],
+      cb
   );
 };
+// UsuarioModel.autoregistro = (data, cb) => {
+//   conn.query(
+//     "SELECT * FROM seguridad.tbl_ms_usuario WHERE nombre_usuario= $1",
+//     [data.nombre_usuario],
+//     (err, rows) => {
+//       console.log(`Número de registros: ${rows.rows.length}`);
+//       console.log(`Número de registros: ${err}`);
+
+//       if (err) {
+//         return err;
+//       } else {
+//         return rows.rows.length === 1
+//           ? conn.query(
+//             "SELECT seguridad.()",
+//             [
+              
+//             ],
+//             cb
+//             )
+//           : 
+              
+//             conn.query(
+//               "SELECT seguridad.ft_insert_autoregistro($1,$2,$3)",
+//                 [
+//                 data.nombre_usuario,
+//                 data.correo_electronico,
+//                 data.contrasena,
+                      
+//                 ],
+//                 cb
+//             );
+//       }
+//     }
+//   );
+// };
 
 UsuarioModel.delete = (id, cb) =>
   conn.query("SELECT seguridad.d_delete_usuario($1)", [id], cb);

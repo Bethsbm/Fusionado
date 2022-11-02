@@ -261,6 +261,7 @@ UsuarioController.save =  (req, res, next) => {
 UsuarioController.autoregistro = (req, res, next) => {
 	let usuario = {
         
+        usuario : req.body.usuario,
         nombre_usuario : req.body.nombre_usuario,
         correo_electronico : req.body.correo_electronico,
         contrasena : req.body.contrasena,
