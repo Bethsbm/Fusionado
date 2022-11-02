@@ -1,4 +1,4 @@
-import React, { useRef ,useState} from 'react';
+import React, { useEffect, useRef ,useState} from 'react';
 import './login.css';
 import burridogs from './loginbg.jpg';
 import { Link ,useNavigate} from "react-router-dom";
@@ -13,6 +13,34 @@ import md5 from 'md5';
 const urlAPi="http://localhost:3001"
 // 
 export default function Login(props) {
+
+/** 
+   ** get settign params
+   * obteniendo todos los parametros de configuracion del sistema
+   * */ 
+   const getAllSettingsParams = async () => {
+    fetch(urlAPi + "/ms_parametros/getall",
+    {
+    method: 'GET',
+    headers: {'Content-type': 'application/json'}
+    })
+    .then(response => response.json())
+    .then(responseJson => {  
+        console.log("dataSettingsParams",responseJson)
+        if(!responseJson.status){
+          console.log('algo salio mal en el servidor')
+          return
+        }
+        localStorage.setItem('params',JSON.stringify(responseJson.object))
+    })
+    .catch(error=>{
+        console.log(error)   
+    })
+};
+useEffect(() => {
+  getAllSettingsParams()
+}, []);
+
     // const { history } = this.props;
     let navigate = useNavigate();
 //   var message=''

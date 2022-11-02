@@ -43,11 +43,13 @@ const Registro = () => {
     console.log('x',x)
     let name_user=(refUserName.current.value).toString()
         name_user= name_user.replace(/\s/g,'')
+        name_user= name_user.substring(0,4);
         name_user= name_user.toUpperCase()
         name_user= name_user+""+x
 
         let pass=refContrasena.current.value
     let data = {
+        usuario: refUserName.current.value,
         nombre_usuario: name_user,
         correo_electronico: refEmail.current.value,
         contrasena:  md5(pass),
@@ -55,7 +57,7 @@ const Registro = () => {
         confirmContrasena: md5(refConfirmContrasena.current.value),
     };
     // console.log("refUserName.current.value", refUserName.current.value);
-    console.log('data',data)
+    // console.log('data',data)
 
     fetch(urlApi+ "/ms_registro/autoregistro", {
         method: "POST",
@@ -155,16 +157,19 @@ const Registro = () => {
               <PasswordChecklist
                 rules={[
                   "minLength",
+                  "maxLength",
                   "specialChar",
                   "number",
                   "capital",
                   "match",
                 ]}
                 minLength={8}
+                maxLength={10}
                 value={password}
                 valueAgain={passwordAgain}
                 messages={{
-                  minLength: "La contraseña tiene más de 8 caracteres.",
+                  minLength: "La contraseña tiene menos de 8 caracteres mínimo.",
+                  maxLength: "La contraseña tiene más de 10 caracteres máximo.",
                   specialChar: "La contraseña tiene caracteres especiales.",
                   number: "La contraseña tiene un número.",
                   capital: "La contraseña tiene una letra mayúscula.",

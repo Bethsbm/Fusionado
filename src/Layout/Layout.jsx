@@ -10,15 +10,16 @@ import Footer from "./Footer";
 
 const urlapi = "http://localhost:3001";
 function Layout() {
+
+/** *
+ ** Aqui obtengo del local storagae los parametros de la bd ,estos s epueden obyet en cualquier poantalla
+ mientras el usuario este logeado 
+ */
+let settingsParams=  JSON.parse(localStorage.getItem('params'))
+console.log("settingsParams",settingsParams)
+
   const [main_class] = useGlobalState("main_class");
-
-  
-
-
   return (
-    // <BrowserRouter>
-        
-    // <UserContext.Provider >
     <div className="">
     <Header />
       <Sidebar />
@@ -28,10 +29,7 @@ function Layout() {
         </section>
       </main>
       <Footer />
-      {/* prints: Reed */}
-    {/* </BrowserRouter> */}
     </div>
-    // </UserContext.Provider>
     
   );
 }
