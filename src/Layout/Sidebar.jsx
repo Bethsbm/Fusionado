@@ -13,17 +13,6 @@ function Sidebar() {
             <i className="bi bi-grid"></i> <span>Inicio</span>
           </Link>
         </li>
-        
-        <li className="nav-item">
-          <Link className="nav-link " to="/admin/users">
-            <i className="bi bi-people"></i> <span>Usuarios</span>
-          </Link>
-        </li>
-        <li className="nav-item">
-          <Link className="nav-link " to="/admin/params">
-            <i className="bi bi-gear"></i> <span>Par&aacute;metros</span>
-          </Link>
-        </li>
         <li className="nav-item">
           <Link className="nav-link " to="/admin/logs">
                 <i className="bi bi-list-columns"></i>
@@ -48,6 +37,12 @@ function Sidebar() {
             data-bs-parent="#sidebar-nav"
           >
             <li>
+              <Link to="/admin/users">
+                <i className="bi bi-people"></i>
+                <span>Usuarios</span>
+              </Link>
+            </li>
+            <li>
               <Link to="/admin/roles">
                 <i className="bi bi-ui-checks"></i>
                 <span>Roles</span>
@@ -66,10 +61,16 @@ function Sidebar() {
               </Link>
             </li>
             
+            <li>
+              <Link to="/admin/params">
+                <i className="bi bi-gear"></i>
+                <span>Par&aacute;metros</span>
+              </Link>
+            </li>
           </ul>
         </li>
 
-        {/* <li className="nav-item">
+        <li className="nav-item">
           <Link
             className="nav-link collapsed"
             data-bs-target="#components-nav"
@@ -110,7 +111,7 @@ function Sidebar() {
               </Link>
             </li>
           </ul>
-        </li> */}
+        </li>
 
         <li className="nav-item">
           <Link
@@ -233,7 +234,7 @@ function Sidebar() {
             </li>
           </ul>
         </li>
-{/* 
+
         <li className="nav-item">
           <Link
             className="nav-link collapsed"
@@ -287,9 +288,9 @@ function Sidebar() {
               </Link>
             </li>
           </ul>
-        </li> */}
+        </li>
 
-        {/* <li className="nav-item">
+        <li className="nav-item">
           <Link
             className="nav-link collapsed"
             data-bs-target="#charts-nav"
@@ -348,9 +349,9 @@ function Sidebar() {
               </Link>
             </li>
           </ul>
-        </li> */}
+        </li>
 
-        {/* <li className="nav-item">
+        <li className="nav-item">
           <Link
             className="nav-link collapsed"
             data-bs-target="#icons-nav"
@@ -385,9 +386,9 @@ function Sidebar() {
               </Link>
             </li>
           </ul>
-        </li> */}
+        </li>
 
-        {/* <li className="nav-heading">Más</li>
+        <li className="nav-heading">Más</li>
         <li className="nav-item">
           <Link className="nav-link collapsed" to="/admin/">
             <i class="bi bi-person"></i> <span>Opción 1</span>
@@ -422,7 +423,7 @@ function Sidebar() {
           <Link className="nav-link collapsed" to="/admin/">
             <i className="bi bi-file-earmark"></i> <span>Opción 7</span>
           </Link>
-        </li> */}
+        </li>
       </ul>
     </aside>
   );

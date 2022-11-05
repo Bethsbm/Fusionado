@@ -107,11 +107,8 @@ export default function Parametros(props) {
   
     return (
       <div className="container">
-        <h3>Par&aacute;metros del sistema</h3>
-        <h5>
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Magni
-          consectetur odio asperiores, deserunt beatae accusantium omnis iure.
-        </h5>
+        <h5>Par&aacute;metros del sistema</h5>
+        
         <br />
         <div className="row">
           <DataTable

@@ -55,7 +55,7 @@ import EditarSalidaMds from "../components/inventario/salida_mds/EditarSalidaMds
 //USUARIOS
 import MostrarUsuarios from "../pages/seguridad/usuarios/Usuarios";
 //import CrearUsuario from "../components/seguridad/usuario/CrearUsuario";
-//import EditarUsuario from "../components/seguridad/usuario/MostrarUsuarios";
+import EditarUsuario from "../components/seguridad/usuario/EditarUsuario";
 import Login from "../pages/seguridad/login/Login"
 import Parametros from "../pages/seguridad/parametros/Parametros";
 import Roles from "../pages/seguridad/roles/Roles";
@@ -100,6 +100,7 @@ function Rutas() {
             <Route path="home" element={<Home />} />
             <Route path="users" element={<MostrarUsuarios />} />
             <Route path="createUser" element={<CreateUser />} />
+            <Route path="editUser/:id" element={<EditarUsuario />} />
             <Route path="params" element={<Parametros />} />
             <Route path="roles" element={<Roles />} />
             <Route path="permits" element={<Permits />} />

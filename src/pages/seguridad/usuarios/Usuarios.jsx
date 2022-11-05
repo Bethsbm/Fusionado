@@ -2,13 +2,25 @@ import React, { useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
 import { useForm } from "react-hook-form";
 import axios from "axios";
-import { Link } from "react-router-dom";
-import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
+import { Link, useNavigate } from "react-router-dom";
+import { Alert, Button, Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
 import "./Usuarios.css";
 
 const urlapi = "http://localhost:3001";
-
+// const UrlMostrar = "http://190.53.243.69:3001/categoria/getall/";
+// const UrlEliminar = "http://190.53.243.69:3001/categoria/eliminar/";
 const Usuarios = () => {
+ let navigate = useNavigate();
+ //Configurar los hooks
+ const [registroDelete, setRegistroDelete] = useState('');
+
+
+ const [message, setMesagge] = useState("");
+ const [color, setColor] = useState("danger");
+ const [isValid, setIsValid] = useState(false);
+ 
+
+
 /** 
    ** Creando bitacora  
    * enviado infromacion de bitacora a la BD
@@ -67,7 +79,51 @@ const Usuarios = () => {
     getRegistros();
   }, []);
 
+  const goToEdit= (id)=>{
+    navigate('/admin/editUser/'+id,{
+      data:"data"
+    })
+  }
 
+
+  //procedimineto para eliminar un registro
+  const deleteRegistro = async () => {
+      console.log('registroDelete',registroDelete)
+    try {
+      console.log("id arriba")
+      setIsValid(true)
+      const res = await axios.delete(`${urlapi}/ms_registro/eliminar/${registroDelete}`);
+      console.log('res',res)
+      if (res.status) {
+        // alert("Eliminado!"); 
+        setColor("success")
+        setMesagge('Registro eliminado exitosamente')
+      } else {
+        setColor("danger")
+        setMesagge(res.message)
+      }
+      setTimeout(()=>{
+        setIsValid(false)
+       },1000) 
+
+
+      setRegistros([]);
+      getRegistros();
+    } catch (error) {
+      console.log('error.response.data',error.response)
+      if(!error.response.data.status){
+        setColor("warning")
+        setMesagge('El usuario ya posee historial en BD,no puede ser eliminado')
+      }
+      setTimeout(()=>{
+        setIsValid(false)
+       },1000) 
+    }
+  };
+   //Ventana modal de confirmación de eliminar
+   const [modalEliminar, setModalEliminar] = useState(false);
+   const abrirModalEliminar = () => setModalEliminar(!modalEliminar);
+ 
   //Configuramos las columnas de la tabla
   const columns = [
     // {
@@ -76,6 +132,18 @@ const Usuarios = () => {
     //   sortable: true,
     
     // }, 
+
+    // {
+    //   name: "ESTADO",
+    //   sortable: true,
+    //   cell: (row) => (
+    //     <>
+    //       <div class="status">
+    //       {row.estado_usuario}
+    //       </div>
+    //     </>
+    //   )
+    // },
     {
       name: "ESTADO",
       selector: (row) => row.estado_usuario || 'No aplica',
@@ -84,13 +152,13 @@ const Usuarios = () => {
     },
   
     {
-      name: "Nombre",
+      name: "NOMBRE",
       selector: (row) => row.usuario || 'No aplica',
-      sortable: true,
+      sortable: false,
     
     },
     {
-      name: "Usuario",
+      name: "USUARIO",
       selector: (row) => row.nombre_usuario || 'No aplica',
       sortable: true,
     
@@ -98,7 +166,7 @@ const Usuarios = () => {
     {
       name: "CORREO",
       selector: (row) => row.correo_electronico || 'No aplica',
-      sortable: true,
+      sortable: false,
     
     },
     {
@@ -110,9 +178,47 @@ const Usuarios = () => {
     {
       name: "FECHA CREACIÓN",
       selector: (row) => row.fecha_creacion || 'No aplica',
-      sortable: true,
+      sortable: false,
     
-    }
+    },
+    {
+      name: "ACCIONES",
+      cell: (row) => (
+        <>
+          {/* <Link
+            to={`/admin/editUser/${row.id_usuario}`}
+            
+            className="btn  btn-light"
+            
+            title="Editar"
+          >
+            <i className="bi bi-pencil-fill"></i>
+          </Link> */}
+          <button
+            className="btn  btn-light"
+            title="Editar"
+            onClick={goToEdit(row.id_usuario)}
+          >
+            <i className="bi bi-trash-fill"></i>
+          </button>
+          &nbsp;
+          <button
+            className="btn  btn-light"
+            title="Eliminar"
+            onClick={() => {
+              console.log(row.id_usuario);
+              setRegistroDelete(row.id_usuario);
+              abrirModalEliminar();
+            }}
+          >
+            <i className="bi bi-trash-fill"></i>
+          </button>
+        </>
+      ),
+      ignoreRowClick: true,
+      allowOverflow: true,
+      button: true,
+    },
   ];
 
   //Configurar la paginación de la tabla
@@ -125,13 +231,19 @@ const Usuarios = () => {
 
   return (
     <div className="container">
-      <h3>Usuarios</h3>
-      <h5>
+      <h5>Usuarios</h5>
+      {/* <h5>
         Lorem ipsum dolor sit amet, consectetur adipisicing elit. Magni
         consectetur odio asperiores, deserunt beatae accusantium omnis iure.
-      </h5>
+      </h5> */}
       <br />
+      
+
       <div className="row">
+      <Alert 
+                     isOpen={isValid} 
+                     color={color}
+                     >{message}</Alert>
         <div className="col">
           <div
             className="btn-toolbar"
@@ -163,9 +275,36 @@ const Usuarios = () => {
           paginationComponentOptions={paginationComponentOptions}
           highlightOnHover
           fixedHeader
-          fixedHeaderScrollHeight="550px"
+          noDataComponent="Cargando registros...."
+          paginationPerPage="6"
+          // fixedHeaderScrollHeight="550px"
         />
       </div>
+
+      {/* Ventana Modal de Eliminar*/}
+      <Modal isOpen={modalEliminar} toggle={abrirModalEliminar} centered>
+        <ModalHeader toggle={abrirModalEliminar}>Eliminar Registro</ModalHeader>
+        <ModalBody>
+          <p>¿Está seguro de Eliminar este Registro?</p>
+          
+        </ModalBody>
+        <ModalFooter>
+          <Button
+            color="danger"
+            onClick={() => {
+              // console.log('elimionar')
+              deleteRegistro();
+              abrirModalEliminar();
+            }}
+          >
+            Eliminar
+          </Button>
+          <Button color="secondary" onClick={abrirModalEliminar}>
+            Cancelar
+          </Button>
+        </ModalFooter>
+      </Modal>
+
     </div>
   );
 };

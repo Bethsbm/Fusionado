@@ -87,11 +87,7 @@ export default function Pregunta(props) {
   
     return (
       <div className="container">
-        <h3>Preguntas de seguridad</h3>
-        <h5>
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Magni
-          consectetur odio asperiores, deserunt beatae accusantium omnis iure.
-        </h5>
+        <h5>Preguntas de seguridad</h5>
         <br />
         <div className="row">
           <DataTable

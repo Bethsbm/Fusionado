@@ -8,6 +8,7 @@ const UrlMostrar = "http://190.53.243.69:3001/ms_registro/getall/";
 const UrlEliminar = "http://190.53.243.69:3001/ms_registro/eliminar/";
 
 const MostrarUsuarios = () => {
+ 
   //Configurar los hooks
   const [registros, setRegistros] = useState([]);
   useEffect(() => {
@@ -33,6 +34,8 @@ const MostrarUsuarios = () => {
   //Ventana modal de confirmación de eliminar
   const [modalEliminar, setModalEliminar] = useState(false);
   const abrirModalEliminar = () => setModalEliminar(!modalEliminar);
+
+
 
   //Configuramos las columnas de la tabla
   const columns = [

@@ -1,36 +1,79 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { useParams } from "react-router-dom";
 
+
+const urlapi = "http://localhost:3001";
 const EditarUsuario = () => {
+
+  let navigate = useNavigate();
   const { id } = useParams();
-  const { type } = useParams();
-  console.log(id);
-  console.log(type);
+  // const { type } = useParams();
+  // console.log(id);
+  // console.log(type);
+var initialValues={
+  id:"",
+  usuario:"",
+  nombre_usuario:"",
+  estado_usuario:"",
+  id_rol:"",
+  correo_electronico:"",
+  modificado_por:"",
+  fecha_modificacion:"",
+}
+  const [registro, setRegistro] = useState({});
+
+  const getRegistroById = async () => {
+    fetch(urlapi + "/getById/"+id
+    , {
+    method: 'GET',
+    headers: {
+        'Content-type': 'application/json'
+    }
+    })
+    .then(response => response.json())
+    .then(responseJson => {  
+        console.log("edit user",responseJson)
+        console.log("Edit usef",responseJson.status)
+        // initialValues={
+        //   id:id,
+        //   usuario:responseJson.object.usuario,
+        //   nombre_usuario:responseJson.object.nombre_usuario,
+        //   estado_usuario:responseJson.object.estado_usuario,
+        //   id_rol:responseJson.object.id_rol,
+        //   correo_electronico:responseJson.object.correo_electronico,
+        //   modificado_por:responseJson.object.modificado_por,
+        //   fecha_modificacion:responseJson.object.fecha_modificacion,
+        // }
+        setRegistro(responseJson.object);
+    })
+    .catch(error=>{
+        console.log(error)   
+    })
+};
+
+  useEffect(() => {
+    getRegistroById();
+  }, []);
+
+
+console.log('registro',registro)
 
   //Configurar los hooks
   const [formularioEnviado, setFormularioEnviado] = useState(false);
 
-  if (type === "new") {
-    console.log("Crear Nuevo registro");
-  } else if (type === "edit") {
-    console.log("Editar un registro");
-  }
+  // if (type === "new") {
+  //   console.log("Crear Nuevo registro");
+  // } else if (type === "edit") {
+  //   console.log("Editar un registro");
+  // }
 
   return (
     <div className="container">
       <Formik
         //valores iniciales
-        initialValues={{
-          id: id,
-          nombre_usuario: "",
-          estado_usuario: "",
-          id_rol: "",
-          correo_electronico: "",
-          modificado_por: "",
-          fecha_modificacion: "",
-        }}
+        initialValues={initialValues}
         //Funcion para validar
         validate={(valores) => {
           let errores = {};
@@ -76,10 +119,10 @@ const EditarUsuario = () => {
         }}
       >
         {({ errors }) => (
-          <Form className="formulario">
+          <Form className="">
             <h3 className="mb-3">Editar Usuario</h3>
             <div className="row g-3">
-              <div className="col-sm-6">
+              {/* <div className="col-sm-6">
                 <div className="mb-3">
                   <label htmlFor="idSucursal" className="form-label">
                     Id Usuario:
@@ -97,20 +140,21 @@ const EditarUsuario = () => {
                     component={() => <div className="error">{errors.id}</div>}
                   />
                 </div>
-              </div>
+              </div> */}
 
               <div className="col-sm-6">
                 <div className="mb-3">
-                  <label htmlFor="descripcionSucursal" className="form-label">
+                  <label htmlFor="usuario" className="form-label">
                     Usuario:
                   </label>
                   <Field
                     type="text"
                     className="form-control"
-                    id="descripcionSucursal"
-                    name="Tipo"
+                    id="usuario"
+                    name="usuario"
                     placeholder="Usuario.."
-                    disable = ""
+                    disable = "true"
+                    value={registro.usuario}
                   />
 
                   <ErrorMessage
@@ -119,24 +163,47 @@ const EditarUsuario = () => {
                   />
                 </div>
               </div>
+
+
+              <div className="col-sm-6">
+                <div className="mb-3">
+                  <label htmlFor="correo_electronico" className="form-label">
+                    Correo electrónico:
+                  </label>
+                  <Field
+                    type="text"
+                    className="form-control"
+                    id="correo_electronico"
+                    name="correo_electronico"
+                    placeholder="Correo electrónico..."
+                  />
+
+                  <ErrorMessage
+                    name="correo_electronico"
+                    component={() => (
+                      <div className="error">{errors.correo_electronico}</div>
+                    )}
+                  />
+                </div>
+              </div>
             </div>
 
             <div className="row g-3">
               <div className="col-sm-6">
                 <div className="mb-3">
-                  <label htmlFor="direccionSucursal" className="form-label">
+                  <label htmlFor="nombre_usuario" className="form-label">
                     Nombre usuario:
                   </label>
                   <Field
                     type="text"
                     className="form-control"
-                    id="direccionSucursal"
-                    name="descripcion"
+                    id="nombre_usuario"
+                    name="nombre_usuario"
                     placeholder="Nombre usuario..."
                   />
 
                   <ErrorMessage
-                    name="descripcion"
+                    name="nombre_usuario"
                     component={() => (
                       <div className="error">{errors.nombre_usuario}</div>
                     )}
@@ -146,19 +213,19 @@ const EditarUsuario = () => {
 
               <div className="col-sm-6">
                 <div className="mb-3">
-                  <label htmlFor="telefonoSucursal" className="form-label">
+                  <label htmlFor="estado_usuario" className="form-label">
                     Estado usuario:
                   </label>
                   <Field
                     type="text"
                     className="form-control"
-                    id="telefonoSucursal"
-                    name="descripcion_corta"
+                    id="estado_usuario"
+                    name="estado_usuario"
                     placeholder="Estado usuario..."
                   />
 
                   <ErrorMessage
-                    name="descripcion_corta"
+                    name="estado_usuario"
                     component={() => (
                       <div className="error">{errors.estado_usuario}</div>
                     )}
@@ -168,7 +235,7 @@ const EditarUsuario = () => {
             </div>
 
             <div className="row g-3">
-              <div className="col-sm-6">
+              {/* <div className="col-sm-6">
                 <div className="mb-3">
                   <label htmlFor="rtnSucursal" className="form-label">
                     Contraseña:
@@ -189,23 +256,23 @@ const EditarUsuario = () => {
                     )}
                   />
                 </div>
-              </div>
+              </div> */}
 
               <div className="col-sm-6">
                 <div className="mb-3">
-                  <label htmlFor="centroCostoSucursal" className="form-label">
+                  <label htmlFor="id_rol" className="form-label">
                     Id rol:
                   </label>
                   <Field
                     type="text"
                     className="form-control"
-                    id="centroCostoSucursal"
-                    name="categoria"
+                    id="id_rol"
+                    name="id_rol"
                     placeholder="Id rol..."
                   />
 
                   <ErrorMessage
-                    name="categoria"
+                    name="id_rol"
                     component={() => (
                       <div className="error">{errors.id_rol}</div>
                     )}
@@ -214,7 +281,7 @@ const EditarUsuario = () => {
               </div>
             </div>
 
-            <div className="row g-3">
+            {/* <div className="row g-3">
               <div className="col-sm-6">
                 <div className="mb-3">
                   <label htmlFor="rtnSucursal" className="form-label">
@@ -260,10 +327,10 @@ const EditarUsuario = () => {
                   />
                 </div>
               </div>
-            </div>
+            </div> */}
 
             <div className="row g-3">
-              <div className="col-sm-6">
+              {/* <div className="col-sm-6">
                 <div className="mb-3">
                   <label htmlFor="rtnSucursal" className="form-label">
                     Primer ingreso:
@@ -284,24 +351,24 @@ const EditarUsuario = () => {
                     )}
                   />
                 </div>
-              </div>
+              </div> */}
 
               <div className="col-sm-6">
                 <div className="mb-3">
-                  <label htmlFor="centroCostoSucursal" className="form-label">
+                  <label htmlFor="fecha_vencimiento" className="form-label">
                     Fecha vencimiento:
                   </label>
                   <Field
                     type="text"
                     className="form-control"
-                    id="centroCostoSucursal"
-                    name="codigobarra"
+                    id="fecha_vencimiento"
+                    name="fecha_vencimiento"
                     placeholder="Fecha vencimiento..."
                     disable = ""
                   />
 
                   <ErrorMessage
-                    name="codigobarra"
+                    name="fecha_vencimiento"
                     component={() => (
                       <div className="error">{errors.fecha_vencimiento}</div>
                     )}
@@ -311,7 +378,7 @@ const EditarUsuario = () => {
             </div>
 
             <div className="row g-3">
-              <div className="col-sm-6">
+              {/* <div className="col-sm-6">
                 <div className="mb-3">
                   <label htmlFor="rtnSucursal" className="form-label">
                     Correo electrónico:
@@ -331,9 +398,9 @@ const EditarUsuario = () => {
                     )}
                   />
                 </div>
-              </div>
+              </div> */}
 
-              <div className="col-sm-6">
+              {/* <div className="col-sm-6">
                 <div className="mb-3">
                   <label htmlFor="centroCostoSucursal" className="form-label">
                     Creado por:
@@ -354,10 +421,10 @@ const EditarUsuario = () => {
                     )}
                   />
                 </div>
-              </div>
+              </div> */}
             </div>
 
-            <div className="row g-3">
+            {/* <div className="row g-3">
               <div className="col-sm-6">
                 <div className="mb-3">
                   <label htmlFor="rtnSucursal" className="form-label">
@@ -402,9 +469,9 @@ const EditarUsuario = () => {
                   />
                 </div>
               </div>
-            </div>
+            </div> */}
 
-            <div className="row g-3">
+            {/* <div className="row g-3">
               <div className="col-sm-6">
                 <div className="mb-3">
                   <label htmlFor="centroCostoSucursal" className="form-label">
@@ -426,13 +493,13 @@ const EditarUsuario = () => {
                   />
                 </div>
               </div>
-            </div>
+            </div> */}
 
             <button className="btn btn-success mb-3 me-2" type="submit">
               Guardar
             </button>
             <Link
-              to="/mostrararticulos"
+              to="/admin/users"
               type="button"
               className="btn btn-danger mb-3 me-2"
             >

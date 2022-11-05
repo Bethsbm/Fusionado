@@ -105,11 +105,7 @@ export default function Roles(props) {
   
     return (
       <div className="container">
-        <h3>Roles de usuario</h3>
-        <h5>
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Magni
-          consectetur odio asperiores, deserunt beatae accusantium omnis iure.
-        </h5>
+        <h5>Roles de usuario</h5>
         <br />
         <div className="row">
           <DataTable

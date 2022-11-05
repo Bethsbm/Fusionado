@@ -1,0 +1,14 @@
+.status{
+    padding: 7px;
+    width: 70px;
+    background: red;
+    border-radius: 15px;
+    min-width: 50px;
+    color: white;
+    text-align: center;
+    font-size: 14px;
+}
+
+.btn{
+    margin: 5px 0 5px 0 !important;
+}
