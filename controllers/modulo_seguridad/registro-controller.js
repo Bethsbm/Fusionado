@@ -158,6 +158,21 @@ UsuarioController.updateUserState = (req, res, next) => {
 	})
 }
 
+
+UsuarioController.edit = (req, res, next) => {
+	let id_usuario = req.body.id_usuario
+	
+			res.status(201).json(
+				{
+					status:true,
+					code:200,
+					message:"Información actualizada exitosamente",
+					object:id_usuario,
+				}
+			)
+	
+}
+
 UsuarioController.save =  (req, res, next) => {
 	// console.log('req.usuario',req.usuario)
 	let otp= newOTP.generate(8, { alphabets: true, upperCase: true, specialChar: true });
@@ -352,8 +367,8 @@ UsuarioController.delete = (req, res, next) => {
 	let id_usuario = req.params.id_usuario
 	console.log(id_usuario)
 
-	UsuarioModel.delete(id_usuario, (err, rows) => {
-		console.log(err, '---', rows)
+	UsuarioModel.delete(id_usuario, (err, row) => {
+		console.log(err, '---', row)
 		if(err)
 		{
 			let locals = {
@@ -362,12 +377,21 @@ UsuarioController.delete = (req, res, next) => {
 				error : err
 			}
 
-			res.render('error', locals)
+			res.status(400).send({
+				status: false,
+				code: 400,
+				message: "Ha ocurrido un error al eliminar usuario",
+				object: err,
+			  });
 		}
 		else
 		{
-			res.send('Success')
-			//res.redirect('/')
+			res.status(200).send({
+				status: true,
+				code: 200,
+				message: "Registro eliminado correctamente",
+				object: [row.rows],
+			  });
 		}
 	})
 }

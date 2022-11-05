@@ -142,7 +142,6 @@ UsuarioModel.autoregistro = (data, cb) => {
         data.nombre_usuario,
         data.contrasena,
         data.correo_electronico,
-            
       ],
       cb
   );

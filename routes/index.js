@@ -184,7 +184,7 @@ router
   //Registro
   .get("/registro/getall", UsuarioController.getAll)
   .get("/getById/:id_usuario", UsuarioController.getOne)
-  // .put("/ms_registro/actualizar-insertar/:id_usuario", UsuarioController.save)
+  .put("/ms_registro/update/:id_usuario", UsuarioController.edit)
   .delete("/ms_registro/eliminar/:id_usuario", UsuarioController.delete)
   .post("/ms_registro/autoregistro", UsuarioController.autoregistro)
   .post("/ms_registro/createUser", UsuarioController.save)
