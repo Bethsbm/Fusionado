@@ -38,7 +38,6 @@ const Registro = () => {
   const onSubmit = (event) => {
     event.preventDefault();
 
-    // console.log("form submitted ✅");
     var x = Math.floor(Math.random() * (100 - 1) + 1);
     console.log('x',x)
     let name_user=(refUserName.current.value).toString()

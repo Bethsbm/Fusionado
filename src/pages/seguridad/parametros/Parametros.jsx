@@ -1,5 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import DataTable from 'react-data-table-component';
+import { Link } from 'react-router-dom';
+import { downloadCSV, toUpperCaseField } from '../../../utils/utils';
 
 
 const urlapi = "http://localhost:3001";
@@ -64,37 +66,59 @@ export default function Parametros(props) {
     //Configuramos las columnas de la tabla
     const columns = [
       {
-        name: "ID",
-        selector: (row) => row.id_parametro || 'No aplica',
+        name: "PARÁMETRO",
+        selector: (row) => toUpperCaseField(row.parametro) || 'NO APLICA',
         sortable: true,
       
       },
       {
-        name: "Nombre",
-        selector: (row) => row.parametro || 'No aplica',
+        name: "VALOR",
+        selector: (row) => (row.valor) || 'NO APLICA',
         sortable: true,
       
       },
       {
-        name: "Valor",
-        selector: (row) => row.valor || 'No aplica',
-        sortable: true,
-      
-      },
-      {
-        name: "Creado Por",
-        selector: (row) => row.creado_por || 'No aplica',
+        name: "CREADO POR",
+        selector: (row) => toUpperCaseField(row.creado_por) || 'NO APLICA',
         sortable: true,
       
       },
      
         {
-          name: "Fecha",
-          selector: (row) => row.fecha_creacion || 'No aplica',
+          name: "FECHA DE CREACION",
+          selector: (row) => (row.fecha_creacion) || 'NO APLICA',
           sortable: true,
         
         },
-     
+        {
+          name: "MODIFICADO POR",
+          selector: (row) => toUpperCaseField(row.modificado_por) || 'NO APLICA',
+          sortable: true,
+        
+        },
+        {
+          name: "FECHA DE MODIFICACIÓN",
+          selector: (row) => (row.fecha_creacion) || 'NO APLICA',
+          sortable: true,
+        
+        },
+        {
+          name: "ACCIONES",
+          cell: (row) => (
+            <>
+              <Link
+                to={`/admin/editUser/${row.id_parametro}`}
+                className="btn  btn-light"
+                title="Editar"
+              >
+                <i className="bi bi-pencil-fill"></i>
+              </Link>
+            </>
+          ),
+          ignoreRowClick: true,
+          allowOverflow: true,
+          button: true,
+        },
     ];
   
     //Configurar la paginación de la tabla
@@ -105,15 +129,105 @@ export default function Parametros(props) {
       selectAllRowsItemText: "Todos",
     };
   
+
+
+//Barra de busqueda
+const [ busqueda, setBusqueda ] = useState("")
+//capturar valor a buscar
+ const valorBuscar = (e) => {
+   setBusqueda(e.target.value)   
+ }
+   //metodo de filtrado 
+ let results = []
+ if(!busqueda){
+     results = registros
+ }else{
+     results = registros.filter( (dato) =>
+     dato.id_parametro.toString().includes(busqueda.toLocaleLowerCase()) || 
+     dato?.valor?.toString().includes(busqueda.toLocaleLowerCase()) ||       
+     dato?.parametro?.toLowerCase().includes(busqueda.toLocaleLowerCase()) ||       
+     dato?.creado_por?.toLowerCase().includes(busqueda.toLocaleLowerCase()) ||       
+     dato?.fecha_creacion?.toLowerCase().includes(busqueda.toLocaleLowerCase()) ||       
+     dato?.modificado_por?.toLowerCase().includes(busqueda.toLocaleLowerCase()) ||       
+     dato?.fecha_modificacion?.toLowerCase().includes(busqueda.toLocaleLowerCase())     
+     )
+ };
+
     return (
       <div className="container">
         <h5>Par&aacute;metros del sistema</h5>
-        
+
+        <div className="row">
+       
+        <div className="col">
+          <div
+            className="btn-toolbar"
+            role="toolbar"
+            aria-label="Toolbar with button groups"
+          >
+            {/* <div
+              className="btn-group me-2"
+              role="group"
+              aria-label="First group"
+            >
+              <Link
+                to="/admin/createUser"
+                type="button"
+                className="btn btn-primary"
+                title="Agregar Nuevo"
+              >
+                 Nuevo
+                <i class="bi bi-plus-lg"></i>
+              </Link>
+            </div> */}
+            <div
+              className="btn-group me-2"
+              role="group"
+              aria-label="Second group"
+            >
+              <Link
+                type="button"
+                className="btn btn-success"
+                title="Exportar a Excel"
+                onClick={() => downloadCSV(registros,'Reporte_Parametros_')}
+              >
+                <i class="bi bi-file-excel-fill"></i> Excel
+              </Link>
+            </div>
+
+
+              
+          </div>
+
+
+         
+
+        </div>
+
+
+          {/*Mostrar la barra de busqueda*/}
+          <div className="col-4">
+          <div className="input-group flex-nowrap">
+            <span className="input-group-text" id="addon-wrapping">
+            <i class="bi bi-search"></i>
+            </span>
+            <input
+              className="form-control me-2"
+              type="text"
+              placeholder="Buscar por Parámetro|Valor|Fechas"
+              aria-label="Search"
+              value={busqueda}
+              onChange={valorBuscar}
+            />
+          </div>
+        </div>
+   
+        </div>
         <br />
         <div className="row">
           <DataTable
             columns={columns}
-            data={registros}
+            data={results}
             pagination
             paginationComponentOptions={paginationComponentOptions}
             highlightOnHover

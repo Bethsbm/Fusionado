@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import DataTable from 'react-data-table-component';
 import { Link } from 'react-router-dom';
+import { downloadCSV, toUpperCaseField } from '../../../utils/utils';
 
 const urlapi = "http://localhost:3001";
 
@@ -35,25 +36,25 @@ export default function Logs(props) {
     const columns = [
       {
         name: "Nombre",
-        selector: (row) => row.nombre_usuario || 'No aplica',
+        selector: (row) => toUpperCaseField(row.nombre_usuario) || 'NO APLICA',
         sortable: true,
       
       },
       {
         name: "Log",
-        selector: (row) => row.accion || 'No aplica',
+        selector: (row) => toUpperCaseField(row.accion) || 'NO APLICA',
         sortable: true,
       
       },
       {
           name: "Descripción",
-          selector: (row) => row.descripcion || 'No aplica',
+          selector: (row) => toUpperCaseField(row.descripcion) || 'NO APLICA',
           sortable: true,
           
         },
         {
           name: "Fecha",
-          selector: (row) => row.fecha || 'No aplica',
+          selector: (row) => row.fecha || 'NO APLICA',
           sortable: true,
         
         },
@@ -68,18 +69,101 @@ export default function Logs(props) {
       selectAllRowsItemText: "Todos",
     };
   
+
+      //Barra de busqueda
+      const [ busqueda, setBusqueda ] = useState("")
+      //capturar valor a buscar
+      const valorBuscar = (e) => {
+        setBusqueda(e.target.value)   
+      }
+        //metodo de filtrado 
+      let results = []
+      if(!busqueda){
+          results = registros
+      }else{
+          results = registros.filter( (dato) =>
+          dato.id_bitacora.toString().includes(busqueda.toLocaleLowerCase()) || 
+          dato?.id_usuario?.toString().includes(busqueda.toLocaleLowerCase()) ||       
+          dato?.accion?.toLowerCase().includes(busqueda.toLocaleLowerCase()) ||
+          dato?.nombre_usuario?.toLowerCase().includes(busqueda.toLocaleLowerCase()) ||
+          dato?.fecha?.toLowerCase().includes(busqueda.toLocaleLowerCase()) 
+          )
+      };
+    
     return (
       <div className="container">
         <h3>Bit&aacute;cora de Usuarios</h3>
-        <h5>
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Magni
-          consectetur odio asperiores, deserunt beatae accusantium omnis iure.
-        </h5>
+        <div className="row">
+       
+       <div className="col">
+         <div
+           className="btn-toolbar"
+           role="toolbar"
+           aria-label="Toolbar with button groups"
+         >
+           {/* <div
+             className="btn-group me-2"
+             role="group"
+             aria-label="First group"
+           >
+             <Link
+               to="/admin/createUser"
+               type="button"
+               className="btn btn-primary"
+               title="Agregar Nuevo"
+             >
+                Nuevo
+               <i class="bi bi-plus-lg"></i>
+             </Link>
+           </div> */}
+           <div
+             className="btn-group me-2"
+             role="group"
+             aria-label="Second group"
+           >
+             <Link
+               type="button"
+               className="btn btn-success"
+               title="Exportar a Excel"
+               onClick={() => downloadCSV(registros,'Reporte_Bitacoras_')}
+             >
+               <i class="bi bi-file-excel-fill"></i> Excel
+             </Link>
+           </div>
+
+
+             
+         </div>
+
+
+        
+
+       </div>
+
+
+         {/*Mostrar la barra de busqueda*/}
+         <div className="col-4">
+         <div className="input-group flex-nowrap">
+           <span className="input-group-text" id="addon-wrapping">
+           <i class="bi bi-search"></i>
+           </span>
+           <input
+             className="form-control me-2"
+             type="text"
+             placeholder="Buscar por Acción|Nombre de usuario|Fecha"
+             aria-label="Search"
+             value={busqueda}
+             onChange={valorBuscar}
+           />
+         </div>
+       </div>
+  
+       </div>
         <br />
         <div className="row">
           <DataTable
             columns={columns}
-            data={registros}
+            data={results}
             pagination
             paginationComponentOptions={paginationComponentOptions}
             highlightOnHover

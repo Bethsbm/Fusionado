@@ -144,17 +144,17 @@ function Header() {
               <li>
                 <hr className="dropdown-divider" />
               </li>
-              {/* <li>
+              <li>
                 <Link
                   className="dropdown-item d-flex align-items-center"
-                  to="/">
+                  to="/admin/MyProfile">
                   <i className="bi bi-person"></i> <span>Mi Perfil</span>
                 </Link>
               </li>
               <li>
                 <hr className="dropdown-divider" />
               </li>
-              <li>
+              {/* <li>
                 
                 <Link
                   className="dropdown-item d-flex align-items-center"
@@ -166,8 +166,8 @@ function Header() {
               </li>
               <li>
                 <hr className="dropdown-divider" />
-              </li>
-              <li>
+              </li> */}
+              {/* <li>
                 
                 <Link
                   className="dropdown-item d-flex align-items-center"
@@ -176,10 +176,10 @@ function Header() {
                   <i className="bi bi-question-circle"></i>
                   <span>Ayuda</span>
                 </Link>
-              </li>
+              </li> */}
               <li>
                 <hr className="dropdown-divider" />
-              </li> */}
+              </li>
               <li>
                 
                 <Link

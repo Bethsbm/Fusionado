@@ -1,5 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import DataTable from 'react-data-table-component';
+import { Link } from 'react-router-dom';
+import { downloadCSV, toUpperCaseField } from '../../../utils/utils';
 import '../preguntas/preguntas.css';
 const urlapi = "http://localhost:3001";
 
@@ -61,16 +63,9 @@ export default function Pregunta(props) {
     //Configuramos las columnas de la tabla
     const columns = [
       {
-        name: "ID",
-        selector: (row) => row.id_pregunta,
-        sortable: true,
-      
-      },
-      {
         name: "Pregunta",
-        selector: (row) => row.pregunta,
-        sortable: true,
-      
+        selector: (row) => toUpperCaseField(row.pregunta),
+        sortable: false,
       },
    
      
@@ -85,14 +80,102 @@ export default function Pregunta(props) {
       selectAllRowsItemText: "Todos",
     };
   
+
+
+
+//Barra de busqueda
+const [ busqueda, setBusqueda ] = useState("")
+//capturar valor a buscar
+ const valorBuscar = (e) => {
+   setBusqueda(e.target.value)   
+ }
+   //metodo de filtrado 
+ let results = []
+ if(!busqueda){
+     results = registros
+ }else{
+     results = registros.filter( (dato) =>
+     dato.id_pregunta.toString().includes(busqueda.toLocaleLowerCase()) || 
+     dato?.pregunta?.toLowerCase().includes(busqueda.toLocaleLowerCase())    
+     )
+ };
+
+
     return (
       <div className="container">
         <h5>Preguntas de seguridad</h5>
+
+        <div className="row">
+       
+        <div className="col">
+          <div
+            className="btn-toolbar"
+            role="toolbar"
+            aria-label="Toolbar with button groups"
+          >
+            {/* <div
+              className="btn-group me-2"
+              role="group"
+              aria-label="First group"
+            >
+              <Link
+                to="/admin/createUser"
+                type="button"
+                className="btn btn-primary"
+                title="Agregar Nuevo"
+              >
+                 Nuevo
+                <i class="bi bi-plus-lg"></i>
+              </Link>
+            </div> */}
+            <div
+              className="btn-group me-2"
+              role="group"
+              aria-label="Second group"
+            >
+              <Link
+                type="button"
+                className="btn btn-success"
+                title="Exportar a Excel"
+                onClick={() => downloadCSV(registros,'Reporte_Preguntas_')}
+              >
+                <i class="bi bi-file-excel-fill"></i> Excel
+              </Link>
+            </div>
+
+
+              
+          </div>
+
+
+         
+
+        </div>
+
+
+          {/*Mostrar la barra de busqueda*/}
+          <div className="col-4">
+          <div className="input-group flex-nowrap">
+            <span className="input-group-text" id="addon-wrapping">
+            <i class="bi bi-search"></i>
+            </span>
+            <input
+              className="form-control me-2"
+              type="text"
+              placeholder="Buscar por Parámetro|Valor|Fechas"
+              aria-label="Search"
+              value={busqueda}
+              onChange={valorBuscar}
+            />
+          </div>
+        </div>
+   
+        </div>
         <br />
         <div className="row">
           <DataTable
             columns={columns}
-            data={registros}
+            data={results}
             pagination
             paginationComponentOptions={paginationComponentOptions}
             highlightOnHover

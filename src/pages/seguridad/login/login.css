@@ -53,6 +53,7 @@ body{
     border: 1px solid #e32728;
     border-radius: 15px;
     font-weight: bold;
+    display: flex;
 }
 
 .username input{
@@ -63,6 +64,10 @@ body{
     background: none;
     outline: none;
 
+}
+.username .fa{
+    top: 3px;
+    position: relative;
 }
 
 .username input::placeholder{
@@ -155,10 +160,39 @@ body{
     text-decoration: underline;
     letter-spacing: 0.5px;
 }
-.showPass{
+.showPass {
     color: #e1e1e0;
     background: #e22828;
     padding: 2px 8px;
     border-radius: 9px;
     cursor: pointer;
+    position: absolute;
+    top: 4px;
+    right: 5px;
+}
+
+.caption{
+    text-align: center;
+}
+
+.danger{
+    color: red;
+}
+.success{
+    color: green;
+}
+
+
+/* estilos reset form reactrap */
+.form-control:focus {
+    color: black;
+    background-color: transparent;
+    border-color: transparent;
+    outline: 0;
+    box-shadow: 0 0 0 0 transparent;
+}
+.form-control.is-invalid:focus,
+.was-validated .form-control:invalid:focus {
+    border-color: transparent;
+    box-shadow: 0 0 0 0 transparent;
 }

@@ -5,6 +5,7 @@ import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import { Alert, Button, Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
 import "./Usuarios.css";
+import { downloadCSV, toUpperCaseField } from "../../../utils/utils";
 
 const urlapi = "http://localhost:3001";
 // const UrlMostrar = "http://190.53.243.69:3001/categoria/getall/";
@@ -79,11 +80,11 @@ const Usuarios = () => {
     getRegistros();
   }, []);
 
-  const goToEdit= (id)=>{
-    navigate('/admin/editUser/'+id,{
-      data:"data"
-    })
-  }
+  // const goToEdit= (id)=>{
+  //   navigate('/admin/editUser/'+id,{
+  //     data:"data"
+  //   })
+  // }
 
 
   //procedimineto para eliminar un registro
@@ -124,68 +125,98 @@ const Usuarios = () => {
    const [modalEliminar, setModalEliminar] = useState(false);
    const abrirModalEliminar = () => setModalEliminar(!modalEliminar);
  
+
+   
+   
+  
+
   //Configuramos las columnas de la tabla
   const columns = [
     // {
     //   name: "ID",
-    //   selector: (row) => row.id_usuario || 'No aplica',
+    //   selector: (row) => row.id_usuario || 'NO APLICA',
     //   sortable: true,
     
     // }, 
 
     // {
     //   name: "ESTADO",
-    //   sortable: true,
-    //   cell: (row) => (
-    //     <>
-    //       <div class="status">
-    //       {row.estado_usuario}
-    //       </div>
-    //     </>
-    //   )
+    //   sortable: false,
+    //   render:statusDes()
+      
     // },
     {
       name: "ESTADO",
-      selector: (row) => row.estado_usuario || 'No aplica',
-      sortable: true,
+      selector: (row) => toUpperCaseField(row.descripcion) || 'NO APLICA',
+      sortable: false,
     
     },
   
     {
       name: "NOMBRE",
-      selector: (row) => row.usuario || 'No aplica',
+      selector: (row) => toUpperCaseField(row.usuario) || 'NO APLICA',
       sortable: false,
     
     },
     {
       name: "USUARIO",
-      selector: (row) => row.nombre_usuario || 'No aplica',
+      selector: (row) => toUpperCaseField(row.nombre_usuario) || 'NO APLICA',
       sortable: true,
     
     },
     {
       name: "CORREO",
-      selector: (row) => row.correo_electronico || 'No aplica',
+      selector: (row) => row.correo_electronico || 'NO APLICA',
+      sortable: false,
+    
+    },
+    {
+      name: "CONTRASEÑA",
+      selector: (row) => row.contrasena || 'NO APLICA',
       sortable: false,
     
     },
     {
       name: "ROLE",
-      selector: (row) => row.id_rol || 'No aplica',
+      selector: (row) => toUpperCaseField(row.rol) || 'NO APLICA',
       sortable: true,
     
     },
     {
-      name: "FECHA CREACIÓN",
-      selector: (row) => row.fecha_creacion || 'No aplica',
+      name: "CREADO POR",
+      selector: (row) => toUpperCaseField(row.creado_por) || 'NO APLICA',
       sortable: false,
-    
+    },
+    {
+      name: "ULTIMA C",
+      selector: (row) => row.fecha_ultima_conexion || 'NO APLICA',
+      sortable: false,
+    },
+    {
+      name: "INTENTOS",
+      selector: (row) => row.intentos_login || 'NO APLICA',
+      sortable: false,
+    },
+    {
+      name: "PRIMER INGRESO",
+      selector: (row) => row.primer_ingreso || 'NO APLICA',
+      sortable: false,
+    },
+    {
+      name: "FECHA CREACIÓN",
+      selector: (row) => row.fecha_creacion || 'NO APLICA',
+      sortable: false,
+    },
+    {
+      name: "FECHA VEN",
+      selector: (row) => row.fecha_vencimiento || 'NO APLICA',
+      sortable: false,
     },
     {
       name: "ACCIONES",
       cell: (row) => (
         <>
-          {/* <Link
+          <Link
             to={`/admin/editUser/${row.id_usuario}`}
             
             className="btn  btn-light"
@@ -193,14 +224,14 @@ const Usuarios = () => {
             title="Editar"
           >
             <i className="bi bi-pencil-fill"></i>
-          </Link> */}
-          <button
+          </Link>
+          {/* <button
             className="btn  btn-light"
             title="Editar"
             onClick={goToEdit(row.id_usuario)}
           >
             <i className="bi bi-trash-fill"></i>
-          </button>
+          </button> */}
           &nbsp;
           <button
             className="btn  btn-light"
@@ -229,6 +260,27 @@ const Usuarios = () => {
     selectAllRowsItemText: "Todos",
   };
 
+
+ //Barra de busqueda
+ const [ busqueda, setBusqueda ] = useState("")
+ //capturar valor a buscar
+  const valorBuscar = (e) => {
+    setBusqueda(e.target.value)   
+  }
+    //metodo de filtrado 
+  let results = []
+  if(!busqueda){
+      results = registros
+  }else{
+      results = registros.filter( (dato) =>
+      dato.id_usuario.toString().includes(busqueda.toLocaleLowerCase()) || 
+      dato?.nombre_usuario?.toLowerCase().includes(busqueda.toLocaleLowerCase()) ||       
+      dato?.usuario?.toLowerCase().includes(busqueda.toLocaleLowerCase()) ||       
+      dato?.fecha_creacion?.toLowerCase().includes(busqueda.toLocaleLowerCase()) ||       
+      dato?.correo_electronico?.toLowerCase().includes(busqueda.toLocaleLowerCase())     
+      )
+  };
+
   return (
     <div className="container">
       <h5>Usuarios</h5>
@@ -244,7 +296,7 @@ const Usuarios = () => {
                      isOpen={isValid} 
                      color={color}
                      >{message}</Alert>
-        <div className="col">
+        {/* <div className="col">
           <div
             className="btn-toolbar"
             role="toolbar"
@@ -264,18 +316,75 @@ const Usuarios = () => {
                 <i className="fa-solid fa-plus"></i> Nuevo
               </Link>
             </div>
+
+            
+          </div>
+        </div> */}
+        <div className="col">
+          <div
+            className="btn-toolbar"
+            role="toolbar"
+            aria-label="Toolbar with button groups"
+          >
+            <div
+              className="btn-group me-2"
+              role="group"
+              aria-label="First group"
+            >
+              <Link
+                to="/admin/createUser"
+                type="button"
+                className="btn btn-primary"
+                title="Agregar Nuevo"
+              >
+                 Nuevo
+                <i class="bi bi-plus-lg"></i>
+              </Link>
+            </div>
+            <div
+              className="btn-group me-2"
+              role="group"
+              aria-label="Second group"
+            >
+              <Link
+                type="button"
+                className="btn btn-success"
+                title="Exportar a Excel"
+                onClick={() => downloadCSV(registros,'Reporte_usuarios_')}
+              >
+                <i class="bi bi-file-excel-fill"></i> Excel
+              </Link>
+            </div>
           </div>
         </div>
+
+        {/*Mostrar la barra de busqueda*/}
+        <div className="col-4">
+          <div className="input-group flex-nowrap">
+            <span className="input-group-text" id="addon-wrapping">
+            <i class="bi bi-search"></i>
+            </span>
+            <input
+              className="form-control me-2"
+              type="text"
+              placeholder="Buscar por Nombre|Usuario|Correo..."
+              aria-label="Search"
+              value={busqueda}
+              onChange={valorBuscar}
+            />
+          </div>
+        </div>
+
       </div>
       <div className="row">
         <DataTable
           columns={columns}
-          data={registros}
+          data={results}
           pagination
           paginationComponentOptions={paginationComponentOptions}
           highlightOnHover
           fixedHeader
-          noDataComponent="Cargando registros...."
+          noDataComponent=". . . Datos no encontrados . . ."
           paginationPerPage="6"
           // fixedHeaderScrollHeight="550px"
         />

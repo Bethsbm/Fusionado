@@ -63,29 +63,25 @@ import Permits from "../pages/seguridad/permits/Permits";
 import Logs from "../pages/seguridad/logs/Logs";
 import Pregunta from "../pages/seguridad/preguntas/Preguntas";
 import Layout from "../Layout/Layout";
-//import Registro from "../pages/seguridad/registro/Registro"
-
 import Registro from "../pages/seguridad/registro/Registro"
-// import CreateUser from "../pages/seguridad/createUser/CreateUser"
 import CreateUser from "../pages/seguridad/createUser/CreateUser"
-
-// import Pregunta from "../pages/seguridad/preguntas/Preguntas"
-// import Usuarios from "../pages/seguridad/usuarios/Usuarios"
 import CambioContra from "../pages/seguridad/cambio_contrasena/cambio_contrasena"
 import RecuperacionContra from "../pages/seguridad/recuperacion_contrasena/recuperacion_contrasena"
 import RecuperacionCorreo from "../pages/seguridad/recuperacion_correo/recuperacion_correo"
 import RecuperacionPreguntas from "../pages/seguridad/recuperacion_preguntas/recuperacion_preguntas"
+import UnlockUser from "../pages/seguridad/UnlockUser/UnlockUser";
+import MyProfile from "../pages/seguridad/MyProfile/MyProfile";
 
 
 
 function Rutas() {
-  const [main_class] = useGlobalState("main_class");
+  // const [main_class] = useGlobalState("main_class");
 
   return (
     <BrowserRouter>
       
       <Routes>
-        <Route  path="/" element={<Login />}/>
+          <Route  path="/" element={<Login />}/>
           <Route path="/login" element={<Login />} />
           <Route path="/registro" element={<Registro />} />
           <Route path="/Preguntas" element={<Pregunta />} />
@@ -93,12 +89,14 @@ function Rutas() {
           <Route path="/recuperacion_contrasena" element={<RecuperacionContra />} />
           <Route path="/recuperacion_correo" element={<RecuperacionCorreo />} />
           <Route path="/recuperacion_preguntas" element={<RecuperacionPreguntas />} />
+          <Route path="/unlockuser" element={<UnlockUser/>} />
       </Routes> 
       
       <Routes  >
             <Route path="/admin" element={<Layout />}>
             <Route path="home" element={<Home />} />
             <Route path="users" element={<MostrarUsuarios />} />
+            <Route path="MyProfile" element={<MyProfile/>} />
             <Route path="createUser" element={<CreateUser />} />
             <Route path="editUser/:id" element={<EditarUsuario />} />
             <Route path="params" element={<Parametros />} />
