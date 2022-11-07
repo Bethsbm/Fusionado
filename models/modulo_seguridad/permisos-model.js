@@ -3,7 +3,26 @@
 var conn = require("../../config/db-connection"),
   PermisosModel = () => {};
 
-PermisosModel.getAll = (cb) => conn.query("SELECT * FROM seguridad.tbl_ms_permisos", cb);
+// PermisosModel.getAll = (cb) => conn.query("SELECT * FROM seguridad.tbl_ms_permisos", cb);
+PermisosModel.getAll = (cb) => conn.query(
+  `
+SELECT 
+per.id_permiso,
+per.id_rol,
+rol.rol,
+per.id_objeto,
+per.permiso_insercion,
+per.permiso_eliminacion,
+per.permiso_actualizacion,
+per.permiso_consultar,
+per.creado_por,
+per.fecha_creacion,
+per.modificado_por, 
+per.fecha_modificacion
+FROM seguridad.tbl_ms_permisos as per
+INNER JOIN seguridad.tbl_ms_roles as rol
+ON rol.id_rol = per.id_rol
+  `, cb);
 
 PermisosModel.getOne = (id, cb) =>
   conn.query("SELECT * FROM seguridad.tbl_ms_permisos WHERE id_permiso = $1", [id], cb);

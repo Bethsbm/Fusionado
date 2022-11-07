@@ -32,7 +32,7 @@ LoginModel.searchToken = (token, cb) =>
   
   
   LoginModel.getByNameUser = (nameUser, cb) =>{
-    conn.query("SELECT id_usuario,nombre_usuario,estado_usuario,id_rol,correo_electronico FROM seguridad.tbl_ms_usuario WHERE nombre_usuario = $1 and nombre_usuario != 'systemUser' ", [nameUser], cb);
+    conn.query("SELECT id_usuario,nombre_usuario,estado_usuario,id_rol,correo_electronico FROM seguridad.tbl_ms_usuario WHERE nombre_usuario = $1 and nombre_usuario != 'SYSTEMUSER' ", [nameUser], cb);
   }
   
   

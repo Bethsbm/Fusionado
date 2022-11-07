@@ -3,7 +3,35 @@
 var conn = require("../../config/db-connection"),
   UsuarioModel = () => {};
 
-UsuarioModel.getAll = (cb) => conn.query("SELECT * FROM seguridad.tbl_ms_usuario WHERE nombre_usuario != 'systemUser'", cb);
+// UsuarioModel.getAll = (cb) => conn.query("SELECT * FROM seguridad.tbl_ms_usuario WHERE nombre_usuario != 'SYSTEMUSER' ", cb);
+UsuarioModel.getAll = (cb) => conn.query(`
+SELECT 
+u.id_usuario,
+u.usuario,
+u.nombre_usuario,
+u.estado_usuario,
+e.descripcion,
+u.contrasena,
+u.id_rol,
+r.rol,
+u.fecha_ultima_conexion,
+u.preguntas_contestadas,
+u.primer_ingreso,
+u.fecha_vencimiento,
+u.correo_electronico,
+u.creado_por,
+u.fecha_creacion,
+u.modificado_por,
+u.fecha_modificacion,
+u.intentos_login
+FROM seguridad.tbl_ms_usuario as u
+INNER JOIN seguridad.tbl_ms_roles as r 
+ON u.id_rol = r.id_rol
+INNER JOIN seguridad.tbl_ms_usuario_estado as e 
+ON u.estado_usuario = e.id
+WHERE nombre_usuario != 'SYSTEMUSER' 
+OR usuario != 'SYSTEMUSER' 
+`, cb);
 
 
 UsuarioModel.validateUserState = (id ,cb) => conn.query("SELECT id_usuario,estado_usuario,id_rol,fecha_vencimiento FROM seguridad.tbl_ms_usuario WHERE id_usuario = $1",[id], cb);
