@@ -160,16 +160,50 @@ UsuarioController.updateUserState = (req, res, next) => {
 
 
 UsuarioController.edit = (req, res, next) => {
-	let id_usuario = req.body.id_usuario
-	
-			res.status(201).json(
+	// let id_usuario = req.params.id_usuario
+	let data={
+		usuario:req.body.usuario,
+		nombre_usuario:req.body.nombre_usuario,
+		estado_usuario:req.body.estado_usuario,
+		id_rol:req.body.id_rol,
+		modificado_por:req.body.modificado_por,
+		id_usuario:req.body.id_usuario,
+	}
+
+	UsuarioModel.updateUserbyId(data, (err, row) => {
+		// console.log(err, '---', row)
+		if(err)
+		{
+			let locals = {
+				title : `Error al buscar el registro con el id: ${id_usuario}`,
+				description : "Error de Sintaxis SQL",
+				error : err
+			}
+			
+			res.render('error', locals)
+		}
+		else
+		{
+			// let locals = {
+			// 	title : 'Editar Usuario',
+			// 	data : row
+			// }
+			console.log(row.rows)
+			// res.status(200).send(rows.rows)
+			res.status(200).json(
 				{
 					status:true,
-					code:200,
+					code:201,
 					message:"Información actualizada exitosamente",
-					object:id_usuario,
+					object:row.rows,
 				}
 			)
+			//res.render('edit-movie', locals)
+		}
+	})
+
+
+
 	
 }
 

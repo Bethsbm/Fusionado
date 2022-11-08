@@ -39,6 +39,26 @@ UsuarioModel.validateUserState = (id ,cb) => conn.query("SELECT id_usuario,estad
 
 UsuarioModel.updateUserState = (id ,cb) => conn.query("UPDATE seguridad.tbl_ms_usuario SET estado_usuario=2 WHERE id_usuario = $1",[id], cb);
 
+UsuarioModel.updateUserbyId = (data ,cb) => conn.query(`
+UPDATE seguridad.tbl_ms_usuario
+	SET 
+	usuario=$1,
+  nombre_usuario=$2,
+	estado_usuario=$3,
+	id_rol=$4,
+	modificado_por=$5,
+	fecha_modificacion= NOW()
+	WHERE id_usuario=$6
+
+  `,[
+    data.usuario,
+    data.nombre_usuario,
+    data.estado_usuario,
+    data.id_rol,
+    data.modificado_por,
+    data.id_usuario,
+  ], cb);
+
 
 UsuarioModel.getOne = (id, cb) =>
   conn.query("SELECT * FROM seguridad.tbl_ms_usuario WHERE id_usuario = $1", [id], cb);

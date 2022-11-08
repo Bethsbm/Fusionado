@@ -18,12 +18,14 @@ var EstadoModel = require('../../models/modulo_seguridad/estado-model'),
         }
         else
         {
-            let locals = {
-                title : 'Lista de estados',
-                data : rows
-            }
-            res.status(200).send(rows.rows)
-            res.render('index', locals)
+            res.status(200).json(
+				{
+					status:true,
+					code:200,
+					message:"Información encontrada exitosamente",
+					object:rows.rows,
+				}
+			)
         }
     })
 }
@@ -47,11 +49,19 @@ EstadoController.getOne = (req, res, next) => {
 		}
 		else
 		{
-			let locals = {
-				title : 'Editar estado',
-				data : rows
-			}
-			res.status(200).send(rows.rows)
+			res.status(200).json(
+				{
+					status:true,
+					code:200,
+					message:"Información encontrada exitosamente",
+					object:rows.rows,
+				}
+			)
+			// let locals = {
+			// 	title : 'Editar estado',
+			// 	data : rows
+			// }
+			// res.status(200).send(rows.rows)
 			//res.render('edit-movie', locals)
 		}
 	})
