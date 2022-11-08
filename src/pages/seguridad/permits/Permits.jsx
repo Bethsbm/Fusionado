@@ -16,7 +16,7 @@ export default function Permits(props) {
     let log={
        fecha: new Date(),
        id_usuario:userdata.data.id || 0,
-       accion:'READ',
+       accion:'LECTURA',
        descripcion:'Ingreso a pantalla PERMISOS',
   }
     fetch(urlapi + "/logs/save"
@@ -64,6 +64,12 @@ export default function Permits(props) {
   
     //Configuramos las columnas de la tabla
     const columns = [
+      {
+        name: "ID",
+        selector: (row) =>row.id_permiso || 'No aplica',
+        sortable: true,
+      
+      },
       {
         name: "Rol",
         selector: (row) =>toUpperCaseField(row.rol) || 'No aplica',

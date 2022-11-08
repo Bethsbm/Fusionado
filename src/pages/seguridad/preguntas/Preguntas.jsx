@@ -15,7 +15,7 @@ export default function Pregunta(props) {
     let log={
        fecha: new Date(),
        id_usuario:userdata.data.id || 0,
-       accion:'READ',
+       accion:'LECTURA',
        descripcion:'Ingreso a pantalla ROLES',
   }
     fetch(urlapi + "/logs/save"
@@ -62,6 +62,11 @@ export default function Pregunta(props) {
   
     //Configuramos las columnas de la tabla
     const columns = [
+      {
+        name: "ID",
+        selector: (row) => row.id_pregunta,
+        sortable: false,
+      },
       {
         name: "Pregunta",
         selector: (row) => toUpperCaseField(row.pregunta),

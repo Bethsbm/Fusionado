@@ -1,31 +1,23 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Formik, Form, Field, ErrorMessage } from "formik";
+// import { Formik, Form, Field, ErrorMessage } from "formik";
 import { useParams } from "react-router-dom";
-
+// import { Button, FormGroup, Input, Label } from "reactstrap";
+import { Button, FormGroup, Label, Input, Row, Col } from "reactstrap";
+import { Form, Field } from "react-final-form";
 
 const urlapi = "http://localhost:3001";
+const userdata= JSON.parse(localStorage.getItem('data')) 
 const EditarUsuario = () => {
-
   let navigate = useNavigate();
   const { id } = useParams();
-  // const { type } = useParams();
-  // console.log(id);
-  // console.log(type);
-var initialValues={
-  id:"",
-  usuario:"",
-  nombre_usuario:"",
-  estado_usuario:"",
-  id_rol:"",
-  correo_electronico:"",
-  modificado_por:"",
-  fecha_modificacion:"",
-}
+
   const [registro, setRegistro] = useState({});
 
-  const getRegistroById = async () => {
-    fetch(urlapi + "/getById/"+id
+
+  const [roles, setRoles] = useState([]);
+  const getRoles = async () => {
+    fetch(urlapi + "/ms_rol/getall"
     , {
     method: 'GET',
     headers: {
@@ -34,485 +26,487 @@ var initialValues={
     })
     .then(response => response.json())
     .then(responseJson => {  
-        console.log("edit user",responseJson)
-        console.log("Edit usef",responseJson.status)
-        // initialValues={
-        //   id:id,
-        //   usuario:responseJson.object.usuario,
-        //   nombre_usuario:responseJson.object.nombre_usuario,
-        //   estado_usuario:responseJson.object.estado_usuario,
-        //   id_rol:responseJson.object.id_rol,
-        //   correo_electronico:responseJson.object.correo_electronico,
-        //   modificado_por:responseJson.object.modificado_por,
-        //   fecha_modificacion:responseJson.object.fecha_modificacion,
-        // }
-        setRegistro(responseJson.object);
+        console.log("ROLES JSON",responseJson)
+        console.log("ROLES JSON",responseJson.status)
+        setRoles(responseJson.object);
+    })
+    .catch(error=>{
+        console.log(error)   
+    })
+};
+  const [estados, setEstados] = useState([]);
+
+  const getEstados = async () => {
+    fetch(urlapi + "/ms_estado/getall"
+    , {
+    method: 'GET',
+    headers: {
+        'Content-type': 'application/json'
+    }
+    })
+    .then(response => response.json())
+    .then(responseJson => {  
+        console.log("ESTADOS JSON",responseJson)
+        console.log("ESTADOS JSON",responseJson.status)
+        setEstados(responseJson.object);
     })
     .catch(error=>{
         console.log(error)   
     })
 };
 
+
+
+  const getRegistroById = async () => {
+    fetch(urlapi + "/getById/" + id, {
+      method: "GET",
+      headers: {
+        "Content-type": "application/json",
+      },
+    })
+      .then((response) => response.json())
+      .then((responseJson) => {
+        console.log("edit user", responseJson);
+        console.log("Edit usef", responseJson.status);
+        setRegistro(responseJson.object);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   useEffect(() => {
+    getEstados();
+    getRoles();
     getRegistroById();
   }, []);
 
+  console.log("registro", registro);
 
-console.log('registro',registro)
+  const onSubmit = (event) => {
+    console.log("event", event);
+    let data={
+      usuario:event.usuario,
+      nombre_usuario:event.nombre_usuario,
+      estado_usuario:event.estado_usuario,
+      id_rol:event.id_rol,
+      modificado_por:userdata.data.nameUser,
+      id_usuario:userdata.data.id,
+    }
+  
+    fetch(urlapi + "/ms_registro/update/"+ id, {
+      method: "PUT",
+      body:JSON.stringify(data),
+      headers: {
+        "Content-type": "application/json",
+      },
+    })
+      .then((response) => response.json())
+      .then((responseJson) => {
+        console.log("edit user", responseJson);
+        console.log("Edit usef", responseJson.status);
+        if(responseJson.status){
+            navigate('/admin/users')
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+  const onSelect = (e) => {
+    console.log(e.target.value);
+    // console.log(e.target.value[0] + " " + e.target.value[1] );
+    // this.setState({
+    //     id_rol: e.target.value[0],
+    //     rol: e.target.value[1]
+    // });
+}
 
-  //Configurar los hooks
-  const [formularioEnviado, setFormularioEnviado] = useState(false);
+// this.state = registro.id_rol;
+const handleChange=(event)=> {
+  
+  
 
-  // if (type === "new") {
-  //   console.log("Crear Nuevo registro");
-  // } else if (type === "edit") {
-  //   console.log("Editar un registro");
-  // }
-
+}
   return (
     <div className="container">
-      <Formik
-        //valores iniciales
-        initialValues={initialValues}
-        //Funcion para validar
-        validate={(valores) => {
-          let errores = {};
+      <h4>Editar usuario</h4>
+      <div className="row">
+        <div className="col-md-12">
+          <Form
+            onSubmit={onSubmit}
+            initialValues={
+              { 
+                id_rol: registro.id_rol,
+                estado_usuario: registro.estado_usuario,
+                nombre_usuario: registro.nombre_usuario,
+                usuario: registro.usuario,
+                }
+            }
+            validate={(values) => {
+              const errors = {};
+              if (!values.id_rol) {
+                errors.id_rol = "Campo Requerido";
+              }
+              if (!values.nombre_usuario) {
+                errors.nombre_usuario = "Campo Requerido";
+              }
+              if (!values.estado_usuario) {
+                errors.estado_usuario = "Campo Requerido";
+              }
+              if (!values.usuario) {
+                errors.usuario = "Campo Requerido";
+              }
+              
+              return errors;
+            }}
+            render={({
+              handleSubmit,
+              values,
+              submitting,
+              validating,
+              valid,
+            }) => (
+              <form onSubmit={handleSubmit}>
+                <Row>
+                  <Col md={6} lg={6}>
+                    {/* contrasena NO  */}
+                    {/* correo_electronico NO  */}
+                    {/* creado_por NO */}
+                    {/* estado_usuario SI */}
+                    {/* fecha_creacion NO */}
+                    {/* fecha_modificacion NO */}
+                    {/* fecha_ultima_conexion NO */}
+                    {/* fecha_vencimiento NO */}
+                    <FormGroup>
+                      <Label for="fname">Contraseña</Label>
+                      <Field name="fname">
+                        {({ input, meta }) => (
+                          <div>
+                            <Input
+                              {...input}
+                              type="text"
+                              disabled
+                              value={registro.contrasena}
+                              placeholder="Contrasena"
+                              invalid={meta.error && meta.touched}
+                            />
+                            {meta.error && meta.touched && (
+                              <span>{meta.error}</span>
+                            )}
+                          </div>
+                        )}
+                      </Field>
+                    </FormGroup>
+                    <FormGroup>
+                      <Label for="createdBy">Creado por</Label>
+                      <Field name="createdBy">
+                        {({ input, meta }) => (
+                          <div>
+                            <Input
+                              {...input}
+                              disabled
+                              type="text"
+                              value={registro.creado_por}
+                              placeholder="Creado Por"
+                              invalid={meta.error && meta.touched}
+                            />
+                            {meta.error && meta.touched && (
+                              <span>{meta.error}</span>
+                            )}
+                          </div>
+                        )}
+                      </Field>
+                    </FormGroup>
+                    <FormGroup>
+                      <Label for="email">Email</Label>
+                      <Field name="email">
+                        {({ input, meta }) => (
+                          <div>
+                            <Input
+                              {...input}
+                              disabled
+                              type="text"
+                              value={registro.correo_electronico}
+                              placeholder="Correo electronico"
+                              invalid={meta.error && meta.touched}
+                            />
+                            {meta.error && meta.touched && (
+                              <span>{meta.error}</span>
+                            )}
+                          </div>
+                        )}
+                      </Field>
+                    </FormGroup>
+                    <FormGroup>
+                      <Label for="id_rol">Rol</Label>
+                      <Input
+                                id="id_rol"
+                                name="id_rol"
+                                type="select"
+                                // value={registro.id_rol}
+                                onChange={handleChange}
+                                // onChange={onSelect}
+                              >
+                               {
+                                roles.map((item,index) => (
+                                <option value={item.id_rol}>{item.rol}</option>
+                                ))}
+                        </Input>
+                    </FormGroup>
+                    <FormGroup>
+                      <Label for="fecha_creacion">Fecha creación </Label>
+                      <Field name="fecha_creacion">
+                        {({ input, meta }) => (
+                          <div>
+                            <Input
+                              {...input}
+                              disabled
+                              type="text"
+                              value={registro.fecha_creacion}
+                              placeholder="Fecha de creación"
+                              invalid={meta.error && meta.touched}
+                            />
+                            {meta.error && meta.touched && (
+                              <span>{meta.error}</span>
+                            )}
+                          </div>
+                        )}
+                      </Field>
+                    </FormGroup>
+                    <FormGroup>
+                      <Label for="fecha_modificacion">Fecha de modificación</Label>
+                      <Field name="fecha_modificacion">
+                        {({ input, meta }) => (
+                          <div>
+                            <Input
+                              {...input}
+                              disabled
+                              type="text"
+                              value={registro.fecha_modificacion}
+                              placeholder="Fecha de modifiacion"
+                              invalid={meta.error && meta.touched}
+                            />
+                            {meta.error && meta.touched && (
+                              <span>{meta.error}</span>
+                            )}
+                          </div>
+                        )}
+                      </Field>
+                    </FormGroup>
+                    <FormGroup>
+                      <Label for="fecha_ultima_conexion">Ultima conexión</Label>
+                      <Field name="fecha_ultima_conexion">
+                        {({ input, meta }) => (
+                          <div>
+                            <Input
+                              {...input}
+                              disabled
+                              type="text"
+                              value={registro.fecha_ultima_conexion}
+                              placeholder="Ultima conexion"
+                              invalid={meta.error && meta.touched}
+                            />
+                            {meta.error && meta.touched && (
+                              <span>{meta.error}</span>
+                            )}
+                          </div>
+                        )}
+                      </Field>
+                    </FormGroup>
+                    <FormGroup>
+                      <Label for="fecha_vencimiento">Fecha vencimiento</Label>
+                      <Field name="fecha_vencimiento">
+                        {({ input, meta }) => (
+                          <div>
+                            <Input
+                              {...input}
+                              disabled
+                              type="text"
+                              value={registro.fecha_vencimiento}
+                              placeholder="Fecha de vencimiento"
+                              invalid={meta.error && meta.touched}
+                            />
+                            {meta.error && meta.touched && (
+                              <span>{meta.error}</span>
+                            )}
+                          </div>
+                        )}
+                      </Field>
+                    </FormGroup>
+                    {/* <Button  color="primary" > Cancelar</Button> */}
+                    <Link className="btn primary" to="/admin/users">Cancelar</Link>
+                  </Col>
 
-          // Validacion nombre usuario
-          if (!valores.nombre_usuario) {
-            errores.nombre_usuario = "Por favor ingrese un nombre de usuario";
-          }
+                  <Col md={6} lg={6}>
+                    {/* id_rol SI  */}
+                    {/* id_usuario NO  */}
+                    {/* intentos_login NO  */}
+                    {/* modificado_por NO */}
+                    {/* nombre_usuario SI  */}
+                    {/* preguntas_contestadas NO  */}
+                    {/* primer_ingreso NO */}
+                    {/* usuario NO */}
+                    {/* <FormGroup>
+                      <Label for="status">Estado</Label>
+                      <Field name="status">
+                        {({ input, meta }) => (
+                          <div>
+                            <Input
+                              {...input}
+                              disabled
+                              type="text"
+                              placeholder="Estado"
+                              invalid={meta.error && meta.touched}
+                            />
+                            {meta.error && meta.touched && (
+                              <span>{meta.error}</span>
+                            )}
+                          </div>
+                        )}
+                      </Field>
+                    </FormGroup> */}
+                    <FormGroup>
+                      <Label for="estado_usuario">Estado</Label>
+                      <Input
+                                id="estado_usuario"
+                                name="estado_usuario"
+                                type="select"
+                                // value={registro.estado_usuario}
+                              >
+                               {
+                                estados.map((item,index) => (
+                                <option key={item.id} value={item.id}>{item.descripcion}</option>
+                                ))}
+                        </Input>
+                    </FormGroup>
+                    <FormGroup>
+                      <Label for="intentos_login">Intentos Login</Label>
+                      <Field name="intentos_login">
+                        {({ input, meta }) => (
+                          <div>
+                            <Input
+                              {...input}
+                              disabled
+                              type="text"
+                              placeholder="Intentos login"
+                              value={registro.intentos_login}
+                              invalid={meta.error && meta.touched}
+                            />
+                            {meta.error && meta.touched && (
+                              <span>{meta.error}</span>
+                            )}
+                          </div>
+                        )}
+                      </Field>
+                    </FormGroup>
+                    <FormGroup>
+                      <Label for="modificado_por">Modificado Por</Label>
+                      <Field name="modificado_por">
+                        {({ input, meta }) => (
+                          <div>
+                            <Input
+                              {...input}
+                              disabled
+                              type="text"
+                              placeholder="Modificado Por"
+                              value={registro.modificado_por}
+                              invalid={meta.error && meta.touched}
+                            />
+                            {meta.error && meta.touched && (
+                              <span>{meta.error}</span>
+                            )}
+                          </div>
+                        )}
+                      </Field>
+                    </FormGroup>
+                    <FormGroup>
+                      <Label for="nombre_usuario">Nombre de usuario</Label>
+                      <Field name="nombre_usuario">
+                        {({ input, meta }) => (
+                          <div>
+                            <Input
+                              {...input}
+                              type="text"
+                              placeholder="Nombre de usuario"
+                              // value={registro.nombre_usuario}
+                              invalid={meta.error && meta.touched}
+                            />
+                            {meta.error && meta.touched && (
+                              <span>{meta.error}</span>
+                            )}
+                          </div>
+                        )}
+                      </Field>
+                    </FormGroup>
+                    <FormGroup>
+                      <Label for="preguntas_contestadas">Preguntas contestadas</Label>
+                      <Field name="preguntas_contestadas">
+                        {({ input, meta }) => (
+                          <div>
+                            <Input
+                              {...input}
+                              disabled
+                              type="text"
+                              value={registro.preguntas_contestadas}
+                              placeholder="Preguntas contestadas"
+                              invalid={meta.error && meta.touched}
+                            />
+                            {meta.error && meta.touched && (
+                              <span>{meta.error}</span>
+                            )}
+                          </div>
+                        )}
+                      </Field>
+                    </FormGroup>
+                    <FormGroup>
+                      <Label for="primer_ingreso">Primer Ingreso</Label>
+                      <Field name="primer_ingreso">
+                        {({ input, meta }) => (
+                          <div>
+                            <Input
+                              {...input}
+                              disabled
+                              type="text"
+                              placeholder="Primer ingreso"
+                              value={registro.primer_ingreso}
+                              invalid={meta.error && meta.touched}
+                            />
+                            {meta.error && meta.touched && (
+                              <span>{meta.error}</span>
+                            )}
+                          </div>
+                        )}
+                      </Field>
+                    </FormGroup>
+                    <FormGroup>
+                      <Label for="usuario">Usuario</Label>
+                      <Field name="usuario">
+                        {({ input, meta }) => (
+                          <div>
+                            <Input
+                              {...input}
+                              type="text"
+                              placeholder="Usuario"
+                              invalid={meta.error && meta.touched}
+                            />
+                            {meta.error && meta.touched && (
+                              <span>{meta.error}</span>
+                            )}
+                          </div>
+                        )}
+                      </Field>
+                    </FormGroup>
+                <Button type="submit" color="primary" disabled={!valid}>Editar</Button>
+                {/* <Button type="submit" color="primary" >Editar</Button> */}
+                  </Col>
+                </Row>
 
-          // Validacion estado usuario
-          if (!valores.estado_usuario) {
-            errores.estado_usuario = "Por favor ingresa un estado";
-          }
-
-          // Validacion rol
-          if (!valores.id_rol) {
-            errores.id_rol = "Por favor ingrese un rol";
-          }
-
-          // Validacion correo
-          if (!valores.correo_electronico) {
-            errores.correo_electronico = "Por favor ingrese un correo electrónico";
-          }
-
-          // Validacion modificado
-          if (!valores.modificado_por) {
-            errores.modificado_por = "Por favor ingresa el nombre por quien fue modificado";
-          }
-
-          // Validacion fecha de modificacion
-          if (!valores.fecha_modificacion) {
-            errores.fecha_modificacion = "Por favor ingrese la fecha de modificación";
-          }
-
-          return errores;
-        }}
-        onSubmit={(valores, { resetForm }) => {
-          //Enviar los datos (petición Post)
-          console.log("Formulario enviado");
-
-          resetForm();
-          setFormularioEnviado(true);
-        }}
-      >
-        {({ errors }) => (
-          <Form className="">
-            <h3 className="mb-3">Editar Usuario</h3>
-            <div className="row g-3">
-              {/* <div className="col-sm-6">
-                <div className="mb-3">
-                  <label htmlFor="idSucursal" className="form-label">
-                    Id Usuario:
-                  </label>
-                  <Field
-                    type="text"
-                    className="form-control"
-                    id="idSucursal"
-                    name="id"
-                    placeholder="Id usuario..."
-                  />
-
-                  <ErrorMessage
-                    name="id"
-                    component={() => <div className="error">{errors.id}</div>}
-                  />
-                </div>
-              </div> */}
-
-              <div className="col-sm-6">
-                <div className="mb-3">
-                  <label htmlFor="usuario" className="form-label">
-                    Usuario:
-                  </label>
-                  <Field
-                    type="text"
-                    className="form-control"
-                    id="usuario"
-                    name="usuario"
-                    placeholder="Usuario.."
-                    disable = "true"
-                    value={registro.usuario}
-                  />
-
-                  <ErrorMessage
-                    name="descripcion"
-                    component={() => <div className="error">{errors.usuario}</div>}
-                  />
-                </div>
-              </div>
-
-
-              <div className="col-sm-6">
-                <div className="mb-3">
-                  <label htmlFor="correo_electronico" className="form-label">
-                    Correo electrónico:
-                  </label>
-                  <Field
-                    type="text"
-                    className="form-control"
-                    id="correo_electronico"
-                    name="correo_electronico"
-                    placeholder="Correo electrónico..."
-                  />
-
-                  <ErrorMessage
-                    name="correo_electronico"
-                    component={() => (
-                      <div className="error">{errors.correo_electronico}</div>
-                    )}
-                  />
-                </div>
-              </div>
-            </div>
-
-            <div className="row g-3">
-              <div className="col-sm-6">
-                <div className="mb-3">
-                  <label htmlFor="nombre_usuario" className="form-label">
-                    Nombre usuario:
-                  </label>
-                  <Field
-                    type="text"
-                    className="form-control"
-                    id="nombre_usuario"
-                    name="nombre_usuario"
-                    placeholder="Nombre usuario..."
-                  />
-
-                  <ErrorMessage
-                    name="nombre_usuario"
-                    component={() => (
-                      <div className="error">{errors.nombre_usuario}</div>
-                    )}
-                  />
-                </div>
-              </div>
-
-              <div className="col-sm-6">
-                <div className="mb-3">
-                  <label htmlFor="estado_usuario" className="form-label">
-                    Estado usuario:
-                  </label>
-                  <Field
-                    type="text"
-                    className="form-control"
-                    id="estado_usuario"
-                    name="estado_usuario"
-                    placeholder="Estado usuario..."
-                  />
-
-                  <ErrorMessage
-                    name="estado_usuario"
-                    component={() => (
-                      <div className="error">{errors.estado_usuario}</div>
-                    )}
-                  />
-                </div>
-              </div>
-            </div>
-
-            <div className="row g-3">
-              {/* <div className="col-sm-6">
-                <div className="mb-3">
-                  <label htmlFor="rtnSucursal" className="form-label">
-                    Contraseña:
-                  </label>
-                  <Field
-                    type="text"
-                    className="form-control"
-                    id="rtnSucursal"
-                    name="impuesto"
-                    placeholder="Contraseña..."
-                    disable = ""
-                  />
-
-                  <ErrorMessage
-                    name="impuesto"
-                    component={() => (
-                      <div className="error">{errors.contrasena}</div>
-                    )}
-                  />
-                </div>
-              </div> */}
-
-              <div className="col-sm-6">
-                <div className="mb-3">
-                  <label htmlFor="id_rol" className="form-label">
-                    Id rol:
-                  </label>
-                  <Field
-                    type="text"
-                    className="form-control"
-                    id="id_rol"
-                    name="id_rol"
-                    placeholder="Id rol..."
-                  />
-
-                  <ErrorMessage
-                    name="id_rol"
-                    component={() => (
-                      <div className="error">{errors.id_rol}</div>
-                    )}
-                  />
-                </div>
-              </div>
-            </div>
-
-            {/* <div className="row g-3">
-              <div className="col-sm-6">
-                <div className="mb-3">
-                  <label htmlFor="rtnSucursal" className="form-label">
-                    Fecha de última conexión:
-                  </label>
-                  <Field
-                    type="text"
-                    className="form-control"
-                    id="rtnSucursal"
-                    name="unidadventa"
-                    placeholder="Fecha de última conexión..."
-                    disable = ""
-                  />
-
-                  <ErrorMessage
-                    name="unidadventa"
-                    component={() => (
-                      <div className="error">{errors.fecha_ultima_conexion}</div>
-                    )}
-                  />
-                </div>
-              </div>
-
-              <div className="col-sm-6">
-                <div className="mb-3">
-                  <label htmlFor="centroCostoSucursal" className="form-label">
-                    Preguntas contestadas:
-                  </label>
-                  <Field
-                    type="text"
-                    className="form-control"
-                    id="centroCostoSucursal"
-                    name="codigobarra"
-                    placeholder="Preguntas contestadas..."
-                    disable = ""
-                  />
-
-                  <ErrorMessage
-                    name="codigobarra"
-                    component={() => (
-                      <div className="error">{errors.preguntas_contestadas}</div>
-                    )}
-                  />
-                </div>
-              </div>
-            </div> */}
-
-            <div className="row g-3">
-              {/* <div className="col-sm-6">
-                <div className="mb-3">
-                  <label htmlFor="rtnSucursal" className="form-label">
-                    Primer ingreso:
-                  </label>
-                  <Field
-                    type="text"
-                    className="form-control"
-                    id="rtnSucursal"
-                    name="unidadventa"
-                    placeholder="Primer ingreso..."
-                    disable = ""
-                  />
-
-                  <ErrorMessage
-                    name="unidadventa"
-                    component={() => (
-                      <div className="error">{errors.primer_ingreso}</div>
-                    )}
-                  />
-                </div>
-              </div> */}
-
-              <div className="col-sm-6">
-                <div className="mb-3">
-                  <label htmlFor="fecha_vencimiento" className="form-label">
-                    Fecha vencimiento:
-                  </label>
-                  <Field
-                    type="text"
-                    className="form-control"
-                    id="fecha_vencimiento"
-                    name="fecha_vencimiento"
-                    placeholder="Fecha vencimiento..."
-                    disable = ""
-                  />
-
-                  <ErrorMessage
-                    name="fecha_vencimiento"
-                    component={() => (
-                      <div className="error">{errors.fecha_vencimiento}</div>
-                    )}
-                  />
-                </div>
-              </div>
-            </div>
-
-            <div className="row g-3">
-              {/* <div className="col-sm-6">
-                <div className="mb-3">
-                  <label htmlFor="rtnSucursal" className="form-label">
-                    Correo electrónico:
-                  </label>
-                  <Field
-                    type="text"
-                    className="form-control"
-                    id="rtnSucursal"
-                    name="unidadventa"
-                    placeholder="Correo electrónico..."
-                  />
-
-                  <ErrorMessage
-                    name="unidadventa"
-                    component={() => (
-                      <div className="error">{errors.correo_electronico}</div>
-                    )}
-                  />
-                </div>
-              </div> */}
-
-              {/* <div className="col-sm-6">
-                <div className="mb-3">
-                  <label htmlFor="centroCostoSucursal" className="form-label">
-                    Creado por:
-                  </label>
-                  <Field
-                    type="text"
-                    className="form-control"
-                    id="centroCostoSucursal"
-                    name="codigobarra"
-                    placeholder="Creado por..."
-                    disable = ""
-                  />
-
-                  <ErrorMessage
-                    name="codigobarra"
-                    component={() => (
-                      <div className="error">{errors.creado_por}</div>
-                    )}
-                  />
-                </div>
-              </div> */}
-            </div>
-
-            {/* <div className="row g-3">
-              <div className="col-sm-6">
-                <div className="mb-3">
-                  <label htmlFor="rtnSucursal" className="form-label">
-                    Fecha de creación:
-                  </label>
-                  <Field
-                    type="text"
-                    className="form-control"
-                    id="rtnSucursal"
-                    name="unidadventa"
-                    placeholder="Fecha de creación..."
-                    disable = ""
-                  />
-
-                  <ErrorMessage
-                    name="unidadventa"
-                    component={() => (
-                      <div className="error">{errors.fecha_creacion}</div>
-                    )}
-                  />
-                </div>
-              </div>
-
-              <div className="col-sm-6">
-                <div className="mb-3">
-                  <label htmlFor="centroCostoSucursal" className="form-label">
-                    Modificado por:
-                  </label>
-                  <Field
-                    type="text"
-                    className="form-control"
-                    id="centroCostoSucursal"
-                    name="codigobarra"
-                    placeholder="Modificado por..."
-                  />
-
-                  <ErrorMessage
-                    name="codigobarra"
-                    component={() => (
-                      <div className="error">{errors.modificado_por}</div>
-                    )}
-                  />
-                </div>
-              </div>
-            </div> */}
-
-            {/* <div className="row g-3">
-              <div className="col-sm-6">
-                <div className="mb-3">
-                  <label htmlFor="centroCostoSucursal" className="form-label">
-                    Fecha de modificación:
-                  </label>
-                  <Field
-                    type="text"
-                    className="form-control"
-                    id="centroCostoSucursal"
-                    name="codigobarra"
-                    placeholder="Fecha de modificación..."
-                  />
-
-                  <ErrorMessage
-                    name="codigobarra"
-                    component={() => (
-                      <div className="error">{errors.fecha_modificacion}</div>
-                    )}
-                  />
-                </div>
-              </div>
-            </div> */}
-
-            <button className="btn btn-success mb-3 me-2" type="submit">
-              Guardar
-            </button>
-            <Link
-              to="/admin/users"
-              type="button"
-              className="btn btn-danger mb-3 me-2"
-            >
-              Cancelar
-            </Link>
-
-            {/*Mostrar mensaje de exito al enviar formulario */}
-            {formularioEnviado && (
-              <p className="exito">Formulario enviado con exito!</p>
+              </form>
             )}
-          </Form>
-        )}
-      </Formik>
+          />
+        </div>
+      </div>
     </div>
   );
 };

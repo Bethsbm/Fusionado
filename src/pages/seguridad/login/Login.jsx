@@ -4,19 +4,10 @@ import {  Link, useNavigate } from "react-router-dom";
 import { Alert, Button, FormGroup, Input, Label } from "reactstrap";
 import md5 from "md5";
 // import { Field } from "formik";
-
-
 import { Form, Field } from "react-final-form";
 
 import "./login.css";
 import burridogs from "./loginbg.jpg";
-
-// import { UserContext } from '../../../App';
-
-//  import {Registro} from "./../registro/Registro";
-// const axios = require('axios').default;
-
-
 
 const urlAPi = "http://localhost:3001";
 //
@@ -101,19 +92,8 @@ export default function Login(props) {
       });
   };
   //capturar los datos ingresados
-  const refNombreUsuario = useRef(null);
-  const RefContrasena = useRef(null);
-
-//   const handleLogin = async () => {
-//     const data = {
-//       nombre_usuario: refNombreUsuario.current.value.trim().toUpperCase(),
-//       contrasena: md5(RefContrasena.current.value),
-//     };
-//     console.log(data);
-//     await enviarData(urlAPi, data);
-//   };
-
-
+  // const refNombreUsuario = useRef(null);
+  // const RefContrasena = useRef(null);
 
   const onSubmit = async  (values) => {
     console.log(values);
@@ -142,12 +122,12 @@ export default function Login(props) {
           validate={(values) => {
             const errors = {};
             function validateText(username) {
-                var re = /^[a-zA-Z]*$/
+                var re = /^[a-zA-Z0-9]*$/
                 return re.test(String(username).toLowerCase());
               }
 
               if (!values.username) {
-                errors.username = "Required";
+                errors.username = "Campo requerido";
               } else if (!validateText(values.username)) {
                 errors.username = "Nombre de usuario no válido";
               }
@@ -217,47 +197,5 @@ export default function Login(props) {
         />
       </div>
     </div>
-
-    // <div className="background">
-    //     <img
-    //         src={burridogs}
-    //         alt="burridogs" />
-    //     <div className="formulario" >
-    //              <Alert
-    //              isOpen={isValid}
-    //              color={color}
-    //              >{message}</Alert>
-    //         <h2>Panel administrativo</h2>
-    //         <h4>Inicio de Sesión</h4>
-    //         <h5 className='caption'>Ingresa tus credenciales para continuar</h5>
-    //         <div className="inputs">
-    //             <div className="username">
-    //                 <div className="fa fa-user-o"></div>
-    //                 <input
-    //                     type="text"
-    //                     placeholder="Usuario"
-    //                     ref={refNombreUsuario}
-    //                 />
-    //             </div>
-    //             <div className="username">
-    //             <div className="fa fa-lock"></div>
-    //                 <input
-    //                     type={passwordShown ? "text" : "password"}
-    //                     placeholder="Contraseña"
-    //                     ref={RefContrasena}
-    //                 />
-    //                 <span className="showPass" onClick={togglePassword}> Ver </span>
-    //             </div>
-    //             <button
-    //                 onClick={handleLogin}
-    //                 className="btn">Ingresar</button>
-    //             <div className="buttom-container">
-    //                 <Link to="/recuperacion_contrasena">¿Olvidaste tu contraseña?</Link>
-    //                 <Link to="/unlockuser">Desbloquea tu usuario</Link>
-    //                 <Link to="/registro">Crear cuenta</Link>
-    //             </div>
-    //         </div>
-    //     </div>
-    // </div>
   );
 }

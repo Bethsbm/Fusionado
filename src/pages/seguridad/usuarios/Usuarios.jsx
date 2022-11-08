@@ -31,7 +31,7 @@ const Usuarios = () => {
     let log={
        fecha: new Date(),
        id_usuario:userdata.data.id || 0,
-       accion:'READ',
+       accion:'LECTURA',
        descripcion:'Ingreso a pantalla USUARIOS',
   }
     fetch(urlapi + "/logs/save"
@@ -132,12 +132,11 @@ const Usuarios = () => {
 
   //Configuramos las columnas de la tabla
   const columns = [
-    // {
-    //   name: "ID",
-    //   selector: (row) => row.id_usuario || 'NO APLICA',
-    //   sortable: true,
-    
-    // }, 
+    {
+      name: "ID",
+      selector: (row) => row.id_usuario || 'NO APLICA',
+      sortable: false,
+    }, 
 
     // {
     //   name: "ESTADO",

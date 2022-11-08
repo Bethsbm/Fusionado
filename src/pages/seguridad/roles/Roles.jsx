@@ -25,7 +25,7 @@ export default function Roles(props) {
     let log={
        fecha: new Date(),
        id_usuario:userdata.data.id || 0,
-       accion:'READ',
+       accion:'LECTURA',
        descripcion:'Ingreso a pantalla ROLES',
   }
     fetch(urlapi + "/logs/save"
@@ -74,6 +74,12 @@ export default function Roles(props) {
     //Configuramos las columnas de la tabla
     // const columReport=['rol','creado_por','descripcion','fecha_creacion']
     const columns = [
+      {
+        name: "ID",
+        selector: (row) => row.id_rol || 'NO APLICA',
+        sortable: true,
+      
+      },
       {
         name: "Nombre",
         selector: (row) => toUpperCaseField(row.rol) || 'NO APLICA',

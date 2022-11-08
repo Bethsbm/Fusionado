@@ -116,7 +116,7 @@ const [isValid, setIsValid] = useState(false);
                     </select>
                     </div>
                     <button className="btn" type="submit">Ingresar</button>
-
+                    <Link to='/admin/users' className="primary">cancelar</Link>
                     
                 </div>
       

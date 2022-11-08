@@ -16,7 +16,7 @@ export default function Parametros(props) {
     let log={
        fecha: new Date(),
        id_usuario:userdata.data.id || 0,
-       accion:'READ',
+       accion:'LECTURA',
        descripcion:'Ingreso a pantalla PARAMETROS',
   }
     fetch(urlapi + "/logs/save"
@@ -65,6 +65,12 @@ export default function Parametros(props) {
   
     //Configuramos las columnas de la tabla
     const columns = [
+      {
+        name: "ID",
+        selector: (row) => row.id_parametro || 'NO APLICA',
+        sortable: true,
+      
+      },
       {
         name: "PARÁMETRO",
         selector: (row) => toUpperCaseField(row.parametro) || 'NO APLICA',

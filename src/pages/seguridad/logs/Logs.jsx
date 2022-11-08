@@ -35,25 +35,31 @@ export default function Logs(props) {
     //Configuramos las columnas de la tabla
     const columns = [
       {
-        name: "Nombre",
+        name: "ID",
+        selector: (row) => row.id_bitacora || 'NO APLICA',
+        sortable: true,
+      
+      },
+      {
+        name: "NOMBRE",
         selector: (row) => toUpperCaseField(row.nombre_usuario) || 'NO APLICA',
         sortable: true,
       
       },
       {
-        name: "Log",
+        name: "LOG",
         selector: (row) => toUpperCaseField(row.accion) || 'NO APLICA',
         sortable: true,
       
       },
       {
-          name: "Descripción",
+          name: "DESCRIPCIÓN",
           selector: (row) => toUpperCaseField(row.descripcion) || 'NO APLICA',
           sortable: true,
           
         },
         {
-          name: "Fecha",
+          name: "FECHA",
           selector: (row) => row.fecha || 'NO APLICA',
           sortable: true,
         
