@@ -5,6 +5,9 @@ import { Alert, Button, FormGroup, Input, Label } from "reactstrap";
 import { Form, Field } from "react-final-form";
 import "../recuperacion_contrasena/login.css";
 import burridogs from "../recuperacion_contrasena/loginbg.jpg";
+
+
+
 //url
 /*const URL_LOGIN = ""
 
@@ -80,7 +83,30 @@ export default function RecuperacionContra(props) {
 //     console.log("values",values);
 //   };
 
+
+// const steps = [
+//   {title: 'StepOne', component: <Step/>},
+//   {title: 'StepTwo', component: <Step/>},
+//   {title: 'StepThree', component: <Step/>},
+//   {title: 'StepFour', component: <Step/>}
+// ];
+// // custom styles
+// const prevStyle = { background: '#33c3f0' }
+// const nextStyle = { background: '#33c3f0' }
   return (
+      // <>
+      // <div className='container'>
+      //   <MultiStep activeStep={0} steps={steps} prevStyle={prevStyle} nextStyle={nextStyle} />
+      //   <div className='app-footer'>
+      //     <h6>Press 'Enter' or click on progress bar for next step.</h6>
+      //     Code is on{' '}
+      //     <a href='https://github.com/Srdjan/react-multistep' target='_blank' rel='noreferrer'>
+      //       github
+      //     </a>
+      //   </div>
+      // </div>
+      // </>
+
     <div className="background">
       <img src={burridogs} alt="burridogs" />
       <div className="formulario">

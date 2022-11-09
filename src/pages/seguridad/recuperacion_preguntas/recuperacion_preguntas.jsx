@@ -3,7 +3,11 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Form, FormGroup, Input, Label } from 'reactstrap';
 import '../recuperacion_preguntas/login.css';
 import burridogs from '../recuperacion_preguntas/loginbg.jpg';
-
+import MultiStep from 'react-multistep'
+import StepOne from './StepOne';
+import StepTwo from './StepTwo';
+import StepThree from './StepThree';
+import StepFour from './StepFour';
 
 const urlAPi="http://localhost:3001"
 export default function RecuperacionPreguntas(props) {
@@ -136,22 +140,35 @@ export default function RecuperacionPreguntas(props) {
     useEffect(() => {
       getRegistros();
     }, []);
-
+const steps = [
+  {title: 'Pregunta 1', component: <StepOne/>},
+  {title: 'Pregunta 2', component: <StepTwo/>},
+  {title: 'Pregunta 3', component: <StepThree/>},
+  {title: 'Pregunta 4', component: <StepFour/>}
+];
+// custom styles
+const prevStyle = { background: '#635e5e' }
+const nextStyle = { background: '#e327' }
     return (
         <div className="background">
             <img
                 src={burridogs}
                 alt="burridogs" />
 
-            <div className="formulario">
+            <div className="formulario steps" >
 
                 <h2>Recuperaci&oacute;n por preguntas </h2>
                 <h5 >Antes de continuar es necesario que crees tus preguntas/respuestas de seguridad</h5>
                 <Form onSubmit={handleSubmit}>
                     
-               
-                <div className="inputs">
-                    {/* <label>Pregunta 1</label> */}
+                 <div className='container'>
+                   <MultiStep activeStep={0} steps={steps} prevStyle={prevStyle} nextStyle={nextStyle} />
+                   {/* <div className='app-footer'>
+                     <h6>Press 'Enter' or click on progress bar for next step.</h6>
+                   </div> */}
+                 </div>
+
+                {/* <div className="inputs">
                     <div className="">
                           <FormGroup>
                             <Label for="question1">Pregunta 1</Label>
@@ -170,7 +187,6 @@ export default function RecuperacionPreguntas(props) {
                             </Input>
                             </FormGroup>
                             <FormGroup>
-                            {/* <Label for="response1">Respuesta 1</Label> */}
                             <Input type="text" 
                             name="response1"
                             id="response1"
@@ -197,7 +213,6 @@ export default function RecuperacionPreguntas(props) {
                             </FormGroup>
 
                             <FormGroup>
-                            {/* <Label for="response2">Respuesta 2</Label> */}
                             <Input type="text" 
                             name="response2"
                              id="response2"
@@ -222,7 +237,6 @@ export default function RecuperacionPreguntas(props) {
                             </Input>
                             </FormGroup>
                             <FormGroup>
-                            {/* <Label for="response3">Respuesta 3</Label> */}
                             <Input type="text" 
                             name="response3" 
                             id="response3"
@@ -243,7 +257,7 @@ export default function RecuperacionPreguntas(props) {
                             Cancelar
                         </Link>
                     </div>
-                </div>
+                </div> */}
 
 
                 </Form>
