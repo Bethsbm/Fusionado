@@ -137,19 +137,13 @@ const Usuarios = () => {
       selector: (row) => row.id_usuario || 'NO APLICA',
       sortable: false,
     }, 
-
-    // {
-    //   name: "ESTADO",
-    //   sortable: false,
-    //   render:statusDes()
-      
-    // },
     {
-      name: "ESTADO",
-      selector: (row) => toUpperCaseField(row.descripcion) || 'NO APLICA',
-      sortable: false,
+      name: "USUARIO",
+      selector: (row) => toUpperCaseField(row.nombre_usuario) || 'NO APLICA',
+      sortable: true,
     
     },
+   
   
     {
       name: "NOMBRE",
@@ -158,14 +152,8 @@ const Usuarios = () => {
     
     },
     {
-      name: "USUARIO",
-      selector: (row) => toUpperCaseField(row.nombre_usuario) || 'NO APLICA',
-      sortable: true,
-    
-    },
-    {
-      name: "CORREO",
-      selector: (row) => row.correo_electronico || 'NO APLICA',
+      name: "ESTADO",
+      selector: (row) => toUpperCaseField(row.descripcion) || 'NO APLICA',
       sortable: false,
     
     },
@@ -182,18 +170,13 @@ const Usuarios = () => {
     
     },
     {
-      name: "CREADO POR",
-      selector: (row) => toUpperCaseField(row.creado_por) || 'NO APLICA',
-      sortable: false,
-    },
-    {
       name: "ULTIMA C",
       selector: (row) => row.fecha_ultima_conexion || 'NO APLICA',
       sortable: false,
     },
     {
-      name: "INTENTOS",
-      selector: (row) => row.intentos_login || 'NO APLICA',
+      name: "PREGUNTAS C",
+      selector: (row) => row.preguntas_contestadas || 'NO APLICA',
       sortable: false,
     },
     {
@@ -202,15 +185,44 @@ const Usuarios = () => {
       sortable: false,
     },
     {
+      name: "FECHA VEN",
+      selector: (row) => row.fecha_vencimiento || 'NO APLICA',
+      sortable: false,
+    },
+    {
+      name: "CORREO",
+      selector: (row) => row.correo_electronico || 'NO APLICA',
+      sortable: false,
+    
+    },  
+    {
+      name: "CREADO POR",
+      selector: (row) => toUpperCaseField(row.creado_por) || 'NO APLICA',
+      sortable: false,
+    },
+    {
       name: "FECHA CREACIÓN",
       selector: (row) => row.fecha_creacion || 'NO APLICA',
       sortable: false,
     },
     {
-      name: "FECHA VEN",
-      selector: (row) => row.fecha_vencimiento || 'NO APLICA',
+      name: "MODIFICADO POR",
+      selector: (row) => row.modificado_por || 'NO APLICA',
       sortable: false,
     },
+    {
+      name: "FECHA MODIFICACIÓN",
+      selector: (row) => row.fecha_modificacion || 'NO APLICA',
+      sortable: false,
+    },
+    {
+      name: "INTENTOS",
+      selector: (row) => row.intentos_login || 'NO APLICA',
+      sortable: false,
+    },
+   
+   
+   
     {
       name: "ACCIONES",
       cell: (row) => (

@@ -1159,3 +1159,9 @@ h6 {
 .error {
   color: #e03125;
 }
+
+
+.titleCompany{
+  font-size: 20px;
+    padding-left: 10px;
+}

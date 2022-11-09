@@ -9,9 +9,21 @@ import { Form, Field } from "react-final-form";
 import "./login.css";
 import burridogs from "./loginbg.jpg";
 
+
+const getOneParam = (objectJson,nameParam) => {
+  return objectJson.filter(
+    (item) => item.parametro === nameParam,
+  )[0] || {};
+}
+
 const urlAPi = "http://localhost:3001";
 //
 export default function Login(props) {
+  // const [params, setParams] = useState("");
+  var nameCompany=''
+  var phone=''
+  var mailContact=''
+  var userContact=''
   /**
    ** get settign params
    * obteniendo todos los parametros de configuracion del sistema
@@ -24,20 +36,37 @@ export default function Login(props) {
       .then((response) => response.json())
       .then((responseJson) => {
         console.log("dataSettingsParams", responseJson);
+        console.log("dataSettingsParams", responseJson.object);
         if (!responseJson.status) {
           console.log("algo salio mal en el servidor");
           return;
         }
         localStorage.setItem("params", JSON.stringify(responseJson.object));
+        // setParams(responseJson.object);
       })
       .catch((error) => {
         console.log(error);
       });
   };
-  useEffect(() => {
-    getAllSettingsParams();
-  }, []);
+  useEffect(  () => {
+      getAllSettingsParams();
+     //  nameCompany=params    
+     
+    }, []);
+    
+    var dataPar=JSON.parse(localStorage.getItem("params")) || []
+    var nombreParam=getOneParam(dataPar,"SYS_NOMBRE")
+    nameCompany=nombreParam.valor
+    
+    var phoneParam=getOneParam(dataPar,"SYS_PHONE")
+    phone=phoneParam.valor
 
+    var mailParam=getOneParam(dataPar,"ADMIN_CORREO")
+    mailContact=mailParam.valor
+
+    var contacParam=getOneParam(dataPar,"ADMIN_CUSER")
+      userContact=contacParam.valor
+    // console.log("getOneParam",dataPar)
   // const { history } = this.props;
   let navigate = useNavigate();
   const [message, setMesagge] = useState("");
@@ -114,6 +143,7 @@ export default function Login(props) {
         <Alert isOpen={isValid} color={color}>
           {message}
         </Alert>
+        <h2>{nameCompany}</h2>
         <h2>Panel administrativo</h2>
         {/* <h4>Inicio de Sesión</h4> */}
         <h5 className="caption">Ingresa tus credenciales para continuar</h5>
@@ -122,14 +152,14 @@ export default function Login(props) {
           validate={(values) => {
             const errors = {};
             function validateText(username) {
-                var re = /^[a-zA-Z0-9]*$/
+                var re = /^[a-zA-Z]*$/
                 return re.test(String(username).toLowerCase());
               }
 
               if (!values.username) {
                 errors.username = "Campo requerido";
               } else if (!validateText(values.username)) {
-                errors.username = "Nombre de usuario no válido";
+                errors.username = "Ingresar nombre en letras mayúsculas";
               }
             
             if (!values.password) {
@@ -190,6 +220,13 @@ export default function Login(props) {
                      <Link to="/recuperacion_contrasena">¿Olvidaste tu contraseña?</Link>
                      <Link to="/unlockuser">Desbloquea tu usuario</Link>
                      <Link to="/registro">Crear cuenta</Link>
+                 </div>
+                <div className="info-container">
+                   <p>Para dudas o consultas comunicate con <strong>{userContact}</strong>
+                   <br /> 
+                   administardor del sistema al número <strong>{phone}</strong> 
+                   <br />
+                   o escribe al correo <strong>{mailContact}</strong></p>
                  </div>
             </form>
             </div>

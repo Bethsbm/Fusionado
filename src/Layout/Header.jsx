@@ -1,9 +1,10 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import React, { useState, } from "react";
 import { setGlobalState } from "./responseClass";
 
 import logo from "../assets/img/logo1.png";
 import imgPerfil from "../assets/img/profile-img.jpg";
+import { getOneParam } from "../utils/utils";
 
 // import { UserContext } from "../App";
 
@@ -31,9 +32,16 @@ function Header() {
 
 
   const logOut =  () => {
-    localStorage.clear()
+    // localStorage.clear()
+    localStorage.removeItem("data")
     // navigate('/')
 }
+
+
+var dataPar=JSON.parse(localStorage.getItem("params")) || []
+console.log("dataPar",dataPar)
+var nombreParam=getOneParam(dataPar,"SYS_NOMBRE")
+var nameCompany=nombreParam.valor
 
   return (
     <header id="header" className="header fixed-top d-flex align-items-center">
@@ -46,7 +54,7 @@ function Header() {
           <i className="bi bi-list toggle-sidebar-btn"></i>
         </div>
       </div>
-
+      <span className="titleCompany">Panel administrativo <strong>{nameCompany}</strong> </span>
       <nav className="header-nav ms-auto">
         <ul className="d-flex align-items-center">
           {/* <li className="nav-item dropdown">
@@ -185,7 +193,7 @@ function Header() {
                 <Link
                   className="dropdown-item d-flex align-items-center"
                   onClick={logOut}
-                  to="/"
+                  to="/login"
                 >
                   
                   <i className="bi bi-box-arrow-right"></i>

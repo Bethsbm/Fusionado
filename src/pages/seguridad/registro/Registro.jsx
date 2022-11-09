@@ -38,18 +38,18 @@ const Registro = () => {
   const onSubmit = (event) => {
     event.preventDefault();
 
-    var x = Math.floor(Math.random() * (100 - 1) + 1);
-    console.log('x',x)
-    let name_user=(refUserName.current.value).toString()
-        name_user= name_user.replace(/\s/g,'')
-        name_user= name_user.substring(0,4);
-        name_user= name_user.toUpperCase()
-        name_user= name_user+""+x
+    // var x = Math.floor(Math.random() * (100 - 1) + 1);
+    // console.log('x',x)
+    // let name_user=(refUserName.current.value).toString()
+    //     name_user= name_user.replace(/\s/g,'')
+    //     name_user= name_user.substring(0,4);
+    //     name_user= name_user.toUpperCase()
+    //     name_user= name_user+""+x
 
         let pass=refContrasena.current.value
     let data = {
         usuario: refUserName.current.value,
-        nombre_usuario: name_user,
+        nombre_usuario: refUserName.current.value,
         correo_electronico: refEmail.current.value,
         contrasena:  md5(pass),
         otp: pass ,

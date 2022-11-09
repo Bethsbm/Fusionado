@@ -48,4 +48,12 @@ function toUpperCaseField(word) {
   return String(word).toUpperCase()
 }
 
-export {downloadCSV,toUpperCaseField}
+
+
+const getOneParam = (objectJson,nameParam) => {
+  return objectJson.filter(
+    (item) => item.parametro === nameParam,
+  )[0] || {};
+}
+
+export {downloadCSV,toUpperCaseField,getOneParam}

@@ -22,13 +22,13 @@ const [isValid, setIsValid] = useState(false);
     event.preventDefault(); 
     console.log('handleSubmit ran');
     
-    // const userdata= JSON.parse(localStorage.getItem('data'))
+    const userdata= JSON.parse(localStorage.getItem('data'))
     // console.log('userData',userData)
     let data={
       "nombre_usuario":name,
       "correo_electronico":email,
       "id_rol":parseInt(role || 6),
-      "creado_por":'asdas'
+      "creado_por":userdata.data.nameUser
     }
     console.log('data',data)
 

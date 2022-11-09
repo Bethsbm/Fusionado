@@ -86,7 +86,7 @@ const EditarUsuario = () => {
   const onSubmit = (event) => {
     console.log("event", event);
     let data={
-      usuario:event.usuario,
+      // usuario:event.usuario,
       nombre_usuario:event.nombre_usuario,
       estado_usuario:event.estado_usuario,
       id_rol:event.id_rol,
@@ -154,9 +154,9 @@ const handleChange=(event)=> {
               if (!values.estado_usuario) {
                 errors.estado_usuario = "Campo Requerido";
               }
-              if (!values.usuario) {
-                errors.usuario = "Campo Requerido";
-              }
+              // if (!values.usuario) {
+              //   errors.usuario = "Campo Requerido";
+              // }
               
               return errors;
             }}
@@ -170,14 +170,67 @@ const handleChange=(event)=> {
               <form onSubmit={handleSubmit}>
                 <Row>
                   <Col md={6} lg={6}>
-                    {/* contrasena NO  */}
-                    {/* correo_electronico NO  */}
-                    {/* creado_por NO */}
-                    {/* estado_usuario SI */}
-                    {/* fecha_creacion NO */}
-                    {/* fecha_modificacion NO */}
-                    {/* fecha_ultima_conexion NO */}
-                    {/* fecha_vencimiento NO */}
+
+                     {/* nombre usaurio */}
+                     <FormGroup>
+                      <Label for="usuario">Usuario</Label>
+                      <Field name="usuario">
+                        {({ input, meta }) => (
+                          <div>
+                            <Input
+                              {...input}
+                              type="text"
+                              disabled
+                              placeholder="Usuario"
+                              invalid={meta.error && meta.touched}
+                            />
+                            {meta.error && meta.touched && (
+                              <span>{meta.error}</span>
+                            )}
+                          </div>
+                        )}
+                      </Field>
+                    </FormGroup>
+
+
+                      {/* nombre de usuario */}
+                      <FormGroup>
+                      <Label for="nombre_usuario">Nombre de usuario</Label>
+                      <Field name="nombre_usuario">
+                        {({ input, meta }) => (
+                          <div>
+                            <Input
+                              {...input}
+                              type="text"
+                              placeholder="Nombre de usuario"
+                              // value={registro.nombre_usuario}
+                              invalid={meta.error && meta.touched}
+                            />
+                            {meta.error && meta.touched && (
+                              <span>{meta.error}</span>
+                            )}
+                          </div>
+                        )}
+                      </Field>
+                    </FormGroup>
+                      
+                      {/* estado */}
+                      <FormGroup>
+                      <Label for="estado_usuario">Estado</Label>
+                      <Input
+                                id="estado_usuario"
+                                name="estado_usuario"
+                                type="select"
+                              >
+                               {
+                                estados.map((item,index) => (
+                                <option key={item.id} value={item.id}>{item.descripcion}</option>
+                                ))}
+                        </Input>
+                    </FormGroup>
+                    
+
+                    {/* contasena */}
                     <FormGroup>
                       <Label for="fname">Contraseña</Label>
                       <Field name="fname">
@@ -198,47 +251,9 @@ const handleChange=(event)=> {
                         )}
                       </Field>
                     </FormGroup>
-                    <FormGroup>
-                      <Label for="createdBy">Creado por</Label>
-                      <Field name="createdBy">
-                        {({ input, meta }) => (
-                          <div>
-                            <Input
-                              {...input}
-                              disabled
-                              type="text"
-                              value={registro.creado_por}
-                              placeholder="Creado Por"
-                              invalid={meta.error && meta.touched}
-                            />
-                            {meta.error && meta.touched && (
-                              <span>{meta.error}</span>
-                            )}
-                          </div>
-                        )}
-                      </Field>
-                    </FormGroup>
-                    <FormGroup>
-                      <Label for="email">Email</Label>
-                      <Field name="email">
-                        {({ input, meta }) => (
-                          <div>
-                            <Input
-                              {...input}
-                              disabled
-                              type="text"
-                              value={registro.correo_electronico}
-                              placeholder="Correo electronico"
-                              invalid={meta.error && meta.touched}
-                            />
-                            {meta.error && meta.touched && (
-                              <span>{meta.error}</span>
-                            )}
-                          </div>
-                        )}
-                      </Field>
-                    </FormGroup>
-                    <FormGroup>
+                  
+                   {/* role */}
+                   <FormGroup>
                       <Label for="id_rol">Rol</Label>
                       <Input
                                 id="id_rol"
@@ -254,46 +269,9 @@ const handleChange=(event)=> {
                                 ))}
                         </Input>
                     </FormGroup>
-                    <FormGroup>
-                      <Label for="fecha_creacion">Fecha creación </Label>
-                      <Field name="fecha_creacion">
-                        {({ input, meta }) => (
-                          <div>
-                            <Input
-                              {...input}
-                              disabled
-                              type="text"
-                              value={registro.fecha_creacion}
-                              placeholder="Fecha de creación"
-                              invalid={meta.error && meta.touched}
-                            />
-                            {meta.error && meta.touched && (
-                              <span>{meta.error}</span>
-                            )}
-                          </div>
-                        )}
-                      </Field>
-                    </FormGroup>
-                    <FormGroup>
-                      <Label for="fecha_modificacion">Fecha de modificación</Label>
-                      <Field name="fecha_modificacion">
-                        {({ input, meta }) => (
-                          <div>
-                            <Input
-                              {...input}
-                              disabled
-                              type="text"
-                              value={registro.fecha_modificacion}
-                              placeholder="Fecha de modifiacion"
-                              invalid={meta.error && meta.touched}
-                            />
-                            {meta.error && meta.touched && (
-                              <span>{meta.error}</span>
-                            )}
-                          </div>
-                        )}
-                      </Field>
-                    </FormGroup>
+
+  
+                    {/* ulrima conexion */}
                     <FormGroup>
                       <Label for="fecha_ultima_conexion">Ultima conexión</Label>
                       <Field name="fecha_ultima_conexion">
@@ -314,6 +292,60 @@ const handleChange=(event)=> {
                         )}
                       </Field>
                     </FormGroup>
+
+        
+                  {/* preguntas contestadas */}
+                  <FormGroup>
+                      <Label for="preguntas_contestadas">Preguntas contestadas</Label>
+                      <Field name="preguntas_contestadas">
+                        {({ input, meta }) => (
+                          <div>
+                            <Input
+                              {...input}
+                              disabled
+                              type="text"
+                              value={registro.preguntas_contestadas}
+                              placeholder="Preguntas contestadas"
+                              invalid={meta.error && meta.touched}
+                            />
+                            {meta.error && meta.touched && (
+                              <span>{meta.error}</span>
+                            )}
+                          </div>
+                        )}
+                      </Field>
+                    </FormGroup>
+
+
+                 
+
+                    <Link className="btn primary" to="/admin/users">Cancelar</Link>
+                  </Col>
+
+                  <Col md={6} lg={6}>
+                      {/* primer ingreso */}
+                      <FormGroup>
+                      <Label for="primer_ingreso">Primer Ingreso</Label>
+                      <Field name="primer_ingreso">
+                        {({ input, meta }) => (
+                          <div>
+                            <Input
+                              {...input}
+                              disabled
+                              type="text"
+                              placeholder="Primer ingreso"
+                              value={registro.primer_ingreso}
+                              invalid={meta.error && meta.touched}
+                            />
+                            {meta.error && meta.touched && (
+                              <span>{meta.error}</span>
+                            )}
+                          </div>
+                        )}
+                      </Field>
+                    </FormGroup>
+                   
+                    {/* fecha venciemiento */}
                     <FormGroup>
                       <Label for="fecha_vencimiento">Fecha vencimiento</Label>
                       <Field name="fecha_vencimiento">
@@ -334,63 +366,19 @@ const handleChange=(event)=> {
                         )}
                       </Field>
                     </FormGroup>
-                    {/* <Button  color="primary" > Cancelar</Button> */}
-                    <Link className="btn primary" to="/admin/users">Cancelar</Link>
-                  </Col>
 
-                  <Col md={6} lg={6}>
-                    {/* id_rol SI  */}
-                    {/* id_usuario NO  */}
-                    {/* intentos_login NO  */}
-                    {/* modificado_por NO */}
-                    {/* nombre_usuario SI  */}
-                    {/* preguntas_contestadas NO  */}
-                    {/* primer_ingreso NO */}
-                    {/* usuario NO */}
-                    {/* <FormGroup>
-                      <Label for="status">Estado</Label>
-                      <Field name="status">
+                  {/* correo */}
+                  <FormGroup>
+                      <Label for="email">Email</Label>
+                      <Field name="email">
                         {({ input, meta }) => (
                           <div>
                             <Input
                               {...input}
                               disabled
                               type="text"
-                              placeholder="Estado"
-                              invalid={meta.error && meta.touched}
-                            />
-                            {meta.error && meta.touched && (
-                              <span>{meta.error}</span>
-                            )}
-                          </div>
-                        )}
-                      </Field>
-                    </FormGroup> */}
-                    <FormGroup>
-                      <Label for="estado_usuario">Estado</Label>
-                      <Input
-                                id="estado_usuario"
-                                name="estado_usuario"
-                                type="select"
-                                // value={registro.estado_usuario}
-                              >
-                               {
-                                estados.map((item,index) => (
-                                <option key={item.id} value={item.id}>{item.descripcion}</option>
-                                ))}
-                        </Input>
-                    </FormGroup>
-                    <FormGroup>
-                      <Label for="intentos_login">Intentos Login</Label>
-                      <Field name="intentos_login">
-                        {({ input, meta }) => (
-                          <div>
-                            <Input
-                              {...input}
-                              disabled
-                              type="text"
-                              placeholder="Intentos login"
-                              value={registro.intentos_login}
+                              value={registro.correo_electronico}
+                              placeholder="Correo electronico"
                               invalid={meta.error && meta.touched}
                             />
                             {meta.error && meta.touched && (
@@ -400,6 +388,56 @@ const handleChange=(event)=> {
                         )}
                       </Field>
                     </FormGroup>
+                   
+                    
+
+                    {/* creado por */}
+                    <FormGroup>
+                      <Label for="createdBy">Creado por</Label>
+                      <Field name="createdBy">
+                        {({ input, meta }) => (
+                          <div>
+                            <Input
+                              {...input}
+                              disabled
+                              type="text"
+                              value={registro.creado_por}
+                              placeholder="Creado Por"
+                              invalid={meta.error && meta.touched}
+                            />
+                            {meta.error && meta.touched && (
+                              <span>{meta.error}</span>
+                            )}
+                          </div>
+                        )}
+                      </Field>
+                    </FormGroup>
+                  
+                  
+                    
+                    {/* fecha de creacion */}
+                    <FormGroup>
+                      <Label for="fecha_creacion">Fecha creación </Label>
+                      <Field name="fecha_creacion">
+                        {({ input, meta }) => (
+                          <div>
+                            <Input
+                              {...input}
+                              disabled
+                              type="text"
+                              value={registro.fecha_creacion}
+                              placeholder="Fecha de creación"
+                              invalid={meta.error && meta.touched}
+                            />
+                            {meta.error && meta.touched && (
+                              <span>{meta.error}</span>
+                            )}
+                          </div>
+                        )}
+                      </Field>
+                    </FormGroup>
+                    
+                    {/* modificado por */}
                     <FormGroup>
                       <Label for="modificado_por">Modificado Por</Label>
                       <Field name="modificado_por">
@@ -420,36 +458,19 @@ const handleChange=(event)=> {
                         )}
                       </Field>
                     </FormGroup>
-                    <FormGroup>
-                      <Label for="nombre_usuario">Nombre de usuario</Label>
-                      <Field name="nombre_usuario">
-                        {({ input, meta }) => (
-                          <div>
-                            <Input
-                              {...input}
-                              type="text"
-                              placeholder="Nombre de usuario"
-                              // value={registro.nombre_usuario}
-                              invalid={meta.error && meta.touched}
-                            />
-                            {meta.error && meta.touched && (
-                              <span>{meta.error}</span>
-                            )}
-                          </div>
-                        )}
-                      </Field>
-                    </FormGroup>
-                    <FormGroup>
-                      <Label for="preguntas_contestadas">Preguntas contestadas</Label>
-                      <Field name="preguntas_contestadas">
+                  
+                   {/* fecha de modificaicon */}
+                   <FormGroup>
+                      <Label for="fecha_modificacion">Fecha de modificación</Label>
+                      <Field name="fecha_modificacion">
                         {({ input, meta }) => (
                           <div>
                             <Input
                               {...input}
                               disabled
                               type="text"
-                              value={registro.preguntas_contestadas}
-                              placeholder="Preguntas contestadas"
+                              value={registro.fecha_modificacion}
+                              placeholder="Fecha de modifiacion"
                               invalid={meta.error && meta.touched}
                             />
                             {meta.error && meta.touched && (
@@ -459,17 +480,19 @@ const handleChange=(event)=> {
                         )}
                       </Field>
                     </FormGroup>
+
+                    {/* intentos login */}
                     <FormGroup>
-                      <Label for="primer_ingreso">Primer Ingreso</Label>
-                      <Field name="primer_ingreso">
+                      <Label for="intentos_login">Intentos Login</Label>
+                      <Field name="intentos_login">
                         {({ input, meta }) => (
                           <div>
                             <Input
                               {...input}
                               disabled
                               type="text"
-                              placeholder="Primer ingreso"
-                              value={registro.primer_ingreso}
+                              placeholder="Intentos login"
+                              value={registro.intentos_login}
                               invalid={meta.error && meta.touched}
                             />
                             {meta.error && meta.touched && (
@@ -479,24 +502,15 @@ const handleChange=(event)=> {
                         )}
                       </Field>
                     </FormGroup>
-                    <FormGroup>
-                      <Label for="usuario">Usuario</Label>
-                      <Field name="usuario">
-                        {({ input, meta }) => (
-                          <div>
-                            <Input
-                              {...input}
-                              type="text"
-                              placeholder="Usuario"
-                              invalid={meta.error && meta.touched}
-                            />
-                            {meta.error && meta.touched && (
-                              <span>{meta.error}</span>
-                            )}
-                          </div>
-                        )}
-                      </Field>
-                    </FormGroup>
+
+                   
+                   
+                   
+          
+                   
+                   
+                   
+                  
                 <Button type="submit" color="primary" disabled={!valid}>Editar</Button>
                 {/* <Button type="submit" color="primary" >Editar</Button> */}
                   </Col>
