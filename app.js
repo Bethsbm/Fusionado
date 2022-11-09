@@ -6,6 +6,8 @@ var express = require('express'),
 	morgan = require('morgan'),
 	restFul = require('express-method-override')('_method'),
 	routes = require('./routes'),
+	middlewareParamsSettings = require('./middlewares/paramsSettings'),
+	// middlewareFunction = require('./middlewares/autentication'),
     cors = require('cors'),
 	faviconURL = `${__dirname}/public/img/node-favicon.png`,
 	// publicDir = express.static(`${__dirname}/public`),
@@ -25,7 +27,8 @@ app
 	.use( bodyParser.urlencoded({extended: false}) )
 	.use(restFul)
 	.use( morgan('dev') )
-	// .use(mv)
+	// .use(middlewareFunction)
+	.use(middlewareParamsSettings)
 	.use(routes)
 	
 	

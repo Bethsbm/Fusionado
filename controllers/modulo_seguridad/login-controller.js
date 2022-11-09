@@ -76,6 +76,7 @@ LoginController.login = async (req, res, next) => {
         contrasena: bodyParams.contrasena,
       };
       console.log(usuario);
+      
       LoginModel.login(usuario, (err, row) => {
         if (err) {
           res.status(300).send({

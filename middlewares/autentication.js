@@ -1,12 +1,9 @@
 const jwt = require("jsonwebtoken");
 var validator = require("validator");
-
-
 const  JWT_SECRET = "PR0Y3CT0_M0DUL0_D3_S3GUR1D4D";
-module.exports = function (options) {
-    return async (req, res, next)=> {
-        const userToken = req.get('x-token')
-        try {
+ async function middlewareFunction(req, res, next) {
+      try {
+          const userToken = req.get('x-token')
           
             
             if (!userToken) {
@@ -50,5 +47,7 @@ module.exports = function (options) {
               })
         
     }
-  }
+  
 }
+
+module.exports = middlewareFunction

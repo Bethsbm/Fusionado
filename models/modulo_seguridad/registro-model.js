@@ -42,16 +42,14 @@ UsuarioModel.updateUserState = (id ,cb) => conn.query("UPDATE seguridad.tbl_ms_u
 UsuarioModel.updateUserbyId = (data ,cb) => conn.query(`
 UPDATE seguridad.tbl_ms_usuario
 	SET 
-	usuario=$1,
-  nombre_usuario=$2,
-	estado_usuario=$3,
-	id_rol=$4,
-	modificado_por=$5,
+  nombre_usuario=$1,
+	estado_usuario=$2,
+	id_rol=$3,
+	modificado_por=$4,
 	fecha_modificacion= NOW()
-	WHERE id_usuario=$6
+	WHERE id_usuario=$5
 
   `,[
-    data.usuario,
     data.nombre_usuario,
     data.estado_usuario,
     data.id_rol,
