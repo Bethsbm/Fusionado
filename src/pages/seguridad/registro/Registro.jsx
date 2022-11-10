@@ -8,7 +8,7 @@ import { render } from "@testing-library/react";
 import { Alert } from "reactstrap";
 import PasswordChecklist from "react-password-checklist";
 import md5 from "md5";
-import { getOneParam, toUpperCaseField } from "../../../utils/utils";
+import { getOneParam, toReplaceSpace, toUpperCaseField } from "../../../utils/utils";
 // const URL = "http://190.53.243.69:3001/ms_registro/autoregistro";
 const urlApi = "http://localhost:3001";
 
@@ -74,18 +74,18 @@ const Registro = () => {
 
   const onSubmit = (event) => {
     event.preventDefault();
-     var x = Math.floor(Math.random() * (100 - 1) + 1);
-    console.log('x',x)
+    //  var x = Math.floor(Math.random() * (100 - 1) + 1);
+    // console.log('x',x)
     let name_user=(refUserName.current.value).toString()
-        name_user= name_user.replace(/\s/g,'')
-        name_user= name_user.substring(0,4);
+        // name_user= name_user.replace(/\s/g,'')
+        // name_user= name_user.substring(0,4);
         name_user= name_user.toUpperCase()
-        name_user= name_user+""+x
+        // name_user= name_user+""+x
         let pass=refContrasena.current.value
-        
+
     let data = {
-        usuario:toUpperCaseField(name_user),
-        nombre_usuario: toUpperCaseField(refUserName.current.value),
+        usuario:toUpperCaseField((name_user)),
+        nombre_usuario: toUpperCaseField(toReplaceSpace(refUserName.current.value)),
         correo_electronico: refEmail.current.value,
         contrasena:  md5(pass),
         otp: pass ,
@@ -213,7 +213,7 @@ const Registro = () => {
               />
             </div>
             <button onClick={onSubmit} className="btn">
-              Cambiar Contrase&ntilde;a
+              Registrarme
             </button>
 
             <div className="buttom-container">

@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button, Form, FormGroup, Label, Input, FormText } from 'reactstrap';
 import { Alert } from 'reactstrap';
+import { toReplaceSpace, toUpperCaseField } from "../../../utils/utils";
 import "./CreateUser.css";
 
 const urlapi = "http://localhost:3001";
@@ -25,17 +26,17 @@ const [isValid, setIsValid] = useState(false);
     var x = Math.floor(Math.random() * (100 - 1) + 1);
     console.log('x',x)
     let name_user=(name).toString()
-        name_user= name_user.replace(/\s/g,'')
-        name_user= name_user.substring(0,4);
+        // name_user= name_user.replace(/\s/g,'')
+        // name_user= name_user.substring(0,4);
         name_user= name_user.toUpperCase()
-        name_user= name_user+""+x
+        // name_user= name_user+""+x
 
     const userdata= JSON.parse(localStorage.getItem('data'))
     // console.log('userData',userData)
-    
+
     let data={
-      "usuario":name_user,
-      "nombre_usuario":name,
+      "usuario":toUpperCaseField(toReplaceSpace(name_user)),
+      "nombre_usuario":toReplaceSpace(name),
       "correo_electronico":email,
       "id_rol":parseInt(role || 6),
       "creado_por":userdata.data.nameUser

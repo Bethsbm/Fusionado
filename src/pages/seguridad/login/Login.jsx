@@ -152,7 +152,7 @@ export default function Login(props) {
           validate={(values) => {
             const errors = {};
             function validateText(username) {
-                var re = /^[a-zA-Z]*$/
+                var re = /^[a-zA-Z ]*$/
                 return re.test(String(username).toLowerCase());
               }
 

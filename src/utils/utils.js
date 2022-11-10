@@ -48,6 +48,10 @@ function toUpperCaseField(word) {
   return String(word).trim().toUpperCase()
 }
 
+function toReplaceSpace(word) {
+  return String(word).replace(/\s/g, '')
+}
+
 
 
 const getOneParam = (objectJson,nameParam) => {
@@ -70,4 +74,9 @@ const getOneParam = (objectJson,nameParam) => {
       
   };
 
-export {downloadCSV,toUpperCaseField,getOneParam,getAllSettingsParams}
+export {
+  downloadCSV,
+  toUpperCaseField,
+  getOneParam,
+  getAllSettingsParams,
+  toReplaceSpace}

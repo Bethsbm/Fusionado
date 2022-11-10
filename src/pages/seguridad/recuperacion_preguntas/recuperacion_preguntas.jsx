@@ -83,12 +83,15 @@ export default function RecuperacionPreguntas(props) {
     newCompleted[activeStep] = true;
     setCompleted(newCompleted);
     handleNext();
+
+   
   };
 
   const handleReset = () => {
     setActiveStep(0);
     setCompleted({});
     // console.log(state)
+    navigate("/login")
   };
 
   const handleSubmit = async (event) => {
