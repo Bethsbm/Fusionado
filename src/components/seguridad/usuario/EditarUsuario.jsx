@@ -7,8 +7,10 @@ import { Button, FormGroup, Label, Input, Row, Col } from "reactstrap";
 import { Form, Field } from "react-final-form";
 
 const urlapi = "http://localhost:3001";
-const userdata= JSON.parse(localStorage.getItem('data')) 
+
 const EditarUsuario = () => {
+
+  const userdata= JSON.parse(localStorage.getItem('data')) 
   let navigate = useNavigate();
   const { id } = useParams();
 
