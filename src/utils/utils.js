@@ -45,7 +45,7 @@ function downloadCSV(array,titleReport) {
 }
 
 function toUpperCaseField(word) {
-  return String(word).toUpperCase()
+  return String(word).trim().toUpperCase()
 }
 
 
@@ -56,4 +56,18 @@ const getOneParam = (objectJson,nameParam) => {
   )[0] || {};
 }
 
-export {downloadCSV,toUpperCaseField,getOneParam}
+ /**
+   ** get settign params
+   * obteniendo todos los parametros de configuracion del sistema
+   * */
+   const urlAPi="http://localhost:3001"
+   const getAllSettingsParams = async () => {
+    return fetch(urlAPi + "/ms_parametros/getall", {
+      method: "GET",
+      headers: { "Content-type": "application/json" },
+    })
+      .then((response) => response.json())
+      
+  };
+
+export {downloadCSV,toUpperCaseField,getOneParam,getAllSettingsParams}

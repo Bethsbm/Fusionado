@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import "./Registro.css";
 import burridogs from "./loginbg.jpg";
@@ -8,10 +8,52 @@ import { render } from "@testing-library/react";
 import { Alert } from "reactstrap";
 import PasswordChecklist from "react-password-checklist";
 import md5 from "md5";
+import { getOneParam, toUpperCaseField } from "../../../utils/utils";
 // const URL = "http://190.53.243.69:3001/ms_registro/autoregistro";
 const urlApi = "http://localhost:3001";
 
 const Registro = () => {
+
+  /**
+   ** get settign params
+   * obteniendo todos los parametros de configuracion del sistema
+   * */
+   const getAllSettingsParams = async () => {
+    fetch(urlApi + "/ms_parametros/getall", {
+      method: "GET",
+      headers: { "Content-type": "application/json" },
+    })
+      .then((response) => response.json())
+      .then((responseJson) => {
+        console.log("dataSettingsParams", responseJson);
+        console.log("dataSettingsParams", responseJson.object);
+        if (!responseJson.status) {
+          console.log("algo salio mal en el servidor");
+          return;
+        }
+        localStorage.setItem("params", JSON.stringify(responseJson.object));
+        // setParams(responseJson.object);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+  useEffect(  () => {
+      getAllSettingsParams();
+     //  nameCompany=params    
+     
+    }, []);
+    
+    var dataPar=JSON.parse(localStorage.getItem("params")) || []
+    var minLengthParam=getOneParam(dataPar,"MIN_CONTRA")
+        minLengthParam=minLengthParam.valor
+        console.log('minLengthParam',minLengthParam)
+
+    var maxLengthParam=getOneParam(dataPar,"MAX_CONTRA")
+        maxLengthParam=maxLengthParam.valor
+        console.log('maxLengthParam',maxLengthParam)
+
+
   const [password, setPassword] = useState("");
   const [passwordAgain, setPasswordAgain] = useState("");
   const [message, setMesagge] = useState("");
@@ -29,34 +71,26 @@ const Registro = () => {
     setPasswordShown(!passwordShown);
   };
 
-  // const {
-  //   register,
-  //   handleSubmit,
-  //   formState: { errors },
-  // } = useForm();
 
   const onSubmit = (event) => {
     event.preventDefault();
-
-    // var x = Math.floor(Math.random() * (100 - 1) + 1);
-    // console.log('x',x)
-    // let name_user=(refUserName.current.value).toString()
-    //     name_user= name_user.replace(/\s/g,'')
-    //     name_user= name_user.substring(0,4);
-    //     name_user= name_user.toUpperCase()
-    //     name_user= name_user+""+x
-
+     var x = Math.floor(Math.random() * (100 - 1) + 1);
+    console.log('x',x)
+    let name_user=(refUserName.current.value).toString()
+        name_user= name_user.replace(/\s/g,'')
+        name_user= name_user.substring(0,4);
+        name_user= name_user.toUpperCase()
+        name_user= name_user+""+x
         let pass=refContrasena.current.value
+        
     let data = {
-        usuario: refUserName.current.value,
-        nombre_usuario: refUserName.current.value,
+        usuario:toUpperCaseField(name_user),
+        nombre_usuario: toUpperCaseField(refUserName.current.value),
         correo_electronico: refEmail.current.value,
         contrasena:  md5(pass),
         otp: pass ,
         confirmContrasena: md5(refConfirmContrasena.current.value),
     };
-    // console.log("refUserName.current.value", refUserName.current.value);
-    // console.log('data',data)
 
     fetch(urlApi+ "/ms_registro/autoregistro", {
         method: "POST",
@@ -154,21 +188,23 @@ const Registro = () => {
               </div>
 
               <PasswordChecklist
-                rules={[
+                rules={
+                  [
                   "minLength",
                   "maxLength",
                   "specialChar",
                   "number",
                   "capital",
                   "match",
-                ]}
-                minLength={8}
-                maxLength={10}
+                ]
+              }
+                minLength={minLengthParam}
+                maxLength={maxLengthParam}
                 value={password}
                 valueAgain={passwordAgain}
                 messages={{
-                  minLength: "La contraseña tiene menos de 8 caracteres mínimo.",
-                  maxLength: "La contraseña tiene más de 10 caracteres máximo.",
+                  minLength: "La contraseña tiene menos de "+minLengthParam+" caracteres.",
+                  maxLength: "La contraseña tiene más de "+maxLengthParam+" caracteres.",
                   specialChar: "La contraseña tiene caracteres especiales.",
                   number: "La contraseña tiene un número.",
                   capital: "La contraseña tiene una letra mayúscula.",

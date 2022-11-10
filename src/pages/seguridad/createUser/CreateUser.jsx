@@ -22,9 +22,19 @@ const [isValid, setIsValid] = useState(false);
     event.preventDefault(); 
     console.log('handleSubmit ran');
     
+    var x = Math.floor(Math.random() * (100 - 1) + 1);
+    console.log('x',x)
+    let name_user=(name).toString()
+        name_user= name_user.replace(/\s/g,'')
+        name_user= name_user.substring(0,4);
+        name_user= name_user.toUpperCase()
+        name_user= name_user+""+x
+
     const userdata= JSON.parse(localStorage.getItem('data'))
     // console.log('userData',userData)
+    
     let data={
+      "usuario":name_user,
       "nombre_usuario":name,
       "correo_electronico":email,
       "id_rol":parseInt(role || 6),

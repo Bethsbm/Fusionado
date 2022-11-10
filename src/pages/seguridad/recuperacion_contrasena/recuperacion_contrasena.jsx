@@ -21,6 +21,7 @@ const enviarData = async (url, data) => {
     });
     const json = await resp.json();
 }*/
+
 const urlAPi = "http://localhost:3001";
 export default function RecuperacionContra(props) {
   let navigate = useNavigate();
