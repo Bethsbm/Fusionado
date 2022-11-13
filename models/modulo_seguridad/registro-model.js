@@ -31,6 +31,7 @@ INNER JOIN seguridad.tbl_ms_usuario_estado as e
 ON u.estado_usuario = e.id
 WHERE nombre_usuario != 'SYSTEMUSER' 
 OR usuario != 'SYSTEMUSER' 
+ORDER BY u.id_usuario DESC 
 `, cb);
 
 
@@ -178,7 +179,7 @@ UsuarioModel.autoregistro = (data, cb) => {
         1,
         (NOW() + interval '3 days'), 
         $4,
-        'Autoregistro',
+        'AUTOREGISTRO',
         NOW(),
         0
         )

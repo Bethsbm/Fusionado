@@ -9,13 +9,10 @@ var UsuarioModel = require("../../models/modulo_seguridad/registro-model"),
 
 const nodemailer = require("nodemailer");
 
-const urlPanel = "http://localhost:3000";
-const JWT_SECRET = "PR0Y3CT0_M0DUL0_D3_S3GUR1D4D";
-const timeExpired = "24h";
-// const mailConfigSender = {
-//   user: "dazzebnn@gmail.com",
-//   pass: "zdvcmiwfpstkebwy",
-// };
+
+// const JWT_SECRET = "PR0Y3CT0_M0DUL0_D3_S3GUR1D4D";
+// const timeExpired = "24h";
+
 
 UsuarioController.validateUserState = (req, res, next) => {
   let id = req.body.id_usuario;
@@ -135,14 +132,14 @@ UsuarioController.updateUserState = (req, res, next) => {
 };
 
 UsuarioController.edit = (req, res, next) => {
-  // let id_usuario = req.params.id_usuario
+  let id_usuario = req.params.id_usuario
   let data = {
     // usuario:req.body.usuario,
     nombre_usuario: req.body.nombre_usuario,
     estado_usuario: req.body.estado_usuario,
     id_rol: req.body.id_rol,
     modificado_por: req.body.modificado_por,
-    id_usuario: req.body.id_usuario,
+    id_usuario: id_usuario,
   };
 
   UsuarioModel.updateUserbyId(data, (err, row) => {
@@ -180,7 +177,10 @@ UsuarioController.save = (req, res, next) => {
 	const paramSettingCompany = filterParamUtil(paramSettings, "SYS_NOMBRE");
 	const paramSettingPhone = filterParamUtil(paramSettings, "SYS_PHONE");
 	const paramSettingUser = filterParamUtil(paramSettings, "ADMIN_CUSER");
-  
+	
+	const paramUrlPanel = filterParamUtil(paramSettings, "URL_PANEL");
+	var urlPanel = paramUrlPanel.valor;	
+	  
 	const mailConfigSender = {
 	  user: paramSettingCorreo.valor,
 	  pass: paramSettingPass.valor,
@@ -226,6 +226,7 @@ UsuarioController.save = (req, res, next) => {
 
       res.render("error", locals);
     } else {
+	  
       const link = `${urlPanel}/login`;
 
       const transporter = nodemailer.createTransport({
@@ -535,6 +536,9 @@ UsuarioController.autoregistro = (req, res, next) => {
   const paramSettingCompany = filterParamUtil(paramSettings, "SYS_NOMBRE");
   const paramSettingPhone = filterParamUtil(paramSettings, "SYS_PHONE");
   const paramSettingUser = filterParamUtil(paramSettings, "ADMIN_CUSER");
+
+  const paramUrlPanel = filterParamUtil(paramSettings, "URL_PANEL");
+  var urlPanel = paramUrlPanel.valor;	
 
   const mailConfigSender = {
     user: paramSettingCorreo.valor,
