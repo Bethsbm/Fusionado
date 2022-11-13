@@ -27,3 +27,7 @@
 .btn{
     margin: 5px 0 5px 0 !important;
 }
+.colorText{
+    color: #684b4b;
+    font-weight: bolder;
+}

@@ -1165,3 +1165,8 @@ h6 {
   font-size: 20px;
     padding-left: 10px;
 }
+
+.hbotQl ,
+.dtqzBx{
+  text-overflow: unset !important;
+}

@@ -11,6 +11,7 @@ const urlapi = "http://localhost:3001";
 const EditarUsuario = () => {
 
   const userdata= JSON.parse(localStorage.getItem('data')) 
+
   let navigate = useNavigate();
   const { id } = useParams();
 
@@ -86,15 +87,22 @@ const EditarUsuario = () => {
   console.log("registro", registro);
 
   const onSubmit = (event) => {
-    console.log("event", event);
+    console.log("EVENT DATA", event);
+    console.log("userdata.data.nameUser", userdata.data.nameUser);
     let data={
       // usuario:event.usuario,
       nombre_usuario:event.nombre_usuario,
       estado_usuario:event.estado_usuario,
       id_rol:event.id_rol,
       modificado_por:userdata.data.nameUser,
-      id_usuario:userdata.data.id,
+      id_usuario:id,
     }
+    console.log('data',data)
+    // nombre_usuario: req.body.nombre_usuario,
+    // estado_usuario: req.body.estado_usuario,
+    // id_rol: req.body.id_rol,
+    // modificado_por: req.body.modificado_por,
+    // id_usuario: req.body.id_usuario,
   
     fetch(urlapi + "/ms_registro/update/"+ id, {
       method: "PUT",
@@ -117,19 +125,14 @@ const EditarUsuario = () => {
   };
   const onSelect = (e) => {
     console.log(e.target.value);
-    // console.log(e.target.value[0] + " " + e.target.value[1] );
-    // this.setState({
-    //     id_rol: e.target.value[0],
-    //     rol: e.target.value[1]
-    // });
+    console.log(e.target.value[0] + " " + e.target.value[1] );
+    this.setState({
+        id_rol: e.target.value[0],
+        rol: e.target.value[1]
+    });
 }
 
-// this.state = registro.id_rol;
-const handleChange=(event)=> {
-  
-  
 
-}
   return (
     <div className="container">
       <h4>Editar usuario</h4>
@@ -225,15 +228,15 @@ const handleChange=(event)=> {
                                 type="select"
                               >
                                {
-                                estados.map((item,index) => (
-                                <option key={item.id} value={item.id}>{item.descripcion}</option>
+                                estados.map((item) => (
+                                <option value={item.id}>{item.descripcion}</option>
                                 ))}
                         </Input>
                     </FormGroup>
                     
 
                     {/* contasena */}
-                    <FormGroup>
+                    {/* <FormGroup>
                       <Label for="fname">Contraseña</Label>
                       <Field name="fname">
                         {({ input, meta }) => (
@@ -252,7 +255,7 @@ const handleChange=(event)=> {
                           </div>
                         )}
                       </Field>
-                    </FormGroup>
+                    </FormGroup> */}
                   
                    {/* role */}
                    <FormGroup>
@@ -262,11 +265,11 @@ const handleChange=(event)=> {
                                 name="id_rol"
                                 type="select"
                                 // value={registro.id_rol}
-                                onChange={handleChange}
+                                // onChange={handleChange}
                                 // onChange={onSelect}
                               >
                                {
-                                roles.map((item,index) => (
+                                roles.map((item) => (
                                 <option value={item.id_rol}>{item.rol}</option>
                                 ))}
                         </Input>

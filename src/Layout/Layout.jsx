@@ -15,8 +15,8 @@ function Layout() {
  ** Aqui obtengo del local storagae los parametros de la bd ,estos s epueden obyet en cualquier poantalla
  mientras el usuario este logeado 
  */
-let settingsParams=  JSON.parse(localStorage.getItem('params'))
-console.log("settingsParams",settingsParams)
+// let settingsParams=  JSON.parse(localStorage.getItem('params'))
+// console.log("settingsParams",settingsParams)
 
   const [main_class] = useGlobalState("main_class");
   return (

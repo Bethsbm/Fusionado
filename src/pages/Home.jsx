@@ -15,8 +15,8 @@ function Home() {
     let log={
        fecha: new Date(),
        id_usuario:userdata.data.id || 0,
-       accion:'READ',
-       descripcion:'Ingreso entro a HOME',
+       accion:'LECTURA',
+       descripcion:'Ingreso a  HOME',
   }
     fetch(urlapi + "/logs/save"
     , {

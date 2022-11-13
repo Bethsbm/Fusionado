@@ -3,7 +3,14 @@ import DataTable from "react-data-table-component";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
-import { Alert, Button, Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
+import {
+  Alert,
+  Button,
+  Modal,
+  ModalBody,
+  ModalFooter,
+  ModalHeader,
+} from "reactstrap";
 import "./Usuarios.css";
 import { downloadCSV, toUpperCaseField } from "../../../utils/utils";
 
@@ -11,69 +18,61 @@ const urlapi = "http://localhost:3001";
 // const UrlMostrar = "http://190.53.243.69:3001/categoria/getall/";
 // const UrlEliminar = "http://190.53.243.69:3001/categoria/eliminar/";
 const Usuarios = () => {
- let navigate = useNavigate();
- //Configurar los hooks
- const [registroDelete, setRegistroDelete] = useState('');
+  let navigate = useNavigate();
+  //Configurar los hooks
+  const [registroDelete, setRegistroDelete] = useState("");
 
+  const [message, setMesagge] = useState("");
+  const [color, setColor] = useState("danger");
+  const [isValid, setIsValid] = useState(false);
 
- const [message, setMesagge] = useState("");
- const [color, setColor] = useState("danger");
- const [isValid, setIsValid] = useState(false);
- 
-
-
-/** 
-   ** Creando bitacora  
+  /**
+   ** Creando bitacora
    * enviado infromacion de bitacora a la BD
-   * */ 
-   const saveLog = async () => {
-    const userdata= JSON.parse(localStorage.getItem('data')) 
-    let log={
-       fecha: new Date(),
-       id_usuario:userdata.data.id || 0,
-       accion:'LECTURA',
-       descripcion:'Ingreso a pantalla USUARIOS',
-  }
-    fetch(urlapi + "/logs/save"
-    , {
-    method: 'POST',
-    body:JSON.stringify(log),
-    headers: {
-        'Content-type': 'application/json'
-    }
+   * */
+  const saveLog = async () => {
+    const userdata = JSON.parse(localStorage.getItem("data"));
+    let log = {
+      fecha: new Date(),
+      id_usuario: userdata.data.id || 0,
+      accion: "LECTURA",
+      descripcion: "Ingreso a pantalla USUARIOS",
+    };
+    fetch(urlapi + "/logs/save", {
+      method: "POST",
+      body: JSON.stringify(log),
+      headers: {
+        "Content-type": "application/json",
+      },
     })
-    .then(response => response.json())
-    .then(responseJson => {  
-        console.log("responseJson",responseJson)
-    })
-    .catch(error=>{
-        console.log(error)   
-    })
-};
-
-  
-
+      .then((response) => response.json())
+      .then((responseJson) => {
+        console.log("responseJson", responseJson);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
   const [registros, setRegistros] = useState([]);
 
   const getRegistros = async () => {
-    fetch(urlapi + "/registro/getall"
-    , {
-    method: 'GET',
-    headers: {
-        'Content-type': 'application/json'
-    }
+    fetch(urlapi + "/registro/getall", {
+      method: "GET",
+      headers: {
+        "Content-type": "application/json",
+      },
     })
-    .then(response => response.json())
-    .then(responseJson => {  
-        console.log("responseJson",responseJson)
-        console.log("responseJson.status",responseJson.status)
+      .then((response) => response.json())
+      .then((responseJson) => {
+        console.log("responseJson", responseJson);
+        console.log("responseJson.status", responseJson.status);
         setRegistros(responseJson.object);
-    })
-    .catch(error=>{
-        console.log(error)   
-    })
-};
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
   useEffect(() => {
     saveLog();
@@ -86,152 +85,155 @@ const Usuarios = () => {
   //   })
   // }
 
-
   //procedimineto para eliminar un registro
   const deleteRegistro = async () => {
-      console.log('registroDelete',registroDelete)
+    console.log("registroDelete", registroDelete);
     try {
-      console.log("id arriba")
-      setIsValid(true)
-      const res = await axios.delete(`${urlapi}/ms_registro/eliminar/${registroDelete}`);
-      console.log('res',res)
+      console.log("id arriba");
+      setIsValid(true);
+      const res = await axios.delete(
+        `${urlapi}/ms_registro/eliminar/${registroDelete}`
+      );
+      console.log("res", res);
       if (res.status) {
-        // alert("Eliminado!"); 
-        setColor("success")
-        setMesagge('Registro eliminado exitosamente')
+        // alert("Eliminado!");
+        setColor("success");
+        setMesagge("Registro eliminado exitosamente");
       } else {
-        setColor("danger")
-        setMesagge(res.message)
+        setColor("danger");
+        setMesagge(res.message);
       }
-      setTimeout(()=>{
-        setIsValid(false)
-       },1000) 
-
+      setTimeout(() => {
+        setIsValid(false);
+      }, 1000);
 
       setRegistros([]);
       getRegistros();
     } catch (error) {
-      console.log('error.response.data',error.response)
-      if(!error.response.data.status){
-        setColor("warning")
-        setMesagge('El usuario ya posee historial en BD,no puede ser eliminado')
+      console.log("error.response.data", error.response);
+      if (!error.response.data.status) {
+        setColor("warning");
+        setMesagge(
+          "El usuario ya posee historial en BD,no puede ser eliminado"
+        );
       }
-      setTimeout(()=>{
-        setIsValid(false)
-       },1000) 
+      setTimeout(() => {
+        setIsValid(false);
+      }, 1000);
     }
   };
-   //Ventana modal de confirmación de eliminar
-   const [modalEliminar, setModalEliminar] = useState(false);
-   const abrirModalEliminar = () => setModalEliminar(!modalEliminar);
- 
+  //Ventana modal de confirmación de eliminar
+  const [modalEliminar, setModalEliminar] = useState(false);
+  const abrirModalEliminar = () => setModalEliminar(!modalEliminar);
 
-   
-   
-  
+  //Ventana modal para mostrar mas
+  const [modalVerMas, setVerMas] = useState(false);
+  const abrirModalVerMas = () => setVerMas(!modalVerMas);
+  const [registroVerMas, setRegistroVerMas] = useState({});
 
   //Configuramos las columnas de la tabla
   const columns = [
     {
       name: "ID",
-      selector: (row) => row.id_usuario || 'NO APLICA',
+      selector: (row) => row.id_usuario || "--- ---",
       sortable: false,
-    }, 
+    },
     {
       name: "USUARIO",
-      selector: (row) => toUpperCaseField(row.nombre_usuario) || 'NO APLICA',
+      selector: (row) => toUpperCaseField(row.usuario) || "--- ---",
       sortable: true,
-    
     },
-   
-  
+
     {
       name: "NOMBRE",
-      selector: (row) => toUpperCaseField(row.usuario) || 'NO APLICA',
+      selector: (row) => toUpperCaseField(row.nombre_usuario) || "--- ---",
       sortable: false,
-    
     },
     {
       name: "ESTADO",
-      selector: (row) => toUpperCaseField(row.descripcion) || 'NO APLICA',
+      selector: (row) => toUpperCaseField(row.descripcion) || "--- ---",
       sortable: false,
-    
     },
-    {
-      name: "CONTRASEÑA",
-      selector: (row) => row.contrasena || 'NO APLICA',
-      sortable: false,
-    
-    },
+    // {
+    //   name: "CONTRASEÑA",
+    //   selector: (row) => row.contrasena || "--- ---",
+    //   sortable: false,
+    // },
     {
       name: "ROLE",
-      selector: (row) => toUpperCaseField(row.rol) || 'NO APLICA',
+      selector: (row) => toUpperCaseField(row.rol) || "--- ---",
       sortable: true,
-    
     },
     {
-      name: "ULTIMA C",
-      selector: (row) => row.fecha_ultima_conexion || 'NO APLICA',
+      name: "FECHA ULTIMA CONEXION",
+      selector: (row) => row.fecha_ultima_conexion || "--- ---",
       sortable: false,
     },
     {
-      name: "PREGUNTAS C",
-      selector: (row) => row.preguntas_contestadas || 'NO APLICA',
+      name: "PREGUNTAS CONTESTADAS",
+      selector: (row) => row.preguntas_contestadas || "--- ---",
       sortable: false,
     },
     {
       name: "PRIMER INGRESO",
-      selector: (row) => row.primer_ingreso || 'NO APLICA',
+      selector: (row) => row.primer_ingreso || "--- ---",
       sortable: false,
     },
     {
       name: "FECHA VEN",
-      selector: (row) => row.fecha_vencimiento || 'NO APLICA',
+      selector: (row) => row.fecha_vencimiento || "--- ---",
       sortable: false,
     },
     {
       name: "CORREO",
-      selector: (row) => row.correo_electronico || 'NO APLICA',
+      selector: (row) => row.correo_electronico || "--- ---",
       sortable: false,
-    
-    },  
+    },
     {
       name: "CREADO POR",
-      selector: (row) => toUpperCaseField(row.creado_por) || 'NO APLICA',
+      selector: (row) => toUpperCaseField(row.creado_por) || "--- ---",
       sortable: false,
     },
     {
       name: "FECHA CREACIÓN",
-      selector: (row) => row.fecha_creacion || 'NO APLICA',
+      selector: (row) => row.fecha_creacion || "--- ---",
       sortable: false,
     },
     {
       name: "MODIFICADO POR",
-      selector: (row) => row.modificado_por || 'NO APLICA',
+      selector: (row) => row.modificado_por || "--- ---",
       sortable: false,
     },
     {
       name: "FECHA MODIFICACIÓN",
-      selector: (row) => row.fecha_modificacion || 'NO APLICA',
+      selector: (row) => row.fecha_modificacion || "--- ---",
       sortable: false,
     },
     {
       name: "INTENTOS",
-      selector: (row) => row.intentos_login || 'NO APLICA',
+      selector: (row) => row.intentos_login || "--- ---",
       sortable: false,
     },
-   
-   
-   
+
     {
       name: "ACCIONES",
       cell: (row) => (
         <>
           <Link
+            type="button"
+            className="btn btn-light"
+            title="Ver Más..."
+            onClick={() => {
+              abrirModalVerMas();
+              setRegistroVerMas(row);
+            }}
+          >
+            <i className="bi bi-eye"></i>
+          </Link>
+          &nbsp;
+          <Link
             to={`/admin/editUser/${row.id_usuario}`}
-            
             className="btn  btn-light"
-            
             title="Editar"
           >
             <i className="bi bi-pencil-fill"></i>
@@ -271,26 +273,32 @@ const Usuarios = () => {
     selectAllRowsItemText: "Todos",
   };
 
-
- //Barra de busqueda
- const [ busqueda, setBusqueda ] = useState("")
- //capturar valor a buscar
+  //Barra de busqueda
+  const [busqueda, setBusqueda] = useState("");
+  //capturar valor a buscar
   const valorBuscar = (e) => {
-    setBusqueda(e.target.value)   
-  }
-    //metodo de filtrado 
-  let results = []
-  if(!busqueda){
-      results = registros
-  }else{
-      results = registros.filter( (dato) =>
-      dato.id_usuario.toString().includes(busqueda.toLocaleLowerCase()) || 
-      dato?.nombre_usuario?.toLowerCase().includes(busqueda.toLocaleLowerCase()) ||       
-      dato?.usuario?.toLowerCase().includes(busqueda.toLocaleLowerCase()) ||       
-      dato?.fecha_creacion?.toLowerCase().includes(busqueda.toLocaleLowerCase()) ||       
-      dato?.correo_electronico?.toLowerCase().includes(busqueda.toLocaleLowerCase())     
-      )
+    setBusqueda(e.target.value);
   };
+  //metodo de filtrado
+  let results = [];
+  if (!busqueda) {
+    results = registros;
+  } else {
+    results = registros.filter(
+      (dato) =>
+        dato.id_usuario.toString().includes(busqueda.toLocaleLowerCase()) ||
+        dato?.nombre_usuario
+          ?.toLowerCase()
+          .includes(busqueda.toLocaleLowerCase()) ||
+        dato?.usuario?.toLowerCase().includes(busqueda.toLocaleLowerCase()) ||
+        dato?.fecha_creacion
+          ?.toLowerCase()
+          .includes(busqueda.toLocaleLowerCase()) ||
+        dato?.correo_electronico
+          ?.toLowerCase()
+          .includes(busqueda.toLocaleLowerCase())
+    );
+  }
 
   return (
     <div className="container">
@@ -300,13 +308,11 @@ const Usuarios = () => {
         consectetur odio asperiores, deserunt beatae accusantium omnis iure.
       </h5> */}
       <br />
-      
 
       <div className="row">
-      <Alert 
-                     isOpen={isValid} 
-                     color={color}
-                     >{message}</Alert>
+        <Alert isOpen={isValid} color={color}>
+          {message}
+        </Alert>
         {/* <div className="col">
           <div
             className="btn-toolbar"
@@ -348,7 +354,7 @@ const Usuarios = () => {
                 className="btn btn-primary"
                 title="Agregar Nuevo"
               >
-                 Nuevo
+                Nuevo
                 <i class="bi bi-plus-lg"></i>
               </Link>
             </div>
@@ -361,7 +367,7 @@ const Usuarios = () => {
                 type="button"
                 className="btn btn-success"
                 title="Exportar a Excel"
-                onClick={() => downloadCSV(registros,'Reporte_usuarios_')}
+                onClick={() => downloadCSV(registros, "Reporte_usuarios_")}
               >
                 <i class="bi bi-file-excel-fill"></i> Excel
               </Link>
@@ -373,7 +379,7 @@ const Usuarios = () => {
         <div className="col-4">
           <div className="input-group flex-nowrap">
             <span className="input-group-text" id="addon-wrapping">
-            <i class="bi bi-search"></i>
+              <i class="bi bi-search"></i>
             </span>
             <input
               className="form-control me-2"
@@ -385,7 +391,6 @@ const Usuarios = () => {
             />
           </div>
         </div>
-
       </div>
       <div className="row">
         <DataTable
@@ -401,12 +406,162 @@ const Usuarios = () => {
         />
       </div>
 
+      {/* Ventana Modal de ver más*/}
+      <Modal
+        isOpen={modalVerMas}
+        toggle={abrirModalVerMas}
+        centered
+        size="xl"
+        // style={{ maxWidth: "800px", width: "110%" }}
+      >
+        <ModalHeader toggle={abrirModalVerMas}>Detalle de usuario</ModalHeader>
+        <ModalBody>
+          <div className="row">
+            {/*  */}
+            <div className="col-sm-6 col-md-6">
+              <div className="row ">
+                <div className="col-sm-6">
+                  <p className="colorText">ID: </p>
+                </div>
+                <div className="col-sm-6">
+                  <p> {registroVerMas.id_usuario || "---"} </p>
+                </div>
+              </div>
+
+              <div className="row ">
+                <div className="col-sm-6">
+                  <p className="colorText">USUARIO: </p>
+                </div>
+                <div className="col-sm-6">
+                  <p> {registroVerMas.usuario || "---"} </p>
+                </div>
+              </div>
+
+              <div className="row ">
+                <div className="col-sm-6">
+                  <p className="colorText">NOMBRE DE USUARIO: </p>
+                </div>
+                <div className="col-sm-6">
+                  <p> {registroVerMas.nombre_usuario || "---"} </p>
+                </div>
+              </div>
+
+              <div className="row ">
+                <div className="col-sm-6">
+                  <p className="colorText">ESTADO DE USUARIO: </p>
+                </div>
+                <div className="col-sm-6">
+                  <p> {registroVerMas.descripcion || "---"} </p>
+                </div>
+              </div>
+
+              <div className="row ">
+                <div className="col-sm-6">
+                  <p className="colorText">ROL: </p>
+                </div>
+                <div className="col-sm-6">
+                  <p> {registroVerMas.rol || "---"} </p>
+                </div>
+              </div>
+
+              <div className="row ">
+                <div className="col-sm-6">
+                  <p className="colorText">FECHA ULTIMA CONEXIÓN: </p>
+                </div>
+                <div className="col-sm-6">
+                  <p> {registroVerMas.fecha_ultima_conexion || "---"} </p>
+                </div>
+              </div>
+              <div className="row ">
+                <div className="col-sm-6">
+                  <p className="colorText">PREGUNTAS CONTESTADAS: </p>
+                </div>
+                <div className="col-sm-6">
+                  <p> {registroVerMas.preguntas_contestadas || "---"} </p>
+                </div>
+              </div>
+              <div className="row ">
+                <div className="col-sm-6">
+                  <p className="colorText">PRIMER INGRESO: </p>
+                </div>
+                <div className="col-sm-6">
+                  <p> {registroVerMas.primer_ingreso || "---"} </p>
+                </div>
+              </div>
+            </div>
+            {/*  */}
+            <div className="col-sm-6 col-md-6">
+              <div className="row ">
+                <p className="colorText">FECHA DE VENCIMIENTO: </p>
+              </div>
+              <div className="col-sm-6">
+                <p> {registroVerMas.fecha_vencimiento || "---"} </p>
+              </div>
+              <div className="row ">
+              <div className="col-sm-6">
+                <p className="colorText">CORREO: </p>
+              </div>
+              <div className="col-sm-6">
+                <p> {registroVerMas.correo_electronico || "---"} </p>
+              </div>
+            </div>
+            <div className="row ">
+              <div className="col-sm-6">
+                <p className="colorText">CREADO POR: </p>
+              </div>
+              <div className="col-sm-6">
+                <p> {registroVerMas.creado_por || "---"} </p>
+              </div>
+            </div>
+            <div className="row ">
+              <div className="col-sm-6">
+                <p className="colorText">FECHA DE CREACIÓN: </p>
+              </div>
+              <div className="col-sm-6">
+                <p> {registroVerMas.fecha_creacion || "---"} </p>
+              </div>
+            </div>
+            <div className="row ">
+              <div className="col-sm-6">
+                <p className="colorText">FECHA DE MODIFICACIÓN: </p>
+              </div>
+              <div className="col-sm-6">
+                <p> {registroVerMas.fecha_modificacion || "---"} </p>
+              </div>
+            </div>
+            <div className="row ">
+              <div className="col-sm-6">
+                <p className="colorText">MODIFICADO POR: </p>
+              </div>
+              <div className="col-sm-6">
+                <p> {registroVerMas.modificado_por || "---"} </p>
+              </div>
+            </div>
+            <div className="row ">
+              <div className="col-sm-6">
+                <p className="colorText">INTENTOS LOGIN: </p>
+              </div>
+              <div className="col-sm-6">
+                <p> {registroVerMas.intentos_login || "---"} </p>
+              </div>
+            </div>
+            </div>
+           
+            {/*  */}
+          </div>
+        </ModalBody>
+        <ModalFooter>
+          <Button color="secondary" onClick={abrirModalVerMas}>
+            Cerrar
+          </Button>
+        </ModalFooter>
+      </Modal>
+
       {/* Ventana Modal de Eliminar*/}
       <Modal isOpen={modalEliminar} toggle={abrirModalEliminar} centered>
         <ModalHeader toggle={abrirModalEliminar}>Eliminar Registro</ModalHeader>
         <ModalBody>
           <p>¿Está seguro de Eliminar este Registro?</p>
-          
         </ModalBody>
         <ModalFooter>
           <Button
@@ -424,7 +579,6 @@ const Usuarios = () => {
           </Button>
         </ModalFooter>
       </Modal>
-
     </div>
   );
 };

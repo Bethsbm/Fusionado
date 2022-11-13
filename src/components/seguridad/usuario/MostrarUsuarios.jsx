@@ -36,6 +36,10 @@ const MostrarUsuarios = () => {
   const abrirModalEliminar = () => setModalEliminar(!modalEliminar);
 
 
+  //Ventana modal para mostrar mas
+  const [modalVerMas, setVerMas] = useState(false);
+  const abrirModalVerMas = () => setVerMas(!modalVerMas);
+  const [registroVerMas, setRegistroVerMas] = useState({});
 
   //Configuramos las columnas de la tabla
   const columns = [
@@ -64,12 +68,12 @@ const MostrarUsuarios = () => {
       maxWidth: "200px",
     },
 
-    {
-      name: "CONTRASEÑA",
-      selector: (row) => row.body,
-      sortable: true,
-      maxWidth: "130px",
-    },
+    // {
+    //   name: "CONTRASEÑA",
+    //   selector: (row) => row.body,
+    //   sortable: true,
+    //   maxWidth: "130px",
+    // },
 
     {
       name: "ID ROL",
@@ -145,6 +149,18 @@ const MostrarUsuarios = () => {
       name: "ACCIONES",
       cell: (row) => (
         <>
+         <Link
+            type="button"
+            className="btn btn-light"
+            title="Ver Más..."
+            onClick={() => {
+              abrirModalVerMas();
+              setRegistroVerMas(row);
+            }}
+          >
+            <i className="fa-solid fa-eye"></i>
+          </Link>
+          &nbsp;
           <Link
             to={`/editarusuario/${row.id}/edit`}
             type="button"
@@ -265,6 +281,63 @@ const MostrarUsuarios = () => {
           fixedHeaderScrollHeight="550px"
         />
       </div>
+
+
+      {/* Ventana Modal de ver más*/}
+      <Modal isOpen={modalVerMas} toggle={abrirModalVerMas} centered>
+        <ModalHeader toggle={abrirModalVerMas}>Detalles</ModalHeader>
+        <ModalBody>
+          <div className="row g-3">
+            <div className="col-sm-6">
+              <p className="colorText">CÓDIGO: </p>
+            </div>
+            <div className="col-sm-6">
+              <p> {registroVerMas.cod_categoria} </p>
+            </div>
+          </div>
+
+          <div className="row g-3">
+            <div className="col-sm-6">
+              <p className="colorText">CREADO POR: </p>
+            </div>
+            <div className="col-sm-6">
+              <p> {registroVerMas.creado_por} </p>
+            </div>
+          </div>
+
+          <div className="row g-3">
+            <div className="col-sm-6">
+              <p className="colorText">FECHA DE CREACIÓN: </p>
+            </div>
+            <div className="col-sm-6">
+              <p> {registroVerMas.fecha_creacion} </p>
+            </div>
+          </div>
+
+          <div className="row g-3">
+            <div className="col-sm-6">
+              <p className="colorText">MODIFICADO POR: </p>
+            </div>
+            <div className="col-sm-6">
+              <p> {registroVerMas.modificado_por} </p>
+            </div>
+          </div>
+
+          <div className="row g-3">
+            <div className="col-sm-6">
+              <p className="colorText">FECHA DE MODIFICACIÓN: </p>
+            </div>
+            <div className="col-sm-6">
+              <p> {registroVerMas.fecha_modificacion} </p>
+            </div>
+          </div>
+        </ModalBody>
+        <ModalFooter>
+          <Button color="secondary" onClick={abrirModalVerMas}>
+            Cerrar
+          </Button>
+        </ModalFooter>
+      </Modal>
 
       {/* Ventana Modal de Eliminar*/}
       <Modal isOpen={modalEliminar} toggle={abrirModalEliminar} centered>
