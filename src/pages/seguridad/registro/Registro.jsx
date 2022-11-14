@@ -10,8 +10,9 @@ import PasswordChecklist from "react-password-checklist";
 import md5 from "md5";
 import { getOneParam, toReplaceSpace, toUpperCaseField } from "../../../utils/utils";
 // const URL = "http://190.53.243.69:3001/ms_registro/autoregistro";
-const urlApi = "http://localhost:3001";
-
+// const urlApi = "http://localhost:3001";
+const URL_API_ENV = process.env.REACT_APP_URL_API;
+console.log('URL_API_ENV===>',URL_API_ENV)
 const Registro = () => {
 
   /**
@@ -19,23 +20,23 @@ const Registro = () => {
    * obteniendo todos los parametros de configuracion del sistema
    * */
    const getAllSettingsParams = async () => {
-    fetch(urlApi + "/ms_parametros/getall", {
+    fetch(URL_API_ENV + "/ms_parametros/getall", {
       method: "GET",
       headers: { "Content-type": "application/json" },
     })
       .then((response) => response.json())
       .then((responseJson) => {
-        console.log("dataSettingsParams", responseJson);
-        console.log("dataSettingsParams", responseJson.object);
+        // console.log("dataSettingsParams", responseJson);
+        // console.log("dataSettingsParams", responseJson.object);
         if (!responseJson.status) {
-          console.log("algo salio mal en el servidor");
+          // console.log("algo salio mal en el servidor");
           return;
         }
         localStorage.setItem("params", JSON.stringify(responseJson.object));
         // setParams(responseJson.object);
       })
       .catch((error) => {
-        console.log(error);
+        // console.log(error);
       });
   };
   useEffect(  () => {
@@ -47,11 +48,11 @@ const Registro = () => {
     var dataPar=JSON.parse(localStorage.getItem("params")) || []
     var minLengthParam=getOneParam(dataPar,"MIN_CONTRA")
         minLengthParam=minLengthParam.valor
-        console.log('minLengthParam',minLengthParam)
+        // console.log('minLengthParam',minLengthParam)
 
     var maxLengthParam=getOneParam(dataPar,"MAX_CONTRA")
         maxLengthParam=maxLengthParam.valor
-        console.log('maxLengthParam',maxLengthParam)
+        // console.log('maxLengthParam',maxLengthParam)
 
 
   const [password, setPassword] = useState("");
@@ -74,6 +75,10 @@ const Registro = () => {
 
   const onSubmit = (event) => {
     event.preventDefault();
+
+    var dataPar=JSON.parse(localStorage.getItem("params")) || []
+    var urlApiParam=getOneParam(dataPar,"URL_API")
+    const urlAPi =urlApiParam.valor
     //  var x = Math.floor(Math.random() * (100 - 1) + 1);
     // console.log('x',x)
     let name_user=(refUserName.current.value).toString()
@@ -92,7 +97,7 @@ const Registro = () => {
         confirmContrasena: md5(refConfirmContrasena.current.value),
     };
 
-    fetch(urlApi+ "/ms_registro/autoregistro", {
+    fetch(urlAPi+ "/ms_registro/autoregistro", {
         method: "POST",
         body: JSON.stringify(data),
         headers: {
@@ -101,8 +106,8 @@ const Registro = () => {
       })
         .then((response) => response.json())
         .then((responseJson) => {
-          console.log("responseJson", responseJson);
-          console.log("responseJson.status", responseJson.status);
+          // console.log("responseJson", responseJson);
+          // console.log("responseJson.status", responseJson.status);
           if (!responseJson.status) {
             setMesagge(responseJson.message);
             setIsValid(false);

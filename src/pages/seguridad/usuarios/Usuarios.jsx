@@ -10,14 +10,22 @@ import {
   ModalBody,
   ModalFooter,
   ModalHeader,
+  Badge
 } from "reactstrap";
 import "./Usuarios.css";
-import { downloadCSV, toUpperCaseField } from "../../../utils/utils";
+import { downloadCSV, getOneParam, toUpperCaseField } from "../../../utils/utils";
 
-const urlapi = "http://localhost:3001";
+
+// const urlapi = "http://localhost:3001";
 // const UrlMostrar = "http://190.53.243.69:3001/categoria/getall/";
 // const UrlEliminar = "http://190.53.243.69:3001/categoria/eliminar/";
 const Usuarios = () => {
+
+
+  var dataPar=JSON.parse(localStorage.getItem("params")) || []
+  var urlApiParam=getOneParam(dataPar,"URL_API")
+  const urlapi =urlApiParam.valor
+
   let navigate = useNavigate();
   //Configurar los hooks
   const [registroDelete, setRegistroDelete] = useState("");
@@ -47,10 +55,10 @@ const Usuarios = () => {
     })
       .then((response) => response.json())
       .then((responseJson) => {
-        console.log("responseJson", responseJson);
+        // console.log("responseJson", responseJson);
       })
       .catch((error) => {
-        console.log(error);
+        // console.log(error);
       });
   };
 
@@ -65,12 +73,12 @@ const Usuarios = () => {
     })
       .then((response) => response.json())
       .then((responseJson) => {
-        console.log("responseJson", responseJson);
-        console.log("responseJson.status", responseJson.status);
+        // console.log("responseJson", responseJson);
+        // console.log("responseJson.status", responseJson.status);
         setRegistros(responseJson.object);
       })
       .catch((error) => {
-        console.log(error);
+        // console.log(error);
       });
   };
 
@@ -87,14 +95,14 @@ const Usuarios = () => {
 
   //procedimineto para eliminar un registro
   const deleteRegistro = async () => {
-    console.log("registroDelete", registroDelete);
+    // console.log("registroDelete", registroDelete);
     try {
-      console.log("id arriba");
+      // console.log("id arriba");
       setIsValid(true);
       const res = await axios.delete(
         `${urlapi}/ms_registro/eliminar/${registroDelete}`
       );
-      console.log("res", res);
+      // console.log("res", res);
       if (res.status) {
         // alert("Eliminado!");
         setColor("success");
@@ -110,7 +118,7 @@ const Usuarios = () => {
       setRegistros([]);
       getRegistros();
     } catch (error) {
-      console.log("error.response.data", error.response);
+      // console.log("error.response.data", error.response);
       if (!error.response.data.status) {
         setColor("warning");
         setMesagge(
@@ -151,9 +159,22 @@ const Usuarios = () => {
     },
     {
       name: "ESTADO",
-      selector: (row) => toUpperCaseField(row.descripcion) || "--- ---",
-      sortable: false,
+      	cell: (row) => (<span 
+          className={`status  
+          ${row.estado_usuario ===1? "new" : ""} 
+          ${row.estado_usuario ===2? "active" : ""}
+          ${row.estado_usuario ===3? "inactive" : ""}
+          ${row.estado_usuario ===4? "lock" : ""}
+          `}
+          >{toUpperCaseField(row.descripcion)}</span>),
+      		// ignoreRowClick: true,
+      		allowOverflow: true,
     },
+    // {
+    //   name: "ESTADO",
+    //   selector: (row) => toUpperCaseField(row.descripcion) || "--- ---",
+    //   sortable: false,
+    // },
     // {
     //   name: "CONTRASEÑA",
     //   selector: (row) => row.contrasena || "--- ---",
@@ -250,7 +271,7 @@ const Usuarios = () => {
             className="btn  btn-light"
             title="Eliminar"
             onClick={() => {
-              console.log(row.id_usuario);
+              // console.log(row.id_usuario);
               setRegistroDelete(row.id_usuario);
               abrirModalEliminar();
             }}

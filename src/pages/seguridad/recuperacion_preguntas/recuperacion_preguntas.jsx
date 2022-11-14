@@ -12,7 +12,9 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import { getOneParam } from "../../../utils/utils";
 
-const urlAPi = "http://localhost:3001";
+// const urlAPi = "http://localhost:3001";
+const URL_API_ENV = process.env.REACT_APP_URL_API;
+console.log('URL_API_ENV===>',URL_API_ENV)
 
 export default function RecuperacionPreguntas(props) {
   let navigate = useNavigate();
@@ -29,6 +31,10 @@ export default function RecuperacionPreguntas(props) {
     steps.push("Pregunta" + (index + 1));
   }
 
+
+  var dataPar=JSON.parse(localStorage.getItem("params")) || []
+  var urlApiParam=getOneParam(dataPar,"URL_API")
+  const urlAPi =urlApiParam.valor
   // var ObjetData={}
 
   const [question1, setQuestion1] = useState("");
@@ -96,10 +102,12 @@ export default function RecuperacionPreguntas(props) {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log("handleSubmit ran");
+    // console.log("handleSubmit ran");
+    
+  
 
     const userData = JSON.parse(localStorage.getItem("data"));
-    console.log("userData", userData);
+    // console.log("userData", userData);
     let dataQuest1 = {
       id_usuario: userData.data.id,
       id_pregunta: parseInt(question1),
@@ -115,9 +123,10 @@ export default function RecuperacionPreguntas(props) {
       id_pregunta: parseInt(question3),
       respuesta: response3,
     };
-    console.log("dataQuest1", dataQuest1);
-    console.log("dataQuest2", dataQuest2);
-    console.log("dataQuest3", dataQuest3);
+    // console.log("dataQuest1", dataQuest1);
+    // console.log("dataQuest2", dataQuest2);
+    // console.log("dataQuest3", dataQuest3);
+   
 
     await fetch(urlAPi + "/ms_pregunta/save", {
       method: "POST",
@@ -128,8 +137,8 @@ export default function RecuperacionPreguntas(props) {
     })
       .then((response) => response.json())
       .then((responseJson) => {
-        console.log("responseJson 1", responseJson);
-        console.log("responseJson.status 1", responseJson.status);
+        // console.log("responseJson 1", responseJson);
+        // console.log("responseJson.status 1", responseJson.status);
       });
 
     await fetch(urlAPi + "/ms_pregunta/save", {
@@ -141,8 +150,8 @@ export default function RecuperacionPreguntas(props) {
     })
       .then((response) => response.json())
       .then((responseJson) => {
-        console.log("responseJson 2", responseJson);
-        console.log("responseJson.status 2", responseJson.status);
+        // console.log("responseJson 2", responseJson);
+        // console.log("responseJson.status 2", responseJson.status);
       });
     await fetch(urlAPi + "/ms_pregunta/save", {
       method: "POST",
@@ -153,8 +162,8 @@ export default function RecuperacionPreguntas(props) {
     })
       .then((response) => response.json())
       .then((responseJson) => {
-        console.log("responseJson 3", responseJson);
-        console.log("responseJson.status 3", responseJson.status);
+        // console.log("responseJson 3", responseJson);
+        // console.log("responseJson.status 3", responseJson.status);
       });
 
     await fetch(urlAPi + "/ms_registro/updateUserState", {
@@ -166,8 +175,8 @@ export default function RecuperacionPreguntas(props) {
     })
       .then((response) => response.json())
       .then((responseJson) => {
-        console.log("update user", responseJson);
-        console.log("responseJson.status 3", responseJson.status);
+        // console.log("update user", responseJson);
+        // console.log("responseJson.status 3", responseJson.status);
       });
 
     localStorage.clear();
@@ -185,14 +194,14 @@ export default function RecuperacionPreguntas(props) {
    * obteniendo todos los parametros de configuracion del sistema
    * */
   const getAllSettingsParams = async () => {
-    fetch(urlAPi + "/ms_parametros/getall", {
+    fetch(URL_API_ENV + "/ms_parametros/getall", {
       method: "GET",
       headers: { "Content-type": "application/json" },
     })
       .then((response) => response.json())
       .then((responseJson) => {
-        console.log("dataSettingsParams", responseJson);
-        console.log("dataSettingsParams", responseJson.object);
+        // console.log("dataSettingsParams", responseJson);
+        // console.log("dataSettingsParams", responseJson.object);
         if (!responseJson.status) {
           console.log("algo salio mal en el servidor");
           return;
@@ -201,7 +210,7 @@ export default function RecuperacionPreguntas(props) {
         setParams(responseJson.object);
       })
       .catch((error) => {
-        console.log(error);
+        // console.log(error);
       });
   };
 
@@ -215,12 +224,12 @@ export default function RecuperacionPreguntas(props) {
     })
       .then((response) => response.json())
       .then((responseJson) => {
-        console.log("responseJson", responseJson);
-        console.log("responseJson.status", responseJson.status);
+        // console.log("responseJson", responseJson);
+        // console.log("responseJson.status", responseJson.status);
         setRegistros(responseJson.object);
       })
       .catch((error) => {
-        console.log(error);
+        // console.log(error);
       });
   };
 

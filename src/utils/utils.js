@@ -1,3 +1,5 @@
+import Swal from "sweetalert2";
+
 
  function convertArrayOfObjectsToCSV(array) {
     let result;
@@ -48,6 +50,9 @@ function toUpperCaseField(word) {
   return String(word).trim().toUpperCase()
 }
 
+
+
+
 function toReplaceSpace(word) {
   return String(word).replace(/\s/g, '')
 }
@@ -74,9 +79,52 @@ const getOneParam = (objectJson,nameParam) => {
       
   };
 
+
+  
+  const showAlerts = (alerta) =>{
+    switch (alerta){
+      case 'guardado':
+        Swal.fire({
+          title: '¡Guardado!',
+          text: "Los cambios se guardaron con éxito",
+          icon: 'success',
+          confirmButtonColor: '#3085d6',
+          confirmButtonText: 'Ok'
+        })
+
+      break;
+
+      case 'error': 
+      Swal.fire({
+        title: 'Error',
+        text:  'No se pudieron guardar los cambios',
+        icon: 'error',
+        confirmButtonColor: 'red',
+        confirmButtonText: 'Ok'
+      })
+      break;
+
+      default: break;
+    }
+  };
+
+
+  // function translateUperCase(text) {
+  //   console.log('text',text)
+  //   try {
+  //     (text.toString()).toUpperCase();
+  //   } catch (error) {
+  //     console.log(error)
+  //   }
+  // }
+  
+
 export {
   downloadCSV,
   toUpperCaseField,
+  // translateUperCase,
   getOneParam,
   getAllSettingsParams,
-  toReplaceSpace}
+  toReplaceSpace,
+  showAlerts
+}

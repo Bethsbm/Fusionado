@@ -17,10 +17,36 @@ import {
 
 import PasswordChecklist from "react-password-checklist";
 import md5 from "md5";
+import { getOneParam } from "../../../utils/utils";
 
-const urlAPi = "http://localhost:3001";
-
+// const urlAPi = "http://localhost:3001";
+const URL_API_ENV = process.env.REACT_APP_URL_API;
+console.log('URL_API_ENV===>',URL_API_ENV)
 export default function CambioContra(props) {
+
+    /**
+   ** get settign params
+   * obteniendo todos los parametros de configuracion del sistema
+   * */
+   const getAllSettingsParams = async () => {
+      fetch(URL_API_ENV + "/ms_parametros/getall", {method: "GET",headers: { "Content-type": "application/json" },})
+      .then((response) => response.json())
+      .then((responseJson) => {
+        if (!responseJson.status) {
+          return;
+        }
+        localStorage.setItem("params", JSON.stringify(responseJson.object));
+      })
+  };
+  useEffect(  () => {
+      getAllSettingsParams();
+    }, []);
+
+    var dataPar=JSON.parse(localStorage.getItem("params")) || []
+    var urlApiParam=getOneParam(dataPar,"URL_API")
+    const urlAPi =urlApiParam.valor
+
+
   let navigate = useNavigate();
   const [password, setPassword] = useState("");
   const [passwordAgain, setPasswordAgain] = useState("");
@@ -45,7 +71,7 @@ export default function CambioContra(props) {
   const validateLink = () => {
     let data = { id, token };
 
-    fetch(urlAPi + "/validateUser", {
+    fetch(URL_API_ENV + "/validateUser", {
       method: "POST",
       body: JSON.stringify(data),
       headers: {
@@ -54,8 +80,8 @@ export default function CambioContra(props) {
     })
       .then((response) => response.json())
       .then((responseJson) => {
-        console.log("responseJson", responseJson);
-        console.log("responseJson.status", responseJson.status);
+        // console.log("responseJson", responseJson);
+        // console.log("responseJson.status", responseJson.status);
         setValidLink(responseJson.status);
         // }
       })
@@ -70,7 +96,7 @@ export default function CambioContra(props) {
 
     event.preventDefault();
 
-    console.log("form submitted ✅");
+    // console.log("form submitted ✅");
     let data = {
       id_user: id,
       newPassword: md5(refContrasena.current.value),
@@ -86,8 +112,8 @@ export default function CambioContra(props) {
     })
       .then((response) => response.json())
       .then((responseJson) => {
-        console.log("responseJson", responseJson);
-        console.log("responseJson.status", responseJson.status);
+        // console.log("responseJson", responseJson);
+        // console.log("responseJson.status", responseJson.status);
         if (!responseJson.status) {
           setMesagge(responseJson.message);
           setIsValid(false);

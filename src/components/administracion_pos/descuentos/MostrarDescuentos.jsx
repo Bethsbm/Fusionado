@@ -21,7 +21,7 @@ const MostrarSucursales = () => {
       const res = await axios.get(UrlMostrar);
       setRegistros(res.data);
     } catch (error) {
-      console.log(error);
+      // console.log(error);
       alert("ERROR - No se ha podido conectar con el servidor :(");
     }
   };
@@ -29,8 +29,8 @@ const MostrarSucursales = () => {
   //procedimineto para eliminar un registro
   const deleteRegistro = async () => {
     try {
-      console.log(registroDelete)
-      console.log("id arriba")
+      // console.log(registroDelete)
+      // console.log("id arriba")
       const res = await axios.delete(`${UrlEliminar}${registroDelete}`);
       getRegistros();
       if (res.status === 200) {

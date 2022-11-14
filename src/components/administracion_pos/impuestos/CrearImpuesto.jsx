@@ -51,7 +51,7 @@ const Formulario = () => {
         }}
         onSubmit={(valores, { resetForm }) => {
           //Enviar los datos (petición Post)
-          console.log("Formulario enviado");
+          // console.log("Formulario enviado");
 
           resetForm();
           setFormularioEnviado(true);

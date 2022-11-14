@@ -1,9 +1,13 @@
 import React, { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Card, CardBody, CardHeader, CardText, CardTitle, Col, Row } from "reactstrap";
-
-const urlapi = "http://localhost:3001";
+import { getOneParam } from "../utils/utils";
+// const urlapi = "http://localhost:3001";
 function Home() {
+
+  var dataPar=JSON.parse(localStorage.getItem("params")) || []
+  var urlApiParam=getOneParam(dataPar,"URL_API")
+  const urlAPi =urlApiParam.valor
 
   let navigate = useNavigate();
  /** 
@@ -16,9 +20,9 @@ function Home() {
        fecha: new Date(),
        id_usuario:userdata.data.id || 0,
        accion:'LECTURA',
-       descripcion:'Ingreso a  HOME',
+       descripcion:'Ingreso a  INICIO',
   }
-    fetch(urlapi + "/logs/save"
+    fetch(urlAPi + "/logs/save"
     , {
     method: 'POST',
     body:JSON.stringify(log),
@@ -26,13 +30,13 @@ function Home() {
         'Content-type': 'application/json'
     }
     })
-    .then(response => response.json())
-    .then(responseJson => {  
-        console.log("responseJson",responseJson)
-    })
-    .catch(error=>{
-        console.log(error)   
-    })
+    // .then(response => response.json())
+    // .then(responseJson => {  
+    //     // console.log("responseJson",responseJson)
+    // })
+    // .catch(error=>{
+    //     // console.log(error)   
+    // })
 };
 
 
@@ -47,7 +51,7 @@ function Home() {
        fecha: new Date(),
        id_usuario:userdata.data.id || 0,
   }
-    fetch(urlapi + "/ms_registro/validateUserState"
+    fetch(urlAPi + "/ms_registro/validateUserState"
     , {
     method: 'POST',
     body:JSON.stringify(data),
@@ -57,22 +61,22 @@ function Home() {
     })
     .then(response => response.json())
     .then(responseJson => {  
-        console.log("responseJson",responseJson)
+        // console.log("responseJson",responseJson)
         if(!responseJson.status){
-          console.log('algo salio mal en el servidor')
+          // console.log('algo salio mal en el servidor')
           return
         }
         let statusUser=responseJson.object.estado_usuario
         if(statusUser===1){
-          console.log('Usuario NUEVO')
+          // console.log('Usuario NUEVO')
           navigate('/recuperacion_preguntas')
         }
         if(statusUser===2){
-          console.log('USUARIO ACTIVO')
+          // console.log('USUARIO ACTIVO')
         }
     })
     .catch(error=>{
-        console.log(error)   
+        // console.log(error)   
     })
 };
 useEffect(() => {

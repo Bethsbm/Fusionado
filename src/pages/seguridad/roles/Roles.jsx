@@ -2,17 +2,19 @@ import React, { useEffect, useRef, useState } from 'react';
 import DataTable from 'react-data-table-component';
 import { Link } from 'react-router-dom';
 import { Button } from 'reactstrap';
-import { downloadCSV, toUpperCaseField } from '../../../utils/utils';
+import { downloadCSV, getOneParam, toUpperCaseField } from '../../../utils/utils';
 
 
-const urlapi = "http://localhost:3001";
+// const urlapi = "http://localhost:3001";
 
 
 
 export default function Roles(props) {
  
 
-
+  var dataPar=JSON.parse(localStorage.getItem("params")) || []
+  var urlApiParam=getOneParam(dataPar,"URL_API")
+  const urlapi =urlApiParam.valor
 
 
 
@@ -38,10 +40,10 @@ export default function Roles(props) {
     })
     .then(response => response.json())
     .then(responseJson => {  
-        console.log("responseJson",responseJson)
+        // console.log("responseJson",responseJson)
     })
     .catch(error=>{
-        console.log(error)   
+        // console.log(error)   
     })
 };
 
@@ -56,12 +58,12 @@ export default function Roles(props) {
       })
       .then(response => response.json())
       .then(responseJson => {  
-          console.log("responseJson",responseJson)
-          console.log("responseJson.status",responseJson.status)
+          // console.log("responseJson",responseJson)
+          // console.log("responseJson.status",responseJson.status)
           setRegistros(responseJson.object);
       })
       .catch(error=>{
-          console.log(error)   
+          // console.log(error)   
       })
   };
   

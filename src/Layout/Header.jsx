@@ -39,7 +39,7 @@ function Header() {
 
 
 var dataPar=JSON.parse(localStorage.getItem("params")) || []
-console.log("dataPar",dataPar)
+// console.log("dataPar",dataPar)
 var nombreParam=getOneParam(dataPar,"SYS_NOMBRE")
 var nameCompany=nombreParam.valor
 

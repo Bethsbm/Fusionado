@@ -5,10 +5,16 @@ import { useParams } from "react-router-dom";
 // import { Button, FormGroup, Input, Label } from "reactstrap";
 import { Button, FormGroup, Label, Input, Row, Col } from "reactstrap";
 import { Form, Field } from "react-final-form";
+import { getOneParam, toUpperCaseField } from "../../../utils/utils";
 
-const urlapi = "http://localhost:3001";
+// const urlapi = "http://localhost:3001";
 
 const EditarUsuario = () => {
+
+
+  var dataPar=JSON.parse(localStorage.getItem("params")) || []
+      var urlApiParam=getOneParam(dataPar,"URL_API")
+      const urlapi =urlApiParam.valor
 
   const userdata= JSON.parse(localStorage.getItem('data')) 
 
@@ -113,8 +119,8 @@ const EditarUsuario = () => {
     })
       .then((response) => response.json())
       .then((responseJson) => {
-        console.log("edit user", responseJson);
-        console.log("Edit usef", responseJson.status);
+        // console.log("edit user", responseJson);
+        // console.log("Edit usef", responseJson.status);
         if(responseJson.status){
             navigate('/admin/users')
         }
@@ -124,8 +130,8 @@ const EditarUsuario = () => {
       });
   };
   const onSelect = (e) => {
-    console.log(e.target.value);
-    console.log(e.target.value[0] + " " + e.target.value[1] );
+    // console.log(e.target.value);
+    // console.log(e.target.value[0] + " " + e.target.value[1] );
     this.setState({
         id_rol: e.target.value[0],
         rol: e.target.value[1]
@@ -210,6 +216,7 @@ const EditarUsuario = () => {
                               placeholder="Nombre de usuario"
                               // value={registro.nombre_usuario}
                               invalid={meta.error && meta.touched}
+                              onKeyUp={toUpperCaseField(values)}
                             />
                             {meta.error && meta.touched && (
                               <span>{meta.error}</span>
@@ -222,16 +229,23 @@ const EditarUsuario = () => {
                       {/* estado */}
                       <FormGroup>
                       <Label for="estado_usuario">Estado</Label>
-                      <Input
+                      <Field className="form-select" id="estado_usuario" name="estado_usuario" component="select">
+                               {
+                                estados.map((item) => (
+                                <option value={item.id}>{item.descripcion}</option>
+                                ))}
+                        </Field>
+                      {/* <Input
                                 id="estado_usuario"
                                 name="estado_usuario"
                                 type="select"
+                                
                               >
                                {
                                 estados.map((item) => (
                                 <option value={item.id}>{item.descripcion}</option>
                                 ))}
-                        </Input>
+                        </Input> */}
                     </FormGroup>
                     
 
@@ -260,7 +274,13 @@ const EditarUsuario = () => {
                    {/* role */}
                    <FormGroup>
                       <Label for="id_rol">Rol</Label>
-                      <Input
+                      <Field className="form-select" id="id_rol" name="id_rol" component="select">
+                               {
+                                roles.map((item) => (
+                                <option value={item.id_rol}>{item.rol}</option>
+                                ))}
+                        </Field>
+                      {/* <Input
                                 id="id_rol"
                                 name="id_rol"
                                 type="select"
@@ -272,7 +292,7 @@ const EditarUsuario = () => {
                                 roles.map((item) => (
                                 <option value={item.id_rol}>{item.rol}</option>
                                 ))}
-                        </Input>
+                        </Input> */}
                     </FormGroup>
 
   

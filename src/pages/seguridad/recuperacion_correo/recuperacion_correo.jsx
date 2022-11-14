@@ -27,7 +27,7 @@ export default function RecuperacionCorreo(props) {
            //  "usuario": refPregunta.current.value,
              "contra": RefRespuesta.current.value
          };
-         console.log(data);
+        //  console.log(data);
          //enviarData (URL_LOGIN, data);*/
 
     return (

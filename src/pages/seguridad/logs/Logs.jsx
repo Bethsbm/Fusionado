@@ -1,12 +1,15 @@
 import React, { useEffect, useRef, useState } from 'react';
 import DataTable from 'react-data-table-component';
 import { Link } from 'react-router-dom';
-import { downloadCSV, toUpperCaseField } from '../../../utils/utils';
+import { downloadCSV, getOneParam, toUpperCaseField } from '../../../utils/utils';
 
-const urlapi = "http://localhost:3001";
+// const urlapi = "http://localhost:3001";
 
 export default function Logs(props) {
-    
+  var dataPar=JSON.parse(localStorage.getItem("params")) || []
+      var urlApiParam=getOneParam(dataPar,"URL_API")
+      const urlapi =urlApiParam.valor  
+
     const [registros, setRegistros] = useState([]);
     const getRegistros = async () => {
       fetch(urlapi + "/logs/getall"
@@ -18,12 +21,12 @@ export default function Logs(props) {
       })
       .then(response => response.json())
       .then(responseJson => {  
-          console.log("responseJson",responseJson)
-          console.log("responseJson.status",responseJson.status)
+          // console.log("responseJson",responseJson)
+          // console.log("responseJson.status",responseJson.status)
           setRegistros(responseJson.object);
       })
       .catch(error=>{
-          console.log(error)   
+          // console.log(error)   
       })
   };
   

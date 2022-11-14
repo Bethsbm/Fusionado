@@ -8,6 +8,7 @@ import { Form, Field } from "react-final-form";
 
 import "./login.css";
 import burridogs from "./loginbg.jpg";
+import { translateUperCase } from "../../../utils/utils";
 
 
 const getOneParam = (objectJson,nameParam) => {
@@ -16,7 +17,9 @@ const getOneParam = (objectJson,nameParam) => {
   )[0] || {};
 }
 
-const urlAPi = "http://localhost:3001";
+// const urlAPi = "http://localhost:3001";
+const URL_API_ENV = process.env.REACT_APP_URL_API;
+console.log('URL_API_ENV===>',URL_API_ENV)
 //
 export default function Login(props) {
   // const [params, setParams] = useState("");
@@ -29,29 +32,28 @@ export default function Login(props) {
    * obteniendo todos los parametros de configuracion del sistema
    * */
   const getAllSettingsParams = async () => {
-    fetch(urlAPi + "/ms_parametros/getall", {
+    fetch(URL_API_ENV + "/ms_parametros/getall", {
       method: "GET",
       headers: { "Content-type": "application/json" },
     })
       .then((response) => response.json())
       .then((responseJson) => {
-        console.log("dataSettingsParams", responseJson);
-        console.log("dataSettingsParams", responseJson.object);
+        // console.log("dataSettingsParams", responseJson);
+        // console.log("dataSettingsParams", responseJson.object);
         if (!responseJson.status) {
-          console.log("algo salio mal en el servidor");
+          // console.log("algo salio mal en el servidor");
           return;
         }
         localStorage.setItem("params", JSON.stringify(responseJson.object));
         // setParams(responseJson.object);
       })
       .catch((error) => {
-        console.log(error);
+        // console.log(error);
       });
   };
   useEffect(  () => {
       getAllSettingsParams();
      //  nameCompany=params    
-     
     }, []);
     
     var dataPar=JSON.parse(localStorage.getItem("params")) || []
@@ -66,6 +68,10 @@ export default function Login(props) {
 
     var contacParam=getOneParam(dataPar,"ADMIN_CUSER")
       userContact=contacParam.valor
+   
+      
+      var urlApiParam=getOneParam(dataPar,"URL_API")
+      const urlAPi =urlApiParam.valor
     // console.log("getOneParam",dataPar)
   // const { history } = this.props;
   let navigate = useNavigate();
@@ -89,8 +95,8 @@ export default function Login(props) {
     })
       .then((response) => response.json())
       .then((responseJson) => {
-        console.log("responseJson", responseJson);
-        console.log("responseJson.status", responseJson.status);
+        // console.log("responseJson", responseJson);
+        // console.log("responseJson.status", responseJson.status);
         setIsValid(true);
         if (!responseJson.status) {
           setColor("danger");
@@ -125,16 +131,24 @@ export default function Login(props) {
   // const RefContrasena = useRef(null);
 
   const onSubmit = async  (values) => {
-    console.log(values);
+    // console.log(values);
 
     const data = {
         nombre_usuario: (values.username).trim().toUpperCase(),
         pass: values.password,
         contrasena: md5(values.password),
       };
-      console.log('data',data);
+      // console.log('data',data);
       await enviarData(urlAPi, data);
   };
+
+
+
+
+  // const [usernameTranslate, setUsernameTranslate] = useState('');
+  // const handleChange = event => {
+  //   return event.target.value.toUpperCase();
+  // };
 
   return (
     <div className="background">
@@ -155,12 +169,14 @@ export default function Login(props) {
                 var re = /^[a-zA-Z ]*$/
                 return re.test(String(username).toLowerCase());
               }
-
+              // console.log('values.username',values.username)
               if (!values.username) {
                 errors.username = "Campo requerido";
-              } else if (!validateText(values.username)) {
+              } else
+               if (!validateText(values.username)) {
                 errors.username = "Ingresar nombre en letras mayúsculas";
               }
+              // values.username= (values.username).toUpperCase()
             
             if (!values.password) {
               errors.password = "La contraseña es requerido";
@@ -182,6 +198,10 @@ export default function Login(props) {
                         {...input}
                         type="text"
                         placeholder="Ingresa tu usuario"
+
+                        // value={usernameTranslate}
+                        // onChange={handleChange}
+                        // onKeyUp={handleChange}
                         invalid={meta.error && meta.touched}
                       />
 
@@ -201,6 +221,8 @@ export default function Login(props) {
                         <div className="fa fa-lock"></div>
                       <Input
                         {...input}
+                        id="password"
+                        name="password"
                         type={passwordShown ? "text" : "password"}
                         placeholder="Ingresa tu contraseña"
                         invalid={meta.error && meta.touched}

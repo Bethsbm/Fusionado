@@ -4,11 +4,16 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button, Form, FormGroup, Label, Input, FormText } from 'reactstrap';
 import { Alert } from 'reactstrap';
-import { toReplaceSpace, toUpperCaseField } from "../../../utils/utils";
+import { getOneParam, toReplaceSpace, toUpperCaseField } from "../../../utils/utils";
 import "./CreateUser.css";
 
-const urlapi = "http://localhost:3001";
+// const urlapi = "http://localhost:3001";
 const CreateUser = () => {
+
+  var dataPar=JSON.parse(localStorage.getItem("params")) || []
+  var urlApiParam=getOneParam(dataPar,"URL_API")
+  const urlapi =urlApiParam.valor
+
   let navigate = useNavigate();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -21,10 +26,10 @@ const [isValid, setIsValid] = useState(false);
 
   const handleSubmit = event => {
     event.preventDefault(); 
-    console.log('handleSubmit ran');
+    // console.log('handleSubmit ran');
     
     var x = Math.floor(Math.random() * (100 - 1) + 1);
-    console.log('x',x)
+    // console.log('x',x)
     let name_user=(name).toString()
         // name_user= name_user.replace(/\s/g,'')
         // name_user= name_user.substring(0,4);
@@ -41,7 +46,7 @@ const [isValid, setIsValid] = useState(false);
       "id_rol":parseInt(role || 6),
       "creado_por":userdata.data.nameUser
     }
-    console.log('data',data)
+    // console.log('data',data)
 
     fetch(urlapi+'/ms_registro/createUser',
           {
@@ -53,8 +58,8 @@ const [isValid, setIsValid] = useState(false);
       })
       .then(response => response.json())
       .then(responseJson => {  
-          console.log("responseJson",responseJson)
-          console.log("responseJson.status",responseJson.status)
+          // console.log("responseJson",responseJson)
+          // console.log("responseJson.status",responseJson.status)
           
           setIsValid(true)
           if(!responseJson.status){
@@ -69,7 +74,7 @@ const [isValid, setIsValid] = useState(false);
          navigate("/admin/users");
       })
       .catch(error=>{
-        console.log('error',error)
+        // console.log('error',error)
       })
 
 

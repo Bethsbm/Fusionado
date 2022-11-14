@@ -5,6 +5,7 @@ import { Alert, Button, FormGroup, Input, Label } from "reactstrap";
 import { Form, Field } from "react-final-form";
 import "../recuperacion_contrasena/login.css";
 import burridogs from "../recuperacion_contrasena/loginbg.jpg";
+import { getOneParam } from "../../../utils/utils";
 
 
 
@@ -22,9 +23,37 @@ const enviarData = async (url, data) => {
     const json = await resp.json();
 }*/
 
-const urlAPi = "http://localhost:3001";
+// const urlAPi = "http://localhost:3001";
+const URL_API_ENV = process.env.REACT_APP_URL_API;
+console.log('URL_API_ENV===>',URL_API_ENV)
 export default function RecuperacionContra(props) {
   let navigate = useNavigate();
+
+
+ /**
+   ** get settign params
+   * obteniendo todos los parametros de configuracion del sistema
+   * */
+   const getAllSettingsParams = async () => {
+    fetch(URL_API_ENV + "/ms_parametros/getall", {method: "GET",headers: { "Content-type": "application/json" },})
+    .then((response) => response.json())
+    .then((responseJson) => {
+      if (!responseJson.status) {
+        return;
+      }
+      localStorage.setItem("params", JSON.stringify(responseJson.object));
+    })
+};
+useEffect(  () => {
+    getAllSettingsParams();
+  }, []);
+
+  var dataPar=JSON.parse(localStorage.getItem("params")) || []
+  var urlApiParam=getOneParam(dataPar,"URL_API")
+  const urlAPi =urlApiParam.valor
+
+
+
   //capturar los datos ingresados
   //  const refPregunta = useRef(null);
   //  const RefRespuesta = useRef(null);
@@ -53,13 +82,13 @@ export default function RecuperacionContra(props) {
     })
       .then((response) => response.json())
       .then((responseJson) => {
-        console.log("responseJson", responseJson);
-        console.log("responseJson.status", responseJson.status);
+        // console.log("responseJson", responseJson);
+        // console.log("responseJson.status", responseJson.status);
 
         if (!responseJson.status) {
           setColor("danger");
           setMesagge(responseJson.message);
-          console.log("ha ocurrido un erorr al enviar el correo");
+          // console.log("ha ocurrido un erorr al enviar el correo");
         }
         setMesagge(responseJson.message);
         setColor("success");
@@ -70,12 +99,12 @@ export default function RecuperacionContra(props) {
         }, 3000);
       })
       .catch((error) => {
-        console.log(error);
+        // console.log(error);
         setIsValid(false);
         setColor("danger");
       })
       .finally(() => {
-        console.log("asdasda");
+        // console.log("asdasda");
         setIsValid(false);
       });
   };

@@ -52,7 +52,7 @@ const Formulario = () => {
           //procedimineto para guardar el nuevo registro
           try {
             const res = await axios.put(URL + valores.id_categoria, valores);
-            console.log(valores);
+            // console.log(valores);
             if (res.status === 200) {
               alert("Guardado!");
             } else {
@@ -60,11 +60,11 @@ const Formulario = () => {
             }
             navigate("/mostrarcategorias");
           } catch (error) {
-            console.log(error);
+            // console.log(error);
             alert("ERROR - No se ha podido insertar :(");
           }
 
-          console.log("Formulario enviado");
+          // console.log("Formulario enviado");
           setFormularioEnviado(true);
         }}
       >
