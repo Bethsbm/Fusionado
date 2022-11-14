@@ -131,43 +131,71 @@ UsuarioController.updateUserState = (req, res, next) => {
   });
 };
 
-UsuarioController.edit = (req, res, next) => {
+UsuarioController.edit =  (req, res, next) => {
   let id_usuario = req.params.id_usuario
-  let data = {
-    // usuario:req.body.usuario,
-    nombre_usuario: req.body.nombre_usuario,
-    estado_usuario: req.body.estado_usuario,
-    id_rol: req.body.id_rol,
-    modificado_por: req.body.modificado_por,
-    id_usuario: id_usuario,
-  };
+//   let usuario=req.body.usuario
+  //validando que el usaurio no exista
+//    UsuarioModel.getOne(usuario,id_usuario, (err, row) => {
+// 	if (err) {
+// 		res.status(400).json({
+// 			status: false,
+// 			code: 400,
+// 			message: "ah ocurrido un erroe al consultar",
+// 			object: [],
+// 		  });
+// 	}
+// 	console.log("id_usuario",id_usuario)
+// 	console.log("usuario",usuario)
+// 	console.log("row",row.rows[0])
 
-  UsuarioModel.updateUserbyId(data, (err, row) => {
-    // console.log(err, '---', row)
-    if (err) {
-      let locals = {
-        title: `Error al buscar el registro con el id: ${id_usuario}`,
-        description: "Error de Sintaxis SQL",
-        error: err,
-      };
+// 	// usaurio existe y e sdistinto de id de usuario)
+// 	if(row.rows.length === 1){
+// 	 	res.status(400).json({
+// 			status: false,
+// 			code: 303,
+// 			message: "Este usaurio ya existe en BD",
+// 			object: [],
+// 		  });
+// 	}
+// });
 
-      res.render("error", locals);
-    } else {
-      // let locals = {
-      // 	title : 'Editar Usuario',
-      // 	data : row
-      // }
-      console.log(row.rows);
-      // res.status(200).send(rows.rows)
-      res.status(200).json({
-        status: true,
-        code: 201,
-        message: "Información actualizada exitosamente",
-        object: row.rows,
-      });
-      //res.render('edit-movie', locals)
-    }
-  });
+let data = {
+//   usuario:req.body.usuario,
+  nombre_usuario: req.body.nombre_usuario,
+  estado_usuario: req.body.estado_usuario,
+  id_rol: req.body.id_rol,
+  modificado_por: req.body.modificado_por,
+  id_usuario: id_usuario,
+};
+
+UsuarioModel.updateUserbyId(data, (err, row) => {
+  // console.log(err, '---', row)
+  if (err) {
+	let locals = {
+	  title: `Error al buscar el registro con el id: ${id_usuario}`,
+	  description: "Error de Sintaxis SQL",
+	  error: err,
+	};
+
+	res.render("error", locals);
+  } else {
+	// let locals = {
+	// 	title : 'Editar Usuario',
+	// 	data : row
+	// }
+	console.log(row.rows);
+	// res.status(200).send(rows.rows)
+	res.status(200).json({
+	  status: true,
+	  code: 201,
+	  message: "Información actualizada exitosamente",
+	  object: row.rows,
+	});
+	//res.render('edit-movie', locals)
+  }
+});
+
+
 };
 
 UsuarioController.save = (req, res, next) => {

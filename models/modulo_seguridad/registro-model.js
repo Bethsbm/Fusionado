@@ -3,6 +3,10 @@
 var conn = require("../../config/db-connection"),
   UsuarioModel = () => {};
 
+
+UsuarioModel.getOne = (usuario,id_usuario, cb) =>
+  conn.query("SELECT * FROM seguridad.tbl_ms_usuario WHERE usuario = $1 AND id_usuario = $2", [usuario,id_usuario], cb);
+
 // UsuarioModel.getAll = (cb) => conn.query("SELECT * FROM seguridad.tbl_ms_usuario WHERE nombre_usuario != 'SYSTEMUSER' ", cb);
 UsuarioModel.getAll = (cb) => conn.query(`
 SELECT 
