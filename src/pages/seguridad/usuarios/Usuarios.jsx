@@ -76,6 +76,7 @@ const Usuarios = () => {
         // console.log("responseJson", responseJson);
         // console.log("responseJson.status", responseJson.status);
         setRegistros(responseJson.object);
+        setPending(false)
       })
       .catch((error) => {
         // console.log(error);
@@ -153,7 +154,7 @@ const Usuarios = () => {
     },
 
     {
-      name: "NOMBRE",
+      name: "NOMBRE DE USUARIO",
       selector: (row) => toUpperCaseField(row.nombre_usuario) || "--- ---",
       sortable: false,
     },
@@ -242,7 +243,7 @@ const Usuarios = () => {
         <>
           <Link
             type="button"
-            className="btn btn-light"
+            className="btn btn-warning"
             title="Ver Más..."
             onClick={() => {
               abrirModalVerMas();
@@ -254,13 +255,13 @@ const Usuarios = () => {
           &nbsp;
           <Link
             to={`/admin/editUser/${row.id_usuario}`}
-            className="btn  btn-light"
+            className="btn btn-secondary"
             title="Editar"
           >
             <i className="bi bi-pencil-fill"></i>
           </Link>
           {/* <button
-            className="btn  btn-light"
+            className="btn "
             title="Editar"
             onClick={goToEdit(row.id_usuario)}
           >
@@ -268,7 +269,7 @@ const Usuarios = () => {
           </button> */}
           &nbsp;
           <button
-            className="btn  btn-light"
+            className="btn btn-danger"
             title="Eliminar"
             onClick={() => {
               // console.log(row.id_usuario);
@@ -320,7 +321,7 @@ const Usuarios = () => {
           .includes(busqueda.toLocaleLowerCase())
     );
   }
-
+  const [pending, setPending] = React.useState(true);
   return (
     <div className="container">
       <h5>Usuarios</h5>
@@ -413,7 +414,9 @@ const Usuarios = () => {
           </div>
         </div>
       </div>
+
       <div className="row">
+        <br />
         <DataTable
           columns={columns}
           data={results}
@@ -421,7 +424,10 @@ const Usuarios = () => {
           paginationComponentOptions={paginationComponentOptions}
           highlightOnHover
           fixedHeader
-          noDataComponent=". . . Datos no encontrados . . ."
+
+          progressPending={pending}
+          progressComponent="Cargando datos..."
+          noDataComponent="---Datos no encontrados ---"
           paginationPerPage="6"
           // fixedHeaderScrollHeight="550px"
         />

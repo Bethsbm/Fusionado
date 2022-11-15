@@ -15,6 +15,7 @@ const CreateUser = () => {
   const urlapi =urlApiParam.valor
 
   let navigate = useNavigate();
+  const [usuario, setUsuario] = useState('');
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [role, setRole] = useState('Operador');
@@ -28,19 +29,19 @@ const [isValid, setIsValid] = useState(false);
     event.preventDefault(); 
     // console.log('handleSubmit ran');
     
-    var x = Math.floor(Math.random() * (100 - 1) + 1);
+    // var x = Math.floor(Math.random() * (100 - 1) + 1);
     // console.log('x',x)
-    let name_user=(name).toString()
+    // let name_user=(name).toString()
         // name_user= name_user.replace(/\s/g,'')
         // name_user= name_user.substring(0,4);
-        name_user= name_user.toUpperCase()
+        // name_user= name_user.toUpperCase()
         // name_user= name_user+""+x
 
     const userdata= JSON.parse(localStorage.getItem('data'))
     // console.log('userData',userData)
 
     let data={
-      "usuario":toUpperCaseField(toReplaceSpace(name_user)),
+      "usuario":toUpperCaseField(toReplaceSpace(usuario)),
       "nombre_usuario":toReplaceSpace(name),
       "correo_electronico":email,
       "id_rol":parseInt(role || 6),
@@ -78,6 +79,7 @@ const [isValid, setIsValid] = useState(false);
       })
 
 
+    setUsuario('');
     setName('');
     setEmail('');
     setRole('');
@@ -95,11 +97,23 @@ const [isValid, setIsValid] = useState(false);
               
                 <h1>Crear usuario</h1>
                 
-                    <label>Nombre</label>
+                    <label>Usuario</label>
                     <div className="username">
                         <input
                             type="text"
-                            placeholder="nombre"  
+                            placeholder="Usuario"  
+                            id="usuario"
+                            name="usuario"
+                            onChange={event => setName(event.target.value)}
+                            value={usuario}
+                        />
+                    </div>
+
+                    <label>Nombre de Usuario</label>
+                    <div className="username">
+                        <input
+                            type="text"
+                            placeholder="Nombre de usuario"  
                             id="name"
                             name="name"
                             onChange={event => setName(event.target.value)}

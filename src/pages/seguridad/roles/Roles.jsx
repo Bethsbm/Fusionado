@@ -61,6 +61,7 @@ export default function Roles(props) {
           // console.log("responseJson",responseJson)
           // console.log("responseJson.status",responseJson.status)
           setRegistros(responseJson.object);
+          setPending(false)
       })
       .catch(error=>{
           // console.log(error)   
@@ -182,7 +183,7 @@ export default function Roles(props) {
 //   	link.click();
 //   }
       
-
+const [pending, setPending] = React.useState(true);
     return (
       
       <div className="container">
@@ -268,7 +269,10 @@ export default function Roles(props) {
             paginationComponentOptions={paginationComponentOptions}
             highlightOnHover
             fixedHeader
-            noDataComponent=". . . Datos no encontrados . . ."
+            progressPending={pending}
+            progressComponent="Cargando datos..."
+            noDataComponent="---Datos no encontrados ---"
+            paginationPerPage="6"
             // actions={actionsMemo}
             // fixedHeaderScrollHeight="550px"
           />

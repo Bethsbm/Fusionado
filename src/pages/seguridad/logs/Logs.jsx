@@ -24,6 +24,7 @@ export default function Logs(props) {
           // console.log("responseJson",responseJson)
           // console.log("responseJson.status",responseJson.status)
           setRegistros(responseJson.object);
+          setPending(false)
       })
       .catch(error=>{
           // console.log(error)   
@@ -98,7 +99,8 @@ export default function Logs(props) {
           dato?.fecha?.toLowerCase().includes(busqueda.toLocaleLowerCase()) 
           )
       };
-    
+      const [pending, setPending] = useState(true);
+
     return (
       <div className="container">
         <h3>Bit&aacute;cora de Usuarios</h3>
@@ -178,6 +180,10 @@ export default function Logs(props) {
             highlightOnHover
             fixedHeader
             fixedHeaderScrollHeight="550px"
+            progressPending={pending}
+            progressComponent="Cargando datos..."
+            noDataComponent="---Datos no encontrados ---"
+            paginationPerPage="6"
           />
         </div>
       </div>

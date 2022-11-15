@@ -47,7 +47,9 @@ function downloadCSV(array,titleReport) {
 }
 
 function toUpperCaseField(word) {
-  return String(word).trim().toUpperCase()
+  // let wordReplacer=String(word).replace(/\s/g,'')
+  let wordReplacer=String(word)
+  return wordReplacer.toUpperCase()
 }
 
 
@@ -109,22 +111,59 @@ const getOneParam = (objectJson,nameParam) => {
   };
 
 
-  // function translateUperCase(text) {
-  //   console.log('text',text)
-  //   try {
-  //     (text.toString()).toUpperCase();
-  //   } catch (error) {
-  //     console.log(error)
-  //   }
-  // }
+  function translateUperCase(key,value) {
+    let texto = key[value] || "";
+    try {
+      key[value] = (String(texto)).toUpperCase() ;
+    } catch (error) {
+      // key[value] = "";
+      console.log(error);
+    }
+  }
   
+  function isSpace(value) {
+    var re = /^[ ]*$/
+    return re.test(String(value));
+  }
+  function isText(value) {
+    var re = /^[a-zA-Z]*$/
+    return re.test(String(value));
+  }
+  function isTextWhitSpace(value) {
+    var re = /^[a-zA-Z ]*$/
+    return re.test(String(value));
+  }
+  function isNumber(value) {
+    var re = /^[0-9]*$/
+    return re.test(value);
+  }
+  function isChar(value) {
+    var re = /^[!@#$%&*()_+-={};':<>,.?/|]*$/
+    return re.test(value);
+  }
+  function isEmail(value) {
+    var re = /(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/
+    return re.test(value);
+  }
+  function isRange(value,minValue,maxValue) {
+    return ((value.length || " ") >= minValue && (value.length || " ") <= maxValue) ? false:true;
+  }
+
+
 
 export {
   downloadCSV,
   toUpperCaseField,
-  // translateUperCase,
+  translateUperCase,
   getOneParam,
   getAllSettingsParams,
   toReplaceSpace,
-  showAlerts
+  showAlerts,
+  isSpace,
+  isText,
+  isTextWhitSpace,
+  isNumber,
+  isChar,
+  isRange,
+  isEmail,
 }

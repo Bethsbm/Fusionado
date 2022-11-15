@@ -53,6 +53,7 @@ export default function Pregunta(props) {
           // console.log("responseJson",responseJson)
           // console.log("responseJson.status",responseJson.status)
           setRegistros(responseJson.object);
+          setPending(false)
       })
       .catch(error=>{
           // console.log(error)   
@@ -109,7 +110,7 @@ const [ busqueda, setBusqueda ] = useState("")
      dato?.pregunta?.toLowerCase().includes(busqueda.toLocaleLowerCase())    
      )
  };
-
+ const [pending, setPending] = React.useState(true);
 
     return (
       <div className="container">
@@ -191,6 +192,10 @@ const [ busqueda, setBusqueda ] = useState("")
             highlightOnHover
             fixedHeader
             fixedHeaderScrollHeight="550px"
+            progressPending={pending}
+            progressComponent="Cargando datos..."
+            noDataComponent="---Datos no encontrados ---"
+            paginationPerPage="6"
           />
         </div>
       </div>

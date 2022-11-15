@@ -55,6 +55,7 @@ export default function Parametros(props) {
           // console.log("responseJson",responseJson)
           // console.log("responseJson.status",responseJson.status)
           setRegistros(responseJson.object);
+          setPending(false)
       })
       .catch(error=>{
           // console.log(error)   
@@ -112,23 +113,23 @@ export default function Parametros(props) {
           sortable: true,
         
         },
-        {
-          name: "ACCIONES",
-          cell: (row) => (
-            <>
-              <Link
-                to={`/admin/editUser/${row.id_parametro}`}
-                className="btn  btn-light"
-                title="Editar"
-              >
-                <i className="bi bi-pencil-fill"></i>
-              </Link>
-            </>
-          ),
-          ignoreRowClick: true,
-          allowOverflow: true,
-          button: true,
-        },
+        // {
+        //   name: "ACCIONES",
+        //   cell: (row) => (
+        //     <>
+        //       <Link
+        //         to={`/admin/editUser/${row.id_parametro}`}
+        //         className="btn  btn-light"
+        //         title="Editar"
+        //       >
+        //         <i className="bi bi-pencil-fill"></i>
+        //       </Link>
+        //     </>
+        //   ),
+        //   ignoreRowClick: true,
+        //   allowOverflow: true,
+        //   button: true,
+        // },
     ];
   
     //Configurar la paginación de la tabla
@@ -162,7 +163,7 @@ const [ busqueda, setBusqueda ] = useState("")
      dato?.fecha_modificacion?.toLowerCase().includes(busqueda.toLocaleLowerCase())     
      )
  };
-
+ const [pending, setPending] = React.useState(true);
     return (
       <div className="container">
         <h5>Par&aacute;metros del sistema</h5>
@@ -243,6 +244,10 @@ const [ busqueda, setBusqueda ] = useState("")
             highlightOnHover
             fixedHeader
             fixedHeaderScrollHeight="550px"
+            progressPending={pending}
+            progressComponent="Cargando datos..."
+            noDataComponent="---Datos no encontrados ---"
+            paginationPerPage="6"
           />
         </div>
       </div>
