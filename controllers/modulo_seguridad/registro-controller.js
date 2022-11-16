@@ -422,7 +422,7 @@ UsuarioController.save = (req, res, next) => {
 							en  Panel administrativo <strong> ${paramSettingCompany.valor}</strong>
 							Tus credenciales de acceso son
 								<br>
-								Usuario: <strong>${usuario.nombre_usuario}</strong>
+								Usuario: <strong>${usuario.usuario}</strong>
 								<br />
 								OTP: <strong>${otp}</strong>
 										<br>
@@ -760,7 +760,7 @@ UsuarioController.autoregistro = (req, res, next) => {
 									en  Panel administrativo <strong> ${paramSettingCompany.valor}</strong>
 									Tus credenciales de acceso son
 										<br>
-										Usuario: <strong>${usuario.nombre_usuario}</strong>
+										Usuario: <strong>${usuario.usuario}</strong>
 										<br />
 										OTP: <strong>${usuario.otp}</strong>
 												<br>
