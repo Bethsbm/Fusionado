@@ -31,10 +31,14 @@ import {
   translateUperCase,
 } from "../../../utils/utils";
 import { Form, Field } from "react-final-form";
-
+import validator from 'validator'
 const URL_API_ENV = process.env.REACT_APP_URL_API;
 console.log("URL_API_ENV===>", URL_API_ENV);
+
 const Registro = () => {
+
+
+
   /**
    ** get settign params
    * obteniendo todos los parametros de configuracion del sistema
@@ -58,10 +62,11 @@ const Registro = () => {
 
   var dataPar = JSON.parse(localStorage.getItem("params")) || [];
   var minLengthParam = getOneParam(dataPar, "MIN_CONTRA");
-  // minLengthParam = minLengthParam.valor;
-
   var maxLengthParam = getOneParam(dataPar, "MAX_CONTRA");
-  // maxLengthParam = maxLengthParam.valor;
+  var minLowerParam = getOneParam(dataPar, "MINUS_CHAR");
+  var minUpperParam = getOneParam(dataPar, "MAYUS_CHAR");
+  var minNumberParam = getOneParam(dataPar, "NUM_CONTRA");
+  var minCharParam = getOneParam(dataPar, "CHAR_ESP_CONTRA");
  
   var minLengthUserParam = getOneParam(dataPar, "MIN_LENGTH_USERS");
   var maxLengthUserParam = getOneParam(dataPar, "MAX_LENGTH_USERS");
@@ -71,18 +76,44 @@ const Registro = () => {
   var maxLengthNamesParam = getOneParam(dataPar, "MAX_LENGTH_NAMES");
   
 
-  const [password, setPassword] = useState("");
-  const [passwordAgain, setPasswordAgain] = useState("");
+  const [errorMessage, setErrorMessage] = useState('')
+  const [validPass, setValidPass] = useState(false)
+  const validate = (password,confirmPassword) => {
+    console.log("password",password)
+    console.log("confirmPassword",confirmPassword)
+    // setErrorMessage('Is Strong Password')
+    if((password).toString()!==(confirmPassword).toString()){
+      setErrorMessage('Las contraseñas no coinciden')
+      setValidPass(false)
+    }
+    if (validator.isStrongPassword(password, {
+      minLength: minLengthParam.valor,
+      minLowercase:minLowerParam.valor,
+      minUppercase:minUpperParam.valor,
+      minNumbers:minNumberParam.valor,
+      minSymbols:minCharParam.valor
+    })) {
+      setErrorMessage('')//Is Strong Password
+      setValidPass(true)
+    } else {
+      setErrorMessage('Esta no es un contraseña fuerte')
+      setValidPass(false)
+    }
+  }
+
+
+  // const [password, setPassword] = useState("");
+  // const [passwordAgain, setPasswordAgain] = useState("");
 
 
   const [message, setMesagge] = useState("");
   const [color, setColor] = useState("danger");
   const [isValid, setIsValid] = useState(false);
-  const refContrasena = useRef(null);
-  const refConfirmContrasena = useRef(null);
-  const refUserName = useRef(null);
-  const refUser = useRef(null);
-  const refEmail = useRef(null);
+  // const refContrasena = useRef(null);
+  // const refConfirmContrasena = useRef(null);
+  // const refUserName = useRef(null);
+  // const refUser = useRef(null);
+  // const refEmail = useRef(null);
 
   const navigate = useNavigate();
 
@@ -327,7 +358,7 @@ const Registro = () => {
                         {({ input, meta }) => (
                           <div>
                             <Label for="password">Contraseña</Label>
-                            <span className="labelHint">{values?.password?.length || 0}/{maxLengthParam?.valor || 0}</span>
+                            {/* <span className="labelHint">{values?.password?.length || 0}/{maxLengthParam?.valor || 0}</span> */}
                             <Input
                               {...input}
                               type={passwordShown ? "text" : "password"}
@@ -335,11 +366,12 @@ const Registro = () => {
                               id="password"
                               name="password"
                               // onChange={(e) => setPassword(e.target.value)}
+                              onKeyUp={(e) => validate(e.target.value,values?.confirmPassword)}
                               invalid={meta.error && meta.touched}
                             />
-                            {meta.error && meta.touched && (
-                              <Label className="danger">{meta.error}</Label>
-                            )}
+                            {meta.error && meta.touched && (<Label className="danger">{meta.error}</Label>)}
+                            {/* {errorMessage === '' ? null :<span style={{color: 'red',}}>{errorMessage}</span>} */}
+                            {<span style={{color: 'red',}}>{errorMessage}</span>}
                             <span className="showPass" onClick={togglePassword}>Ver</span>
                           </div>
                         )}
@@ -354,7 +386,7 @@ const Registro = () => {
                             <Label for="confirmPassword">
                               Confirmar
                             </Label>
-                            <span className="labelHint">{values?.password?.length || 0}/{maxLengthParam?.valor || 0}</span>
+                            {/* <span className="labelHint">{values?.confirmPassword?.length || 0}/{maxLengthParam?.valor || 0}</span> */}
                             <Input
                               {...input}
                               type={passwordShown ? "text" : "password"}
@@ -362,17 +394,88 @@ const Registro = () => {
                               id="confirmPassword"
                               name="confirmPassword"
                               // onChange={(e) => setPasswordAgain(e.target.value)}
+                              onKeyUp={(e) => validate(e.target.value,values?.confirmPassword)}
                               invalid={meta.error && meta.touched}
                             />
-                            {meta.error && meta.touched && (
-                              <Label className="danger">{meta.error}</Label>
-                            )}
+                             {meta.error && meta.touched && (<Label className="danger">{meta.error}</Label>)}
+                            {/* {errorMessage === '' ? null :<span style={{color: 'red',}}>{errorMessage}</span>} */}
+                            {<span style={{color: 'red',}}>{errorMessage}</span>}
                             <span className="showPass" onClick={togglePassword}>Ver</span>
                           </div>
                         )}
                       </Field>
                     </FormGroup>
 
+                    <FormGroup>
+                    {/* 
+                    minLength: 8,
+                    minLowercase:1,
+                    minUppercase:1,
+                    minNumbers:1,
+                    minSymbols:1 
+                    */}
+                      <h6>Tú contraseña debe tener</h6>
+                      <ul class="list-group">
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                        {"Mínimo "+minLengthParam.valor+" caracteres"}
+                        {(values?.password?.length <= minLengthParam.valor)?
+                        <span class="badge bg-danger rounded-pill"><i class="bi bi-x"></i></span>
+                        :
+                        <span class="badge bg-success rounded-pill"><i class="bi bi-check"></i></span>
+                      }
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                          {"Máximo "+maxLengthParam.valor+" caracteres"}
+                          {(values?.password?.length >= maxLengthParam.valor)?
+                          <span class="badge bg-success rounded-pill"><i class="bi bi-check"></i></span>
+                          :
+                          <span class="badge bg-danger rounded-pill"><i class="bi bi-x"></i></span>
+                          }
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                          {"("+minCharParam.valor+") Caracteres especiales"}
+                          {!isChar(values.password)?
+                          <span class="badge bg-success rounded-pill"><i class="bi bi-check"></i></span>
+                          :
+                          <span class="badge bg-danger rounded-pill"><i class="bi bi-x"></i></span>
+                          }
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                          { "("+minNumberParam.valor+") Números"}
+                          {(!isNumber(values.password))?
+                          <span class="badge bg-success rounded-pill"><i class="bi bi-check"></i></span>
+                          :
+                          <span class="badge bg-danger rounded-pill"><i class="bi bi-x"></i></span>
+                          }
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                          {"("+minLowerParam.valor+") Letras minúscula"}
+                          {(! isText(values.password))?
+                          <span class="badge bg-success rounded-pill"><i class="bi bi-check"></i></span>
+                        :
+                          <span class="badge bg-danger rounded-pill"><i class="bi bi-x"></i></span>
+                        }
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                          {"("+minUpperParam.valor+") Letras mayúsculas"}
+                          {(!isText(values.password))?
+                          <span class="badge bg-success rounded-pill"><i class="bi bi-check"></i></span>
+                          :
+                          <span class="badge bg-danger rounded-pill"><i class="bi bi-x"></i></span>
+                          }
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                        { "Las contraseñas no coinciden"}
+                        {(values?.password?.length===values?.confirmPassword?.length && values?.password?.length !==0)?
+                          <span class="badge bg-success rounded-pill"><i class="bi bi-check"></i></span>
+                          :
+                          <span class="badge bg-danger rounded-pill"><i class="bi bi-x"></i></span>
+                        }
+                        </li>
+                      </ul>
+                    </FormGroup>
+                    
+    
                     {/* check list */}
                     {/* <FormGroup> */}
                       {/* <PasswordChecklist
@@ -409,8 +512,8 @@ const Registro = () => {
                       <button
                         type="submit"
                         className="btn btn-primary"
-                        disabled={submitting}
-                        // disabled={!valid}
+                        
+                        disabled={!valid && validPass && submitting}
                       >
                         {" "}
                         Registrarme{" "}
