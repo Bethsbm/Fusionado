@@ -3,9 +3,9 @@ import {  Link, useNavigate } from "react-router-dom";
 import { Alert, Button, FormGroup, Input, Label } from "reactstrap";
 // import { FormFeedback, FormGroup, FormText, Input, Label } from 'reactstrap';
 import { Form, Field } from "react-final-form";
-import "../recuperacion_contrasena/login.css";
+import "../recuperacion_contrasena/reset.css";
 import burridogs from "../recuperacion_contrasena/loginbg.jpg";
-import { getOneParam } from "../../../utils/utils";
+import { getOneParam, isChar, isNumber, isRange, isSpace, isText, translateUperCase } from "../../../utils/utils";
 
 
 
@@ -52,7 +52,8 @@ useEffect(  () => {
   var urlApiParam=getOneParam(dataPar,"URL_API")
   const urlAPi =urlApiParam.valor
 
-
+  var minLengthUserParam = getOneParam(dataPar, "MIN_LENGTH_USERS");
+  var maxLengthUserParam = getOneParam(dataPar, "MAX_LENGTH_USERS");
 
   //capturar los datos ingresados
   //  const refPregunta = useRef(null);
@@ -82,7 +83,7 @@ useEffect(  () => {
     })
       .then((response) => response.json())
       .then((responseJson) => {
-        // console.log("responseJson", responseJson);
+        console.log("responseJson", responseJson);
         // console.log("responseJson.status", responseJson.status);
 
         if (!responseJson.status) {
@@ -153,15 +154,31 @@ useEffect(  () => {
           onSubmit={onSubmit}
           validate={(values) => {
             const errors = {};
-            function validateText(username) {
-              var re = /^[a-zA-Z0-9]*$/;
-              return re.test(String(username).toLowerCase());
-            }
+          
 
-            if (!values.username) {
-              errors.username = "Campo requerido";
-            } else if (!validateText(values.username)) {
-              errors.username = "Nombre de usuario no válido";
+            // console.log('values.username',values.username)
+            if(!values.username) {
+              errors.username = "Usuario requerido";
+            } else if (isSpace(values.username)) {
+              errors.username = "No se permiten espacios";
+            } else if (!isText(values.username)) {
+              errors.username = "Ingresar solo letras";
+            } else if (isChar(values.username)) {
+              errors.username = "No puede contener caracteres especiales";
+            } else if (isNumber(values.username)) {
+              errors.username = "No puede contener numeros";
+            } else if (
+              isRange(
+                values.username,
+                minLengthUserParam.valor,
+                maxLengthUserParam.valor
+              )
+            ) {
+              errors.username =
+                "Debe tener una longitud entre " +
+                minLengthUserParam.valor +
+                " y " +
+                maxLengthUserParam.valor;
             }
 
             return errors;
@@ -170,32 +187,43 @@ useEffect(  () => {
             <div className="inputs">
               <form onSubmit={handleSubmit}>
                 <FormGroup>
-                  <Label for="username">Usuario</Label>
                   <Field name="username">
                     {({ input, meta }) => (
                       <div>
-                        <div className="username">
-                          <div className="fa fa-user-o"></div>
+                        
+                        <Label for="username">Usuario<span className="danger"> *</span></Label>
+                        {/* <div className="username"> */}
+                          {/* <div className="fa fa-user-o"></div> */}
+                          <div className="input-group flex-nowrap">
+                          <span className="input-group-text" id="addon-wrapping">
+                            <i class="bi bi-person"></i>
+                          </span>
                           <Input
                             {...input}
                             type="text"
+                            id="username"
+                            name="username"
                             placeholder="Ingresa tu usuario"
                             invalid={meta.error && meta.touched}
+                            onKeyDown={translateUperCase(
+                              values,
+                              "username"
+                            )}
                           />
-                        </div>
+                      </div>
+                        {/* </div> */}
                         {meta.error && meta.touched && (
                           <span class="danger">{meta.error}</span>
                         )}
-                      </div>
+                       </div>
                     )}
                   </Field>
                 </FormGroup>
 
-                <Button type="submit" className="btn" disabled={!valid}>Restablecer v&iacute;a correo</Button>
+                <Button type="submit"  color="primary" size="lg" block disabled={!valid  && submitting}>Restablecer v&iacute;a correo</Button>
                 <div className="buttom-container">
-                  <Link to="/recuperacion_preguntas">
-                    Cambia tu contrase&ntilde;a via preguntas
-                  </Link>
+                  {/* <Link to="/recuperacion_preguntas" disabled={!responseUser} color="secondary" size="lg" block>Restablecer v&iacute;a preguntas</Link> */}
+                {/* <Button color="secondary" size="lg" block >Restablecer v&iacute;a preguntas</Button> */}
                   <Link to="/login">Cancelar</Link>
                 </div>
               </form>

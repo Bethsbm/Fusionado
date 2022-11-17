@@ -16,7 +16,7 @@ import {
   Col,
   Spinner,
 } from "reactstrap";
-import PasswordChecklist from "react-password-checklist";
+// import PasswordChecklist from "react-password-checklist";
 import md5 from "md5";
 import {
   getOneParam,
@@ -275,7 +275,7 @@ const Registro = () => {
                       <Field name="usuario">
                         {({ input, meta }) => (
                           <div>
-                            <Label for="usuario">Usuario</Label>
+                            <Label for="usuario">Usuario<span className="danger"> *</span></Label>
                             <span className="labelHint">
                               {values?.usuario?.length || 0}/
                               {maxLengthUserParam?.valor || 0}
@@ -302,7 +302,7 @@ const Registro = () => {
                       <Field name="nombre_usuario">
                         {({ input, meta }) => (
                           <div>
-                            <Label for="nombre_usuario">Nombre</Label>
+                            <Label for="nombre_usuario">Nombre<span className="danger"> *</span></Label>
                             <span className="labelHint">
                               {values?.nombre_usuario?.length || 0}/
                               {maxLengthNamesParam?.valor || 0}
@@ -332,9 +332,7 @@ const Registro = () => {
                       <Field name="correo_electronico">
                         {({ input, meta }) => (
                           <div>
-                            <Label for="correo_electronico">
-                              Correo electrónico
-                            </Label>
+                            <Label for="correo_electronico">Correo electrónico<span className="danger"> *</span></Label>
                             
                             <Input
                               {...input}
@@ -357,7 +355,7 @@ const Registro = () => {
                       <Field name="password">
                         {({ input, meta }) => (
                           <div>
-                            <Label for="password">Contraseña</Label>
+                            <Label for="password">Contraseña<span className="danger"> *</span></Label>
                             {/* <span className="labelHint">{values?.password?.length || 0}/{maxLengthParam?.valor || 0}</span> */}
                             <Input
                               {...input}
@@ -369,10 +367,10 @@ const Registro = () => {
                               onKeyUp={(e) => validate(e.target.value,values?.confirmPassword)}
                               invalid={meta.error && meta.touched}
                             />
+                            <span className="showPass" onClick={togglePassword}>Ver</span>
                             {meta.error && meta.touched && (<Label className="danger">{meta.error}</Label>)}
                             {/* {errorMessage === '' ? null :<span style={{color: 'red',}}>{errorMessage}</span>} */}
                             {<span style={{color: 'red',}}>{errorMessage}</span>}
-                            <span className="showPass" onClick={togglePassword}>Ver</span>
                           </div>
                         )}
                       </Field>
@@ -383,9 +381,7 @@ const Registro = () => {
                       <Field name="confirmPassword">
                         {({ input, meta }) => (
                           <div>
-                            <Label for="confirmPassword">
-                              Confirmar
-                            </Label>
+                            <Label for="confirmPassword">Confirmar<span className="danger"> *</span></Label>
                             {/* <span className="labelHint">{values?.confirmPassword?.length || 0}/{maxLengthParam?.valor || 0}</span> */}
                             <Input
                               {...input}
@@ -397,10 +393,10 @@ const Registro = () => {
                               onKeyUp={(e) => validate(e.target.value,values?.confirmPassword)}
                               invalid={meta.error && meta.touched}
                             />
+                            <span className="showPass" onClick={togglePassword}>Ver</span>
                              {meta.error && meta.touched && (<Label className="danger">{meta.error}</Label>)}
                             {/* {errorMessage === '' ? null :<span style={{color: 'red',}}>{errorMessage}</span>} */}
                             {<span style={{color: 'red',}}>{errorMessage}</span>}
-                            <span className="showPass" onClick={togglePassword}>Ver</span>
                           </div>
                         )}
                       </Field>

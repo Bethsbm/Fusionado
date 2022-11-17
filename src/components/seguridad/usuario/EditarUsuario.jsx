@@ -40,12 +40,7 @@ const EditarUsuario = () => {
     })
     .then(response => response.json())
     .then(responseJson => {  
-        // console.log("ROLES JSON",responseJson)
-        // console.log("ROLES JSON",responseJson.status)
         setRoles(responseJson.object);
-    })
-    .catch(error=>{
-        // console.log(error)   
     })
 };
   const [estados, setEstados] = useState([]);
@@ -60,12 +55,7 @@ const EditarUsuario = () => {
     })
     .then(response => response.json())
     .then(responseJson => {  
-        // console.log("ESTADOS JSON",responseJson)
-        // console.log("ESTADOS JSON",responseJson.status)
         setEstados(responseJson.object);
-    })
-    .catch(error=>{
-        // console.log(error)   
     })
 };
 
@@ -80,14 +70,9 @@ const EditarUsuario = () => {
     })
       .then((response) => response.json())
       .then((responseJson) => {
-        // console.log("edit user", responseJson);
-        // console.log("Edit usef", responseJson.status);
         setRegistro(responseJson.object);
         setLoading(false)
       })
-      .catch((error) => {
-        // console.log(error);
-      });
   };
 
   useEffect(() => {
@@ -96,11 +81,8 @@ const EditarUsuario = () => {
     getRegistroById();
   }, []);
 
-  // console.log("registro", registro);
 
   const onSubmit = (event) => {
-    // console.log("EVENT DATA", event);
-    // console.log("userdata.data.nameUser", userdata.data.nameUser);
     let data={
       // usuario:event.usuario,
       nombre_usuario:event.nombre_usuario,
@@ -109,12 +91,6 @@ const EditarUsuario = () => {
       modificado_por:userdata.data.nameUser,
       id_usuario:id,
     }
-    // console.log('data',data)
-    // nombre_usuario: req.body.nombre_usuario,
-    // estado_usuario: req.body.estado_usuario,
-    // id_rol: req.body.id_rol,
-    // modificado_por: req.body.modificado_por,
-    // id_usuario: req.body.id_usuario,
   
     fetch(urlapi + "/ms_registro/update/"+ id, {
       method: "PUT",
@@ -135,23 +111,6 @@ const EditarUsuario = () => {
         // console.log(error);
       });
   };
-//   const onSelect = (e) => {
-    // console.log(e.target.value);
-    // console.log(e.target.value[0] + " " + e.target.value[1] );
-//     this.setState({
-//         id_rol: e.target.value[0],
-//         rol: e.target.value[1]
-//     });
-// }
-
-                
-// const required = value => (value ? undefined : 'Campo requerido')
-// const noChar = value => ( /^[!@#$%&*()_+-={};':<>,.?/|]*$/.test(value) ? 'No puede contener caracteres especiales' : undefined)
-// const mustBeNumber = value => (isString(value) ? 'Solo debe contener texto' : undefined)
-// const minValue = min => value =>
-//   isNaN(value) || value >= min ? undefined : `Debe contener minimo ${min} caracteres`
-// const composeValidators = (...validators) => value =>
-//   validators.reduce((error, validator) => error || validator(value), undefined)
 
   return (
     <div className="container">
@@ -231,7 +190,7 @@ const EditarUsuario = () => {
                       <Field name="nombre_usuario">
                         {({ input, meta }) => (
                           <div>
-                            <Label for="nombre_usuario">Nombre de usuario</Label>
+                            <Label for="nombre_usuario">Nombre de usuario<span className="danger"> *</span></Label>
                             <span className="labelHint">{values?.nombre_usuario?.length || 0}/{maxLengthParam?.valor || 0}</span>
                             <Input
                               {...input}
@@ -252,7 +211,7 @@ const EditarUsuario = () => {
                       
                       {/* estado */}
                       <FormGroup>
-                      <Label for="estado_usuario">Estado</Label>
+                      <Label for="estado_usuario">Estado<span className="danger"> *</span></Label>
                       <Field 
                         className="form-select"
                         id="estado_usuario"
@@ -269,7 +228,7 @@ const EditarUsuario = () => {
                   
                    {/* role */}
                    <FormGroup>
-                      <Label for="id_rol">Rol</Label>
+                      <Label for="id_rol">Rol<span className="danger"> *</span></Label>
                       <Field   className="form-select" id="id_rol" name="id_rol" component="select">
                                {
                                 roles.map((item) => (

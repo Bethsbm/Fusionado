@@ -69,7 +69,7 @@ function Home() {
         let statusUser=responseJson.object.estado_usuario
         if(statusUser===1){
           // console.log('Usuario NUEVO')
-          navigate('/recuperacion_preguntas')
+          navigate('/recuperacion_preguntas/'+userdata.data.id || 0)
         }
         if(statusUser===2){
           // console.log('USUARIO ACTIVO')

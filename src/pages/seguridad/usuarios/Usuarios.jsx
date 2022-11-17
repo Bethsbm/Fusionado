@@ -193,12 +193,12 @@ const Usuarios = () => {
     },
     {
       name: "PREGUNTAS CONTESTADAS",
-      selector: (row) => row.preguntas_contestadas || "--- ---",
+      selector: (row) => row.preguntas_contestadas || 0,
       sortable: false,
     },
     {
       name: "PRIMER INGRESO",
-      selector: (row) => row.primer_ingreso || "--- ---",
+      selector: (row) => row.primer_ingreso || 0,
       sortable: false,
     },
     {
@@ -233,7 +233,7 @@ const Usuarios = () => {
     },
     {
       name: "INTENTOS",
-      selector: (row) => row.intentos_login || "--- ---",
+      selector: (row) => row.intentos_login || 0,
       sortable: false,
     },
 

@@ -1,133 +1,88 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { Form, FormGroup, Input, Label } from "reactstrap";
+import { Link, useNavigate, useParams } from "react-router-dom";
+// import { Form, FormGroup, Input, Label } from "reactstrap";
+/* eslint-disable jsx-a11y/accessible-emoji */
+
+// import { render } from 'react-dom'
+import Styles from './Styles'
+import { Field } from 'react-final-form'
+import Wizard from './Wizard'
 import "../recuperacion_preguntas/login.css";
 import burridogs from "../recuperacion_preguntas/loginbg.jpg";
 
-import Box from "@mui/material/Box";
-import Stepper from "@mui/material/Stepper";
-import Step from "@mui/material/Step";
-import StepButton from "@mui/material/StepButton";
-import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
+// import Box from "@mui/material/Box";
+// import Stepper from "@mui/material/Stepper";
+// import Step from "@mui/material/Step";
+// import StepButton from "@mui/material/StepButton";
+// import Button from "@mui/material/Button";
+// import Typography from "@mui/material/Typography";
 import { getOneParam } from "../../../utils/utils";
 
 // const urlAPi = "http://localhost:3001";
 const URL_API_ENV = process.env.REACT_APP_URL_API;
 console.log('URL_API_ENV===>',URL_API_ENV)
 
+
+
+const sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
+
+
+const Error = ({ name }) => (
+  <Field
+    name={name}
+    subscription={{ touched: true, error: true }}
+    render={({ meta: { touched, error } }) =>
+      touched && error ? <span>{error}</span> : null
+    }
+  />
+)
+
+const required = value => (value ? undefined : 'Required')
+
+
 export default function RecuperacionPreguntas(props) {
   let navigate = useNavigate();
- 
+  const { id_usuario } = useParams();
 
 
   const [params, setParams] = useState([]);
-  var steps = [];
+  // var steps = [];
   var numberQuestion = getOneParam(params, "ADMIN_PREGUNTAS");
   // numberQuestion=numberQuestiond.valor
   // console.log("nombreParam", numberQuestion.valor);
 
-  for (let index = 0; index < numberQuestion.valor; index++) {
-    steps.push("Pregunta" + (index + 1));
-  }
+  // for (let index = 0; index < numberQuestion.valor; index++) {
+  //   steps.push("Pregunta" + (index + 1));
+  // }
 
 
   var dataPar=JSON.parse(localStorage.getItem("params")) || []
   var urlApiParam=getOneParam(dataPar,"URL_API")
   const urlAPi =urlApiParam.valor
-  // var ObjetData={}
 
-  const [question1, setQuestion1] = useState("");
-  const [response1, setResponse1] = useState("");
-
-  const [question2, setQuestion2] = useState("");
-  const [response2, setResponse2] = useState("");
-
-  const [question3, setQuestion3] = useState("");
-  const [response3, setResponse3] = useState("");
-
-  const [activeStep, setActiveStep] = React.useState(0);
-  // const [completed, setCompleted] = React.useState<{[k]}>({});
-  const [completed, setCompleted] = React.useState({});
-
-  const totalSteps = () => {
-    return steps.length;
-  };
-
-  const completedSteps = () => {
-    return Object.keys(completed).length;
-  };
-
-  const isLastStep = () => {
-    return activeStep === totalSteps() - 1;
-  };
-
-  const allStepsCompleted = () => {
-    return completedSteps() === totalSteps();
-  };
-
-  const handleNext = () => {
-    const newActiveStep =
-      isLastStep() && !allStepsCompleted()
-        ? // It's the last step, but not all steps have been completed,
-          // find the first step that has been completed
-          steps.findIndex((step, i) => !(i in completed))
-        : activeStep + 1;
-    setActiveStep(newActiveStep);
-  };
-
-  const handleBack = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep - 1);
-  };
-
-  const handleStep = (step) => () => {
-    setActiveStep(step);
-  };
-
-  const handleComplete = () => {
-    const newCompleted = completed;
-    newCompleted[activeStep] = true;
-    setCompleted(newCompleted);
-    handleNext();
-
-   
-  };
-
-  const handleReset = () => {
-    setActiveStep(0);
-    setCompleted({});
-    // console.log(state)
-    navigate("/login")
-  };
-
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    // console.log("handleSubmit ran");
-    
+  const onSubmit = async values => {
+    console.log("values",values)
+    // await sleep(300)
+    // window.alert(JSON.stringify(values, 0, 2))
   
-
     const userData = JSON.parse(localStorage.getItem("data"));
     // console.log("userData", userData);
     let dataQuest1 = {
       id_usuario: userData.data.id,
-      id_pregunta: parseInt(question1),
-      respuesta: response1,
+      id_pregunta: parseInt(values.pregunta1),
+      respuesta: values.respuesta1,
     };
     let dataQuest2 = {
       id_usuario: userData.data.id,
-      id_pregunta: parseInt(question2),
-      respuesta: response2,
+      id_pregunta: parseInt(values.pregunta2),
+      respuesta: values.respuesta2,
     };
     let dataQuest3 = {
       id_usuario: userData.data.id,
-      id_pregunta: parseInt(question3),
-      respuesta: response3,
+      id_pregunta: parseInt(values.pregunta3),
+      respuesta: values.respuesta3,
     };
-    // console.log("dataQuest1", dataQuest1);
-    // console.log("dataQuest2", dataQuest2);
-    // console.log("dataQuest3", dataQuest3);
-   
-
+  
     await fetch(urlAPi + "/ms_pregunta/save", {
       method: "POST",
       body: JSON.stringify(dataQuest1),
@@ -136,11 +91,8 @@ export default function RecuperacionPreguntas(props) {
       },
     })
       .then((response) => response.json())
-      .then((responseJson) => {
-        // console.log("responseJson 1", responseJson);
-        // console.log("responseJson.status 1", responseJson.status);
-      });
-
+     
+  
     await fetch(urlAPi + "/ms_pregunta/save", {
       method: "POST",
       body: JSON.stringify(dataQuest2),
@@ -149,10 +101,7 @@ export default function RecuperacionPreguntas(props) {
       },
     })
       .then((response) => response.json())
-      .then((responseJson) => {
-        // console.log("responseJson 2", responseJson);
-        // console.log("responseJson.status 2", responseJson.status);
-      });
+     
     await fetch(urlAPi + "/ms_pregunta/save", {
       method: "POST",
       body: JSON.stringify(dataQuest3),
@@ -161,11 +110,7 @@ export default function RecuperacionPreguntas(props) {
       },
     })
       .then((response) => response.json())
-      .then((responseJson) => {
-        // console.log("responseJson 3", responseJson);
-        // console.log("responseJson.status 3", responseJson.status);
-      });
-
+    
     await fetch(urlAPi + "/ms_registro/updateUserState", {
       method: "POST",
       body: JSON.stringify({ id_usuario: userData.data.id }),
@@ -174,21 +119,11 @@ export default function RecuperacionPreguntas(props) {
       },
     })
       .then((response) => response.json())
-      .then((responseJson) => {
-        // console.log("update user", responseJson);
-        // console.log("responseJson.status 3", responseJson.status);
-      });
-
     localStorage.clear();
     navigate("/login");
-    //   .catch(error=>{
-    //     console.log('error',error)
-    //   })
+  }
+  
 
-    // setName('');
-    // setEmail('');
-    // setRole('');
-  };
   /**
    ** get settign params
    * obteniendo todos los parametros de configuracion del sistema
@@ -237,30 +172,8 @@ export default function RecuperacionPreguntas(props) {
     getAllSettingsParams();
     getRegistros();
   }, []);
-  // const steps = [
-  //   {title: 'Pregunta 1', component: <StepOne/>},
-  //   {title: 'Pregunta 2', component: <StepTwo/>},
-  //   {title: 'Pregunta 3', component: <StepThree/>},
-  //   {title: 'Pregunta 4', component: <StepFour/>}
-  // ];
-  // custom styles
-  // const prevStyle = { background: '#635e5e' }
-  // const nextStyle = { background: '#e327' }
-  
-// const  handleChange =(name,value)  => {
-//     //more logic here as per the requirement
-//     setState({
-//         [name]: value,
-//     });
-// };
-const handleChange = (name,value) =>{ 
-  // const key = e.target.name; 
-  // valor const = e.objetivo.valor;
-  // setState({ [name]: value }); 
-//   setState(
-//     state.map((val, ix) => (name === ix ? "nada" : val))
-// );
-}
+
+
   return (
     <div className="background">
       <img src={burridogs} alt="burridogs" />
@@ -273,103 +186,222 @@ const handleChange = (name,value) =>{
         </h5>
         
           <div className="container">
-            <Box sx={{ width: "100%" }}>
-              <Stepper alternativeLabel activeStep={activeStep}>
-                {steps.map((label, index) => (
-                  <Step key={label} completed={completed[index]}>
-                    <StepButton color="inherit" onClick={handleStep(index)}>
-                      {label}
-                    </StepButton>
-                  </Step>
-                ))}
-              </Stepper>
-              <div>
-                <Form >
-                {allStepsCompleted() ? (
-                  <React.Fragment>
-                    <Typography sx={{ mt: 2, mb: 1 }}>
-                      Todos los pasos han sido completados
-                    </Typography>
-                    <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
-                      <Box sx={{ flex: "1 1 auto" }} />
-                      <Button  onClick={handleReset}>Enviar</Button>
-                    </Box>
-                  </React.Fragment>
-                ) : (
-                  <React.Fragment>
-                    <Typography sx={{ mt: 2, mb: 1, py: 1 }} align="center">
-                      Pregunta {activeStep + 1} / {totalSteps()}
-                    </Typography>
-                    {steps.map((label, index) => (
-                                // onChange={(event) => setQuestion1(event.target.value)}
-                                // onChange={(event) => setResponse1(event.target.value)}
-                            // value={question1}
-                            <div className="">
-                            {
-                                activeStep + 1 === index + 1? 
-                                <Box >
-                                    <FormGroup>
-                                    <Input
-                                        type="select"
-                                        id={"question"+(index + 1)}
-                                        name={"question"+(index + 1)}
-                                        // onChange={(event)=>handleChange("question"+(index + 1))}
-                                    >
-                                        {registros.map((item,index) => (
-                                        <option key={index} value={item.id_pregunta}> {item.pregunta} </option>
-                                        ))}
-                                    </Input>
-                                    </FormGroup>
-                                    <FormGroup>
-                                    <Input
-                                        type="text"
-                                        name={"response"+(index + 1)}
-                                        id={"response"+(index + 1)}
-                                        // onChange={(event)=>handleChange("response"+(index + 1),event.target.value)}
-                                        placeholder={"Respuesta "+(index + 1)}
-                                    />
-                                    </FormGroup>
-                                </Box>
-                                :null
-                            }
-                            </div>
-                        
-                        ))}
-                            
-                    <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
-                      <Button
-                        color="inherit"
-                        disabled={activeStep === 0}
-                        onClick={handleBack}
-                        sx={{ mr: 1 }}
-                        >
-                        Atras
-                      </Button>
-                      <Box sx={{ flex: "1 1 auto" }} />
-                      <Button onClick={handleNext} sx={{ mr: 1 }}>
-                        Siguiente
-                      </Button>
-                      {activeStep !== steps.length &&
-                        (completed[activeStep] ? (
-                          <Typography
-                          variant="caption"
-                          sx={{ display: "inline-block" }}
-                          >
-                            Paso {activeStep + 1} ha sido completado
-                          </Typography>
-                        ) : (
-                          <Button  onClick={handleComplete}>
-                            {completedSteps() === totalSteps() - 1
-                              ? "Terminado"
-                              : "Paso Completado"}
-                          </Button>
-                        ))}
-                    </Box>
-                  </React.Fragment>
-                )}
-                </Form>
-              </div>
-            </Box>
+            
+            {/* {counter}/{numberQuestion.valor} */}
+          <Styles>
+    {/* <h1>React Final Form Example</h1>
+    <h2>Wizard Form</h2>
+    <a
+      href="https://final-form.org/react"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      Read Docs
+    </a>
+    <p>
+      Notice the mixture of field-level and record-level (or <em>page-level</em>{' '}
+      in this case) validation.
+    </p> */}
+    <Wizard
+      initialValues={{ id_usuario: id_usuario }}
+      onSubmit={onSubmit}
+    >
+      {/* <Wizard.Page>
+        <div>
+          <label>Primer Pregunta</label>
+          <Field
+            name="firstName"
+            component="input"
+            type="text"
+            placeholder="First Name"
+            validate={required}
+          />
+          <Error name="firstName" />
+        </div>
+        <div>
+          <label>Primer Respuesta</label>
+          <Field
+            name="lastName"
+            component="input"
+            type="text"
+            placeholder="Last Name"
+            validate={required}
+          />
+          <Error name="lastName" />
+        </div>
+      </Wizard.Page> */}
+      <Wizard.Page
+        validate={values => {
+          const errors = {}
+          if (!values.respuesta1) {
+            errors.respuesta1 = 'Requerido'
+          }
+          if (!values.pregunta1) {
+            errors.pregunta1 = 'Requerido'
+          }
+          return errors
+        }}
+      >
+        <div>
+          <label>Pregunta 1</label>
+          <Field name="pregunta1" component="select">
+            { registros.map((item) => (
+              <option value={item.id_pregunta}>{item.pregunta}</option>
+              ))
+            }
+          </Field>
+          <Error name="pregunta1" />
+        </div>
+        <div>
+          <label>Respuesta 1</label>
+          <Field
+            name="respuesta1"
+            component="input"
+            type="text"
+            placeholder="Respuesta 1"
+          />
+          <Error name="respuesta1" />
+        </div>
+      </Wizard.Page>
+      <Wizard.Page
+        validate={values => {
+          const errors = {}
+          if (!values.respuesta2) {
+            errors.respuesta2 = 'Requerido'
+          }
+          if (!values.pregunta2) {
+            errors.pregunta2 = 'Requerido'
+          }
+          return errors
+        }}
+      >
+        <div>
+          <label>Pregunta 2</label>
+          <Field name="pregunta2" component="select">
+            { registros.map((item) => (
+              <option value={item.id_pregunta}>{item.pregunta}</option>
+              ))
+            }
+          </Field>
+          <Error name="pregunta2" />
+        </div>
+        <div>
+          <label>Respuesta 2</label>
+          <Field
+            name="respuesta2"
+            component="input"
+            type="text"
+            placeholder="Respuesta 2"
+          />
+          <Error name="respuesta2" />
+        </div>
+      </Wizard.Page>
+      <Wizard.Page
+        validate={values => {
+          const errors = {}
+          if (!values.respuesta3) {
+            errors.respuesta3 = 'Requerido'
+          }
+          if (!values.pregunta3) {
+            errors.pregunta3 = 'Requerido'
+          }
+          return errors
+        }}
+      >
+        <div>
+          <label>Pregunta 3</label>
+          <Field name="pregunta3" component="select">
+            { registros.map((item) => (
+              <option value={item.id_pregunta}>{item.pregunta}</option>
+              ))
+            }
+          </Field>
+          <Error name="pregunta3" />
+        </div>
+        <div>
+          <label>Respuesta 3</label>
+          <Field
+            name="respuesta3"
+            component="input"
+            type="text"
+            placeholder="Respuesta 3"
+          />
+          <Error name="respuesta3" />
+        </div>
+      </Wizard.Page>
+      {/* <Wizard.Page
+        validate={values => {
+          const errors = {}
+          if (!values.toppings) {
+            errors.toppings = 'Required'
+          } else if (values.toppings.length < 2) {
+            errors.toppings = 'Choose more'
+          }
+          return errors
+        }}
+      >
+        <div>
+          <label>Employed?</label>
+          <Field name="employed" component="input" type="checkbox" />
+        </div>
+        <div>
+          <label>Toppings</label>
+          <Field name="toppings" component="select" multiple>
+            <option value="ham">🐷 Ham</option>
+            <option value="mushrooms">🍄 Mushrooms</option>
+            <option value="cheese">🧀 Cheese</option>
+            <option value="chicken">🐓 Chicken</option>
+            <option value="pineapple">🍍 Pinapple</option>
+          </Field>
+          <Error name="toppings" />
+        </div>
+      </Wizard.Page> */}
+      {/* <Wizard.Page
+        validate={values => {
+          const errors = {}
+          if (!values.notes) {
+            errors.notes = 'Required'
+          }
+          return errors
+        }}
+      >
+        <div>
+          <label>Best Stooge?</label>
+          <div>
+            <label>
+              <Field
+                name="stooge"
+                component="input"
+                type="radio"
+                value="larry"
+              />{' '}
+              Larry
+            </label>
+            <label>
+              <Field name="stooge" component="input" type="radio" value="moe" />{' '}
+              Moe
+            </label>
+            <label>
+              <Field
+                name="stooge"
+                component="input"
+                type="radio"
+                value="curly"
+              />{' '}
+              Curly
+            </label>
+          </div>
+        </div>
+        <div>
+          <label>Notes</label>
+          <Field name="notes" component="textarea" placeholder="Notes" />
+          <Error name="notes" />
+        </div>
+      </Wizard.Page> */}
+    </Wizard>
+  </Styles>
+
+
             <div className="buttom-container">
                         <Link to="/login">
                             Cancelar

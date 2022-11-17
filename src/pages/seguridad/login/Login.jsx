@@ -8,7 +8,7 @@ import { Form, Field } from "react-final-form";
 
 import "./login.css";
 import burridogs from "./loginbg.jpg";
-import { translateUperCase } from "../../../utils/utils";
+import { isChar, isNumber, isRange, isSpace, isText, translateUperCase } from "../../../utils/utils";
 
 
 const getOneParam = (objectJson,nameParam) => {
@@ -72,6 +72,10 @@ export default function Login(props) {
       
       var urlApiParam=getOneParam(dataPar,"URL_API")
       const urlAPi =urlApiParam.valor
+
+      var minLengthUserParam = getOneParam(dataPar, "MIN_LENGTH_USERS");
+      var maxLengthUserParam = getOneParam(dataPar, "MAX_LENGTH_USERS");
+        
     // console.log("getOneParam",dataPar)
   // const { history } = this.props;
   let navigate = useNavigate();
@@ -95,8 +99,6 @@ export default function Login(props) {
     })
       .then((response) => response.json())
       .then((responseJson) => {
-        // console.log("responseJson", responseJson);
-        // console.log("responseJson.status", responseJson.status);
         setIsValid(true);
         if (!responseJson.status) {
           setColor("danger");
@@ -163,23 +165,41 @@ export default function Login(props) {
         <h5 className="caption">Ingresa tus credenciales para continuar</h5>
         <Form
           onSubmit={onSubmit}
+          initialValues={{
+            username: "",
+            password: "",
+          }}
           validate={(values) => {
             const errors = {};
-            function validateText(username) {
-                var re = /^[a-zA-Z ]*$/
-                return re.test(String(username).toLowerCase());
-              }
+            
               // console.log('values.username',values.username)
-              if (!values.username) {
-                errors.username = "Campo requerido";
-              } else
-               if (!validateText(values.username)) {
-                errors.username = "Ingresar nombre en letras mayúsculas";
+              if(!values.username) {
+                errors.username = "Usuario requerido";
+              } else if (isSpace(values.username)) {
+                errors.username = "No se permiten espacios";
+              } else if (!isText(values.username)) {
+                errors.username = "Ingresar solo letras";
+              } else if (isChar(values.username)) {
+                errors.username = "No puede contener caracteres especiales";
+              } else if (isNumber(values.username)) {
+                errors.username = "No puede contener numeros";
+              } else if (
+                isRange(
+                  values.username,
+                  minLengthUserParam.valor,
+                  maxLengthUserParam.valor
+                )
+              ) {
+                errors.username =
+                  "Debe tener una longitud entre " +
+                  minLengthUserParam.valor +
+                  " y " +
+                  maxLengthUserParam.valor;
               }
               // values.username= (values.username).toUpperCase()
             
             if (!values.password) {
-              errors.password = "La contraseña es requerido";
+              errors.password = "La contraseña es requerida";
             }
            
             return errors;
@@ -188,24 +208,31 @@ export default function Login(props) {
             <div className="inputs">
             <form onSubmit={handleSubmit}>
               <FormGroup>
-                <Label for="username">Usuario</Label>
                 <Field name="username">
                   {({ input, meta }) => (
                     <div >
-                        <div className="username">
-                        <div className="fa fa-user-o"></div>
+                      <Label for="username">Usuario<span className="danger"> *</span></Label>
+                        {/* <div className="username"> */}
+                        {/* <div className="fa fa-user-o"></div> */}
+                        <div className="input-group flex-nowrap">
+                          <span className="input-group-text" id="addon-wrapping">
+                            <i class="bi bi-person"></i>
+                          </span>
                       <Input
                         {...input}
                         type="text"
                         placeholder="Ingresa tu usuario"
-
-                        // value={usernameTranslate}
-                        // onChange={handleChange}
-                        // onKeyUp={handleChange}
+                        id="username"
+                        name="username"
+                        onKeyDown={translateUperCase(
+                          values,
+                          "username"
+                          )}
                         invalid={meta.error && meta.touched}
                       />
+                          </div >
 
-                        </div>
+                        {/* </div> */}
                       {meta.error && meta.touched && <span class="danger">{meta.error}</span>}
                     </div>
                   )}
@@ -213,12 +240,16 @@ export default function Login(props) {
               </FormGroup>
 
               <FormGroup>
-                <Label for="password">Contraseña</Label>
                 <Field name="password">
                   {({ input, meta }) => (
                     <div >
-                        <div className="username">
-                        <div className="fa fa-lock"></div>
+                      <Label for="password">Contraseña<span className="danger"> *</span></Label>
+                        {/* <div className="username"> */}
+                        {/* <div className="fa fa-lock"></div> */}
+                        <div className="input-group flex-nowrap">
+                          <span className="input-group-text" id="addon-wrapping">
+                            <i class="bi bi-lock"></i>
+                          </span>
                       <Input
                         {...input}
                         id="password"
@@ -227,7 +258,7 @@ export default function Login(props) {
                         placeholder="Ingresa tu contraseña"
                         invalid={meta.error && meta.touched}
                       />
-                      <span className="showPass" onClick={togglePassword}> Ver </span>
+                      <span className="showPass-login" onClick={togglePassword}> Ver </span>
                       </div>
                       {meta.error && meta.touched && <span class="danger">{meta.error}</span>}
                     </div>
@@ -235,9 +266,7 @@ export default function Login(props) {
                 </Field>
               </FormGroup>
 
-              <Button type="submit" className="btn" disabled={!valid}>
-                Iniciar Sesión
-              </Button>
+              <Button type="submit" color="primary" size="lg" block disabled={!valid  && submitting}>Iniciar Sesión</Button>
                 <div className="buttom-container">
                      <Link to="/recuperacion_contrasena">¿Olvidaste tu contraseña?</Link>
                      {/* <Link to="/unlockuser">Desbloquea tu usuario</Link> */}
