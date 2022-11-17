@@ -1,6 +1,6 @@
 "use strict";
-var newOTP = require("otp-generators");
-var md5 = require("md5");
+// var newOTP = require("otp-generators");
+// var md5 = require("md5");
 // var filterParam =require('../../utils/filterParam.util')
 
 const filterParamUtil = require("../../utils/filterParam.util");
@@ -205,6 +205,7 @@ UsuarioController.save = (req, res, next) => {
 	const paramSettingCompany = filterParamUtil(paramSettings, "SYS_NOMBRE");
 	const paramSettingPhone = filterParamUtil(paramSettings, "SYS_PHONE");
 	const paramSettingUser = filterParamUtil(paramSettings, "ADMIN_CUSER");
+	const paramVigenciaUser = filterParamUtil(paramSettings, "ADMIN_VIGENCIA");
 	
 	const paramUrlPanel = filterParamUtil(paramSettings, "URL_PANEL");
 	var urlPanel = paramUrlPanel.valor;	
@@ -215,11 +216,12 @@ UsuarioController.save = (req, res, next) => {
 	};
 
   // console.log('req.usuario',req.usuario)
-  let otp = newOTP.generate(8, {
-    alphabets: true,
-    upperCase: true,
-    specialChar: true,
-  });
+  let otp = req.body.otp
+//   let otp = newOTP.generate(8, {
+//     alphabets: true,
+//     upperCase: true,
+//     specialChar: true,
+//   });
 
   // var x = Math.floor(Math.random() * (100 - 1) + 1);
   // let name_user=(req.body.nombre_usuario).toString()
@@ -229,16 +231,18 @@ UsuarioController.save = (req, res, next) => {
 
   // let nombreDeUsuario=req.body.nombre_usuario
   let usuario = {
-    usuario: String(req.body.nombre_usuario).toUpperCase(),
-    nombre_usuario: (req.body.nombre_usuario).toUpperCase(),
-    contrasena: md5(otp),
-    id_rol: req.body.id_rol,
+    usuario: String(req.body.usuario).toUpperCase(),
+    nombre_usuario: String(req.body.nombre_usuario).toUpperCase(),
+    contrasena: req.body.contrasena,
+    // contrasena: md5(otp),
+    id_rol: req.body.id_rol || 1,
     primer_ingreso: 0,
     correo_electronico: req.body.correo_electronico,
     creado_por: req.body.creado_por,
     fecha_creacion: new Date(),
     intentos_login: 0,
     estado_usuario: 2,
+    paramVigencia: paramVigenciaUser.valor,
   };
 
   console.log(usuario);

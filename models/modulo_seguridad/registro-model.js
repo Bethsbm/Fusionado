@@ -93,7 +93,7 @@ INSERT INTO seguridad.tbl_ms_usuario(
     $4,
     0,
     1,
-    (NOW() + interval '3 days'), 
+    (NOW() + interval '${data.paramVigencia} days'), 
     $5,
     $6,
     NOW(),
@@ -101,8 +101,8 @@ INSERT INTO seguridad.tbl_ms_usuario(
     )
      `
     const values = [
-      data.nombre_usuario,
       data.usuario,
+      data.nombre_usuario,
       data.contrasena,
       data.id_rol,
       data.correo_electronico,
