@@ -94,6 +94,8 @@ const urlapi =urlApiParam.valor
   var minLengthNamesParam = getOneParam(dataPar, "MIN_LENGTH_NAMES");
   var maxLengthNamesParam = getOneParam(dataPar, "MAX_LENGTH_NAMES");
   
+  var adminVigenciaParam = getOneParam(dataPar, "ADMIN_VIGENCIA");
+  
 
 const userdata= JSON.parse(localStorage.getItem('data')) 
 
@@ -134,8 +136,6 @@ const getEstados = async () => {
   })
 };
 
-
-
 // const getRegistroById = async () => {
 //   fetch(urlapi + "/getById/" + id, {
 //     method: "GET",
@@ -156,7 +156,13 @@ useEffect(() => {
   // getRegistroById();
 }, []);
 
-
+var dateEndParam = new Date();
+var now=dateEndParam
+    now=now.toISOString()
+// console.log('adminVigenciaParam.valor',adminVigenciaParam.valor)
+dateEndParam.setDate(dateEndParam.getDate() + parseInt(adminVigenciaParam.valor));
+dateEndParam=dateEndParam.toISOString()
+// const  dateEndParam = new Date() + ;
 const onSubmit = (event) => {
   setLoading(true)
   let otp = newOTP.generate(maxLengthParam.valor, {
@@ -438,6 +444,7 @@ fetch(urlapi+'/ms_registro/createUser',
                               disabled
                               type="text"
                               // value={registro.preguntas_contestadas}
+                              value={0}
                               placeholder="Preguntas contestadas"
                               invalid={meta.error && meta.touched}
                             />
@@ -460,7 +467,7 @@ fetch(urlapi+'/ms_registro/createUser',
                               disabled
                               type="text"
                               placeholder="Intentos login"
-                              // value={registro.intentos_login}
+                              value={0}
                               invalid={meta.error && meta.touched}
                             />
                             {meta.error && meta.touched && (
@@ -487,6 +494,7 @@ fetch(urlapi+'/ms_registro/createUser',
                               type="text"
                               placeholder="Primer ingreso"
                               // value={registro.primer_ingreso}
+                              value={0}
                               invalid={meta.error && meta.touched}
                             />
                             {meta.error && meta.touched && (
@@ -507,7 +515,7 @@ fetch(urlapi+'/ms_registro/createUser',
                               {...input}
                               disabled
                               type="text"
-                              // value={registro.fecha_vencimiento}
+                              value={dateEndParam}
                               placeholder="Fecha de vencimiento"
                               invalid={meta.error && meta.touched}
                             />
@@ -554,7 +562,7 @@ fetch(urlapi+'/ms_registro/createUser',
                               {...input}
                               disabled
                               type="text"
-                              // value={registro.creado_por}
+                              value={userdata.data.nameUser}
                               placeholder="Creado Por"
                               invalid={meta.error && meta.touched}
                             />
@@ -578,7 +586,7 @@ fetch(urlapi+'/ms_registro/createUser',
                               {...input}
                               disabled
                               type="text"
-                              // value={registro.fecha_creacion}
+                              value={now}
                               placeholder="Fecha de creación"
                               invalid={meta.error && meta.touched}
                             />
