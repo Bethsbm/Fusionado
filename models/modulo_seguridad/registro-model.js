@@ -44,6 +44,14 @@ UsuarioModel.validateUserState = (id ,cb) => conn.query("SELECT id_usuario,estad
 
 UsuarioModel.updateUserState = (id,preguntas_contestadas ,cb) => conn.query("UPDATE seguridad.tbl_ms_usuario SET estado_usuario=2, preguntas_contestadas =$2 WHERE id_usuario = $1",[id,preguntas_contestadas], cb);
 
+UsuarioModel.saveHistoricPassword = (id_usuario,contrasena) => conn.query(
+  `INSERT INTO seguridad.tbl_ms_hist_contrasena(
+	id_usuario,
+	contrasena,
+	fecha)
+	VALUES ($1,$2, NOW());`,
+  [id_usuario,contrasena]);
+
 UsuarioModel.updateUserbyId = (data ,cb) => conn.query(`
 UPDATE seguridad.tbl_ms_usuario
 	SET 
@@ -99,6 +107,7 @@ INSERT INTO seguridad.tbl_ms_usuario(
     NOW(),
     0
     )
+    RETURNING *
      `
     const values = [
       data.usuario,
@@ -111,7 +120,17 @@ INSERT INTO seguridad.tbl_ms_usuario(
     conn.query(
       text,
       values,
-      cb
+      (err,res)=>{
+        console.log('err',err)
+        console.log('res.rows[0]',res.rows[0])
+        conn.query(
+          `INSERT INTO seguridad.tbl_ms_hist_contrasena(
+          id_usuario,
+          contrasena,
+          fecha)
+          VALUES ($1,$2, NOW());`,
+          [res.rows[0].id_usuario,data.contrasena],cb)
+      }
     );
  
 
@@ -156,8 +175,9 @@ INSERT INTO seguridad.tbl_ms_usuario(
   // );
 };
 
-UsuarioModel.autoregistro = (data, cb) => {
-  conn.query(
+UsuarioModel.autoregistro = async (data, cb) => {
+
+await  conn.query(
     `
     INSERT INTO seguridad.tbl_ms_usuario(
       usuario, 
@@ -187,6 +207,7 @@ UsuarioModel.autoregistro = (data, cb) => {
         NOW(),
         0
         )
+        RETURNING *
         `,
       [
         data.usuario,
@@ -194,7 +215,17 @@ UsuarioModel.autoregistro = (data, cb) => {
         data.contrasena,
         data.correo_electronico,
       ],
-      cb
+      (err,res)=>{
+        console.log('err',err)
+        console.log('res',res.rows[0])
+        conn.query(
+          `INSERT INTO seguridad.tbl_ms_hist_contrasena(
+          id_usuario,
+          contrasena,
+          fecha)
+          VALUES ($1,$2, NOW());`,
+          [res.rows[0].id_usuario,data.contrasena],cb)
+      }
   );
 };
 // UsuarioModel.autoregistro = (data, cb) => {

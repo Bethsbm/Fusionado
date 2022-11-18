@@ -598,6 +598,8 @@ UsuarioController.autoregistro = (req, res, next) => {
 
       res.render("error", locals);
     } else {
+		// console.log('row==>>>',row.rows)
+		// await UsuarioModel.saveHistoricPassword(row.rows[0].id_usuario,req.body.contrasena)
       const link = `${urlPanel}/login`;
 
       const transporter = nodemailer.createTransport({
