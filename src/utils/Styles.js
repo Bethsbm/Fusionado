@@ -67,12 +67,12 @@ export default styled.div`
   }
 
   form {
-    max-width: 500px;
+    max-width: 600px;
     margin: 10px auto;
-    border: 1px solid #ccc;
+    // border: 1px solid #ccc;
     padding: 20px;
-    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
-    border-radius: 3px;
+    // box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+    // border-radius: 3px;
     position: relative;
 
     .loading {

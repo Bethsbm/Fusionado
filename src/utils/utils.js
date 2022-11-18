@@ -148,6 +148,10 @@ const getOneParam = (objectJson,nameParam) => {
   function isRange(value,minValue,maxValue) {
     return ((value.length || " ") >= minValue && (value.length || " ") <= maxValue) ? false:true;
   }
+  function isComent(value) {
+    var re = /^[a-zA-Z0-9., ]*$/
+    return re.test(String(value));
+  }
 
 
 
@@ -166,4 +170,5 @@ export {
   isChar,
   isRange,
   isEmail,
+  isComent,
 }

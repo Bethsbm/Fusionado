@@ -70,13 +70,11 @@ export default class Wizard extends React.Component {
               )}
               {!isLastPage && <button type="submit">Siguiente</button>}
               {isLastPage && (
-                <button type="submit" disabled={submitting}>
-                  Restablecer
-                </button>
+                <button type="submit" disabled={submitting}>Restablecer</button>
               )}
             </div>
 
-            <pre>{JSON.stringify(values, 0, 2)}</pre>
+            {/* <pre>{JSON.stringify(values, 0, 2)}</pre> */}
           </form>
         )}
       </Form>
