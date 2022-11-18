@@ -201,7 +201,7 @@ await  conn.query(
         1,
         0,
         1,
-        (NOW() + interval '3 days'), 
+        (NOW() + interval '${data.paramVigencia} days'), 
         $4,
         'AUTOREGISTRO',
         NOW(),
@@ -247,8 +247,7 @@ await  conn.query(
 //             ],
 //             cb
 //             )
-//           : 
-              
+//           :
 //             conn.query(
 //               "SELECT seguridad.ft_insert_autoregistro($1,$2,$3)",
 //                 [

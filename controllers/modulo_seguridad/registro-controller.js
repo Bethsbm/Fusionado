@@ -569,6 +569,7 @@ UsuarioController.autoregistro = (req, res, next) => {
   const paramSettingCompany = filterParamUtil(paramSettings, "SYS_NOMBRE");
   const paramSettingPhone = filterParamUtil(paramSettings, "SYS_PHONE");
   const paramSettingUser = filterParamUtil(paramSettings, "ADMIN_CUSER");
+  const paramVigenciaUser = filterParamUtil(paramSettings, "ADMIN_VIGENCIA");
 
   const paramUrlPanel = filterParamUtil(paramSettings, "URL_PANEL");
   var urlPanel = paramUrlPanel.valor;	
@@ -584,6 +585,7 @@ UsuarioController.autoregistro = (req, res, next) => {
     correo_electronico: req.body.correo_electronico,
     contrasena: req.body.contrasena,
     otp: req.body.otp,
+	paramVigencia: paramVigenciaUser.valor,
   };
 
   console.log(usuario);
