@@ -201,14 +201,19 @@ router
   .get("/ms_pregunta/getone/:id_pregunta", PreguntasController.getOne)
   .post("/ms_pregunta/save",PreguntasController.save)
   .delete("/ms_pregunta/eliminar/:id_pregunta", PreguntasController.delete)
+  
   //Preguntas Usuario
   .get("/ms_pregunta_usuario/getall", PreguntasUsuarioController.getAll)
   .get(
     "/ms_pregunta_usuario/getone/:id_preguntas_usuario",
     PreguntasUsuarioController.getOne
   )
-  .put(
-    "/ms_pregunta_usuario/actualizar-insertar/:id_preguntas_usuario",
+  // .put(
+  //   "/ms_pregunta_usuario/actualizar-insertar/:id_preguntas_usuario",
+  //   PreguntasUsuarioController.save
+  // )
+  .post(
+    "/ms_pregunta_usuario/save",
     PreguntasUsuarioController.save
   )
   .delete(

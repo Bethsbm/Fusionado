@@ -101,9 +101,10 @@ UsuarioController.getOne = (req, res, next) => {
 
 UsuarioController.updateUserState = (req, res, next) => {
   let id_usuario = req.body.id_usuario;
+  let preguntas_contestadas = req.body.preguntas_contestadas;
   // console.log(id_usuario)
 
-  UsuarioModel.updateUserState(id_usuario, (err, row) => {
+  UsuarioModel.updateUserState(id_usuario,preguntas_contestadas, (err, row) => {
     // console.log(err, '---', row)
     if (err) {
       let locals = {

@@ -42,7 +42,7 @@ ORDER BY u.id_usuario DESC
 UsuarioModel.validateUserState = (id ,cb) => conn.query("SELECT id_usuario,estado_usuario,id_rol,fecha_vencimiento FROM seguridad.tbl_ms_usuario WHERE id_usuario = $1",[id], cb);
 
 
-UsuarioModel.updateUserState = (id ,cb) => conn.query("UPDATE seguridad.tbl_ms_usuario SET estado_usuario=2 WHERE id_usuario = $1",[id], cb);
+UsuarioModel.updateUserState = (id,preguntas_contestadas ,cb) => conn.query("UPDATE seguridad.tbl_ms_usuario SET estado_usuario=2, preguntas_contestadas =$2 WHERE id_usuario = $1",[id,preguntas_contestadas], cb);
 
 UsuarioModel.updateUserbyId = (data ,cb) => conn.query(`
 UPDATE seguridad.tbl_ms_usuario
