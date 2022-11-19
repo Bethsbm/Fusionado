@@ -1,3 +1,4 @@
+import logoEmpresa from "../assets/img/logo1.png";
 import React, { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Card, CardBody, CardHeader, CardText, CardTitle, Col, Row } from "reactstrap";
