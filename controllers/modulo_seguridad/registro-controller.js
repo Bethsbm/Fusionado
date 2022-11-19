@@ -4,7 +4,8 @@ var UsuarioModel = require('../../models/modulo_seguridad/registro-model'),
 	UsuarioController = () => {}
 
 	UsuarioController.getAll = (req, res, next) => {
-	UsuarioModel.getAll((err, rows) => {
+	
+		UsuarioModel.getAll((err, rows) => {
 		if(err)
 		{
 			let locals = {
@@ -17,11 +18,18 @@ var UsuarioModel = require('../../models/modulo_seguridad/registro-model'),
 		}
 		else
 		{
-			let locals = {
-				title : 'Lista de Usuarios',
-				data : rows
-			}
-			res.status(200).send(rows.rows)
+			// let locals = {
+			// 	title : 'Lista de Usuarios',
+			// 	data : rows
+			// }
+			res.status(200).json(
+				{
+					status:true,
+					code:200,
+					message:"Información encontrada exitosamente",
+					object:rows.rows,
+				}
+			)
 			//res.render('index', locals)
 		}
 	})
@@ -29,10 +37,10 @@ var UsuarioModel = require('../../models/modulo_seguridad/registro-model'),
 
 UsuarioController.getOne = (req, res, next) => {
 	let id_usuario = req.params.id_usuario
-	console.log(id_usuario)
+	// console.log(id_usuario)
 
-	UsuarioModel.getOne(id_usuario, (err, rows) => {
-		console.log(err, '---', rows)
+	UsuarioModel.getOne(id_usuario, (err, row) => {
+		// console.log(err, '---', row)
 		if(err)
 		{
 			let locals = {
@@ -45,11 +53,20 @@ UsuarioController.getOne = (req, res, next) => {
 		}
 		else
 		{
-			let locals = {
-				title : 'Editar Usuario',
-				data : rows
-			}
-			res.status(200).send(rows.rows)
+			// let locals = {
+			// 	title : 'Editar Usuario',
+			// 	data : row
+			// }
+			console.log(row.rows)
+			// res.status(200).send(rows.rows)
+			res.status(200).json(
+				{
+					status:true,
+					code:200,
+					message:"Información encontrada exitosamente",
+					object:row.rows[0],
+				}
+			)
 			//res.render('edit-movie', locals)
 		}
 	})
