@@ -21,7 +21,7 @@
     "react-data-table-component": "^7.5.3",
     "react-dom": "^18.2.0",
     "react-final-form": "3.4.2",
-    "react-hook-form": "^7.38.0",
+    "react-hook-form": "^7.39.0",
     "react-hooks-global-state": "^2.0.0",
     "react-input-mask": "^1.2.2",
     "react-password-checklist": "^1.4.2",
