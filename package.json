@@ -1,21 +1,21 @@
 {
-  "name": "proyecto-modulo-seguridad-backend",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "name": "api-rest-mysql",
+  "version": "0.0.1",
+  "description": "Api REST MVC con MySQL, Express y Node.js",
+  "main": "server.js",
   "scripts": {
-    "start": "supervisor index.js"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "supervisor server.js"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/AndreaLozanoCortes/Proyecto-Modulo-Seguridad-Backend.git"
-  },
-  "author": "Andrea Lozano",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/AndreaLozanoCortes/Proyecto-Modulo-Seguridad-Backend/issues"
-  },
-  "homepage": "https://github.com/AndreaLozanoCortes/Proyecto-Modulo-Seguridad-Backend#readme",
+  "keywords": [
+    "API",
+    "CRUD",
+    "REST",
+    "MVC",
+    "MySQL"
+  ],
+  "author": "@jonmircha",
+  "license": "MIT",
   "dependencies": {
     "body-parser": "^1.14.1",
     "cors": "^2.8.5",
