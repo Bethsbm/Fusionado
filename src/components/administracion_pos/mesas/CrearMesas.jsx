@@ -52,14 +52,14 @@ const Formulario = () => {
         }}
         onSubmit={(valores, { resetForm }) => {
           //Enviar los datos (petición Post)
-          // console.log("Formulario enviado");
+          console.log("Formulario enviado");
 
           resetForm();
           setFormularioEnviado(true);
         }}
       >
         {({ errors }) => (
-          <Form className="formulario">
+          <Form >
             <h3 className="mb-3">Nueva Mesa</h3>
             <div className="row g-3">
               <div className="col-sm-6">

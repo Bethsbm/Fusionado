@@ -1,194 +1,229 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { Formik, Form, Field, ErrorMessage } from "formik";
-import { useParams } from "react-router-dom";
+import { useNavigate} from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useGlobalState } from "../../../globalStates/globalStates"; 
+import axios from "axios";
+import Swal from "sweetalert2";
+import { cambiarAMayusculasDescripcionPOS } from "../../../utils/cambiarAMayusculas";
 
-const EditarPOS = () => {
-    const { id } = useParams();
-    const { type } = useParams();
-    // console.log(id);
-    // console.log(type);
-  
-    //Configurar los hooks
-    const [formularioEnviado, setFormularioEnviado] = useState(false);
+const URLEditar = "http://190.53.243.69:3001/pos/actualizar-insertar/";
+const UrlMostrarSucursal = "http://190.53.243.69:3001/sucursal/getall"
 
-    if (type === "new") {
-        // console.log("Crear Nuevo registro");
-    } else if (type === "edit") {
-        // console.log("Editar un registro");
+const FormularioEditar = () => {
+  const [edit] = useGlobalState('registroEdit')
+
+  const navigate = useNavigate();
+
+  //procedimineto para obtener todos las sucursales y mostrarlas en select
+  const [sucursal, setsucursal] = useState([]);
+  useEffect(() => {
+    getsucursal();
+  }, []);
+
+    //petición a api
+    const getsucursal = async () => {
+      try {
+        const res = await axios.get(UrlMostrarSucursal);
+        setsucursal(res.data);
+      } catch (error) {
+        console.log(error);
+        mostrarAlertas("errormostrar");
+      }
+    };
+
+  //Alertas de éxito o error
+  const mostrarAlertas = (alerta) =>{
+    switch (alerta){
+      case 'guardado':
+        Swal.fire({
+          title: '¡Guardado!',
+          text: "Los cambios se guardaron con éxito",
+          icon: 'success',
+          confirmButtonColor: '#3085d6',
+          confirmButtonText: 'Ok'
+        })
+
+      break;
+
+      case 'error': 
+      Swal.fire({
+        title: 'Error',
+        text:  'No se pudieron guardar los cambios',
+        icon: 'error',
+        confirmButtonColor: '#3085d6',
+        confirmButtonText: 'Ok'
+      })
+      break;
+
+      default: break;
     }
+  };
+
   return (
     <div className="container">
       <Formik
         //valores iniciales
         initialValues={{
-          id_pos: id,
-          descripcion: "",
-          id_sucursal: "",
-          id_correlativo: "",
-          creado_por: "",
-          fecha_creacion: "",
-          modificado_por: "",
-          fecha_modificacion: "",
-          activo:"",
+          cod_pos: edit.cod_pos,
+          descripcion: edit.descripcion_pos,
+          id_sucursal: edit.id_sucursal,
+          activo: edit.activo,
+          modificado_por: "autorPrueba",
+          fecha_modificacion: "2022/10/27"
         }}
+
         //Funcion para validar
         validate={(valores) => {
           let errores = {};
 
-          // Validacion id
-          if (!valores.id) {
-            errores.id = "Por favor ingresa un código";
-          } else if (!/^^[0-9]+$/.test(valores.id)) {
-            errores.id = "El código solo puede contener números";
+          // Validacion de código
+          if (!valores.cod_pos) {
+            errores.cod_pos = "Por favor ingresa un código";
+          } else if (!/^^(?=[A-Z]+[0-9])[A-Z-0-9]{2,12}$/.test(valores.cod_pos)) {
+            errores.cod_pos = "Escribir números y letras sin espacios. Ejemplo: S001";
           }
 
-          // Validacion descripcion
+
+          // Validacion descripción
           if (!valores.descripcion) {
-            errores.tipo = "Por favor ingresa una descripcion";
+            errores.descripcion = "Por favor ingresa una descripción";
           }
 
-          // Validacion id sucursal
+          // Validacion de código
           if (!valores.id_sucursal) {
-            errores.descripcion = "Por favor ingresa un codigo";
+            errores.id_sucursal = "Por favor ingresa un código";
+          } else if (!/^[0-9]+$/.test(valores.id_sucursal)) {
+            errores.id_sucursal = "Escribir solo números";
           }
 
-          // Validacion id correlativo
-          if (!valores.id_correlativo) {
-            errores.id_correlativo =
-              "Por favor ingresa un codigo";
-          }
           // Validacion estado
-          if (!valores.estado) {
-            errores.estado = "Por favor ingresa un estado";
+          if (!valores.activo) {
+            errores.activo = "Por favor ingresa un estado";
           }
-         
 
           return errores;
         }}
-        onSubmit={(valores, { resetForm }) => {
-          //Enviar los datos (petición Post)
-          console.log("Formulario enviado");
+        onSubmit={async (valores) => {
+              //procedimineto para guardar el los cambios
+              
+              try {
+                const res = await axios.put(`${URLEditar}${valores.cod_pos}`, valores);
 
-          resetForm();
-          setFormularioEnviado(true);
+                  if (res.status === 200) {
+                    mostrarAlertas("guardado");
+                    navigate("/mostrarPOS");
+                  } else {
+                    mostrarAlertas("error");
+                  }
+                
+              } catch (error) {
+                console.log(error);
+                mostrarAlertas("error");
+                navigate("/mostrarPOS");
+              }
         }}
       >
-        {({ errors }) => (
-          <Form className="formulario">
-            <h3 className="mb-3">Nuevo POS</h3>
+        {({ errors, values }) => (
+          <Form>
+            <h3 className="mb-3">Editar POS</h3>
             <div className="row g-3">
               <div className="col-sm-6">
                 <div className="mb-3">
-                  <label htmlFor="idpos" className="form-label">
-                    Id:
+                  <label htmlFor="codpos" className="form-label">
+                    Código:
                   </label>
                   <Field
                     type="text"
                     className="form-control"
-                    id="idpos"
-                    name="id"
-                    placeholder="id del POS..."
+                    id="codPos"
+                    name="cod_pos"
+                    placeholder="Código..."
+                    disabled
                   />
 
                   <ErrorMessage
-                    name="id"
-                    component={() => <div className="error">{errors.id}</div>}
+                    name="cod_pos"
+                    component={() => (
+                      <div className="error">{errors.cod_pos}</div>
+                    )}
                   />
                 </div>
               </div>
 
               <div className="col-sm-6">
                 <div className="mb-3">
-                  <label htmlFor="descripcionpos" className="form-label">
-                    Descripcion:
+                  <label htmlFor="descripcionPOS" className="form-label">
+                    Descripción:
                   </label>
                   <Field
                     type="text"
                     className="form-control"
-                    id="descripcionpos"
-                    name="Tipo"
-                    placeholder="Descripcion POS..."
+                    id="descripcionPOS"
+                    name="descripcion"
+                    placeholder="Descripción..."
+                    onKeyUp={cambiarAMayusculasDescripcionPOS(values)}
                   />
 
                   <ErrorMessage
                     name="descripcion"
-                    component={() => <div className="error">{errors.descripcion}</div>}
+                    component={() => (
+                      <div className="error">{errors.descripcion}</div>
+                    )}
                   />
                 </div>
               </div>
-            </div>
 
-            <div className="row g-3">
               <div className="col-sm-6">
                 <div className="mb-3">
-                  <label htmlFor="id_sucursal" className="form-label">
-                    id sucursal:
+                  <label htmlFor="sucursal" className="form-label">
+                    Sucursal:
                   </label>
                   <Field
-                    type="text"
-                    className="form-control"
-                    id="direccionSucursal"
-                    name="descripcion"
-                    placeholder="Ingrese..."
-                  />
+                  as="select"
+                  className="form-select"
+                  id="pos"
+                  name="id_sucursal"
+                >
+                  <option value="">Seleccionar...</option>
+                  {sucursal.map((item, i) =>(
+                    <option key={i} value={item.id_sucursal}>{item.descripcion_sucursal}</option>
+                  ))}
+                </Field>
 
                   <ErrorMessage
-                    name="descripcion"
+                    name="id_sucursal"
                     component={() => (
                       <div className="error">{errors.id_sucursal}</div>
                     )}
                   />
                 </div>
               </div>
-
-              <div className="col-sm-6">
-                <div className="mb-3">
-                  <label htmlFor="idcorrelaivo" className="form-label">
-                    id correlativo:
-                  </label>
-                  <Field
-                    type="text"
-                    className="form-control"
-                    id="idcorrelativo"
-                    name="id correlativo"
-                    placeholder="Ingrese..."
-                  />
-
-                  <ErrorMessage
-                    name="id correlativo"
-                    component={() => (
-                      <div className="error">{errors.id_correlativo}</div>
-                    )}
-                  />
-                </div>
-              </div>
             </div>
+
             <div className="row g-3">
               <div className="col-md-4 mb-3">
-                <label htmlFor="estadoModoPedido" className="form-label">
+                <label htmlFor="estadoPOS" className="form-label">
                   Estado:
                 </label>
                 <Field
                   as="select"
                   className="form-select"
-                  id="estadoMetodoPedido"
-                  name="estado"
-                > 
-                  <option value="Activo">Activo</option>
-                  <option value="Inactivo">Inactivo</option>
+                  id="estadoPOS"
+                  name="activo"
+                >
+                  <option value="1">Activo</option>
+                  <option value="0">Inactivo</option>
                 </Field>
 
                 <ErrorMessage
-                  name="estado"
-                  component={() => (
-                    <div className="error">{errors.activo}</div>
-                  )}
+                  name="activo"
+                  component={() => <div className="error">{errors.activo}</div>}
                 />
               </div>
               <hr />
             </div>
-            
 
             <button className="btn btn-success mb-3 me-2" type="submit">
               Guardar
@@ -200,11 +235,6 @@ const EditarPOS = () => {
             >
               Cancelar
             </Link>
-
-            {/*Mostrar mensaje de exito al enviar formulario */}
-            {formularioEnviado && (
-              <p className="exito">Formulario enviado con exito!</p>
-            )}
           </Form>
         )}
       </Formik>
@@ -212,4 +242,4 @@ const EditarPOS = () => {
   );
 };
 
-export default EditarPOS;
+export default FormularioEditar;

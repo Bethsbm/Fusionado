@@ -19,7 +19,7 @@ const MostrarMesas = () => {
       const res = await axios.get(URL);
       setRegistros(res.data);
     } catch (error) {
-      // console.log(error);
+      console.log(error);
       alert("ERROR - No se ha podido conectar con el servidor :(");
     }
   };

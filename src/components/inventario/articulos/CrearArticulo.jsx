@@ -1,164 +1,343 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { Formik, Form, Field, ErrorMessage } from "formik";
+import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import axios from "axios";
+import Swal from "sweetalert2";
+import {
+  cambiarAMayusculasDescripCorta,
+  cambiarAMayusculasDescripArticulo,
+} from "../../../utils/cambiarAMayusculas";
+
+const URLCrear = "http://190.53.243.69:3001/articulo/actualizar-insertar/";
+const URLMostrarUno = "http://190.53.243.69:3001/articulo/getone/";
+
+const UrlMostrarUnidades = "http://190.53.243.69:3001/unidad_medida/getall/";
+const UrlMostrarCategorias = "http://190.53.243.69:3001/categoria/getall/";
+const UrlMostrarImpuestos = "http://190.53.243.69:3001/impuesto/getall/";
+const UrlMostrarSocios = "http://190.53.243.69:3001/socio_negocio/getall";
 
 const Formulario = () => {
-  const [formularioEnviado, setFormularioEnviado] = useState(false);
+  const navigate = useNavigate();
+
+  //procedimineto para obtener las unidades de medida
+  const [unidades, setUnidades] = useState([]);
+  useEffect(() => {
+    getUnidades();
+  }, []);
+
+  //petición a api
+  const getUnidades = async () => {
+    try {
+      const res = await axios.get(UrlMostrarUnidades);
+      setUnidades(res.data);
+    } catch (error) {
+      console.log(error);
+      mostrarAlertas("errormostrar");
+    }
+  };
+
+  //procedimineto para obtener las categorias
+  const [categorias, setCategorias] = useState([]);
+  useEffect(() => {
+    getCategorias();
+  }, []);
+
+  //petición a api
+  const getCategorias = async () => {
+    try {
+      const res = await axios.get(UrlMostrarCategorias);
+      setCategorias(res.data);
+    } catch (error) {
+      console.log(error);
+      mostrarAlertas("errormostrar");
+    }
+  };
+
+  //procedimineto para obtener las categorias
+  const [impuestos, setImpuestos] = useState([]);
+  useEffect(() => {
+    getImpuestos();
+  }, []);
+
+  //petición a api
+  const getImpuestos = async () => {
+    try {
+      const res = await axios.get(UrlMostrarImpuestos);
+      setImpuestos(res.data);
+    } catch (error) {
+      console.log(error);
+      mostrarAlertas("errormostrar");
+    }
+  };
+
+  //procedimineto para obtener los socios de negocio
+  const [socios, setSocios] = useState([]);
+  useEffect(() => {
+    getSocios();
+  }, []);
+
+  //petición a api
+  const getSocios = async () => {
+    try {
+      const res = await axios.get(UrlMostrarSocios);
+      setSocios(res.data);
+    } catch (error) {
+      console.log(error);
+      mostrarAlertas("errormostrar");
+    }
+  };
+
+  //Alertas de éxito o error
+  const mostrarAlertas = (alerta) => {
+    switch (alerta) {
+      case "guardado":
+        Swal.fire({
+          title: "¡Guardado!",
+          text: "El artículo se creó con éxito",
+          icon: "success",
+          confirmButtonColor: "#3085d6",
+          confirmButtonText: "Ok",
+        });
+
+        break;
+
+      case "error":
+        Swal.fire({
+          title: "Error",
+          text: "No se pudo crear el nuevo artículo",
+          icon: "error",
+          confirmButtonColor: "#3085d6",
+          confirmButtonText: "Ok",
+        });
+        break;
+
+      case "duplicado":
+        Swal.fire({
+          text: "Ya existe un artículo con el código ingresado",
+          icon: "warning",
+          confirmButtonColor: "#3085d6",
+          confirmButtonText: "Ok",
+        });
+
+        break;
+
+      default:
+        break;
+    }
+  };
 
   return (
     <div className="container">
       <Formik
         //valores iniciales
         initialValues={{
-          id: "",
+          cod_articulo: "",
           tipo: "",
-          descripcion: "",
+          descripcion_articulo: "",
           descripcion_corta: "",
-          impuesto: "",
-          categoria: "",
-          unidadventa: "",
-          codigobarra: "",
+          id_impuesto: "",
+          //descripcion_impuesto: "",
+          id_categoria: "",
+          //descripcion_categoria: "",
+          precio: "",
+          //id_unidad_venta: "",
+          //descripcion_unidad_venta: "",
+          id_socio_negocio: "",
+          //descripcion_socio_negocio: "",
+          //id_unidad_compra: "",
+          //descripcion_unidad_compra: "",
+          codigo_barra: "",
+          id_unidad_medida: "",
+          //descripcion_unidad_medida: "",
+          activo: "",
+          creado_por: "autorPrueba",
+          fecha_creacion: "2022/11/05",
         }}
         //Funcion para validar
         validate={(valores) => {
           let errores = {};
 
-          // Validacion id
-          if (!valores.id) {
-            errores.id = "Por favor ingresa un código";
-          } else if (!/^^[0-9]+$/.test(valores.id)) {
-            errores.id = "El código solo puede contener números";
+          // Validacion codigo
+          if (!valores.cod_articulo) {
+            errores.cod_articulo = "Por favor ingrese un código";
           }
 
           // Validacion tipo
           if (!valores.tipo) {
-            errores.tipo = "Por favor ingresa el tipo";
+            errores.tipo = "Por favor seleccione una opción";
           }
 
-          // Validacion descripción
-          if (!valores.descripcion) {
-            errores.descripcion = "Por favor ingresa una descripción";
+          // Validacion descripción articulo
+          if (!valores.descripcion_articulo) {
+            errores.descripcion_articulo =
+              "Por favor ingrese una descripción para el artículo";
           }
 
           // Validacion descripción corta
           if (!valores.descripcion_corta) {
             errores.descripcion_corta =
-              "Por favor ingresa una descripción corta";
+              "Por favor ingrese una descripción corta";
           }
 
           // Validacion impuesto
-          if (!valores.impuesto) {
-            errores.impuesto = "Por favor ingrese un impuesto";
+          if (!valores.id_impuesto) {
+            errores.id_impuesto = "Por favor seleccione una opción";
           }
 
-          // Validacion categoría
-          if (!valores.categoria) {
-            errores.categoria = "Por favor ingresa la categoría";
+          // Validacion categoria
+          if (!valores.id_categoria) {
+            errores.id_categoria = "Por favor seleccione una opción";
           }
 
-          // Validacion unidad de venta
-          if (!valores.unidadventa) {
-            errores.unidadventa = "Por favor ingrese unidades";
-          } else if (!/^^[0-9]+$/.test(valores.unidadventa)) {
-            errores.id = "Las unidades de venta solo puede contener números";
+          // Validacion precio
+          if (!valores.precio) {
+            errores.precio = "Por favor ingrese el precio";
+          } else if (!/^^[0-9]+$/.test(valores.precio)) {
+            errores.precio = "El precio solo puede contener números";
+          }
+
+          // Validacion socio negocio
+          if (!valores.id_socio_negocio) {
+            errores.id_socio_negocio = "Por favor seleccione una opción";
           }
 
           // Validacion código de barra
-          if (!valores.codigobarra) {
-            errores.codigobarra = "Por favor ingresa el código de barra";
-          } else if (!/^^[0-9]+$/.test(valores.codigobarra)) {
-            errores.id = "El código de barra solo puede contener números";
+          if (!valores.codigo_barra) {
+            errores.codigo_barra = "Por favor ingresa el código de barra";
+          } else if (!/^^[0-9]+$/.test(valores.codigo_barra)) {
+            errores.codigo_barra =
+              "El código de barra solo puede contener números";
+          }
+
+          // Validacion unidad medida
+          if (!valores.id_unidad_medida) {
+            errores.id_unidad_medida = "Por favor seleccione una opción";
+          }
+
+          // Validacion estado
+          if (!valores.activo) {
+            errores.activo = "Por favor seleccione una opción";
           }
 
           return errores;
         }}
-        onSubmit={(valores, { resetForm }) => {
-          //Enviar los datos (petición Post)
-          console.log("Formulario enviado");
-
-          resetForm();
-          setFormularioEnviado(true);
+        onSubmit={async (valores) => {
+          //validar si existe un registro con el codigo ingresado
+          try {
+            const res = await axios.get(
+              `${URLMostrarUno}${valores.cod_articulo}`
+            );
+            console.log(res);
+            if (res.data === "") {
+              //procedimineto para guardar el nuevo registro en el caso de que no exista
+              const res = await axios.put(
+                `${URLCrear}${valores.cod_articulo}`,
+                valores
+              );
+              if (res.status === 200) {
+                mostrarAlertas("guardado");
+                navigate("/mostrararticulos");
+              } else {
+                mostrarAlertas("error");
+              }
+            } else {
+              mostrarAlertas("duplicado");
+            }
+          } catch (error) {
+            console.log(error);
+            mostrarAlertas("error");
+            navigate("/mostrararticulos");
+          }
         }}
       >
-        {({ errors }) => (
-          <Form className="formulario">
+        {({ errors, values }) => (
+          <Form>
             <h3 className="mb-3">Nuevo Artículo</h3>
             <div className="row g-3">
-              <div className="col-sm-6">
+              <div className="col-sm-4">
                 <div className="mb-3">
-                  <label htmlFor="idSucursal" className="form-label">
+                  <label htmlFor="codArticulo" className="form-label">
                     Código:
                   </label>
                   <Field
                     type="text"
                     className="form-control"
-                    id="idSucursal"
-                    name="id"
+                    id="codArticulo"
+                    name="cod_articulo"
                     placeholder="Código del Artículo..."
                   />
 
                   <ErrorMessage
-                    name="id"
-                    component={() => <div className="error">{errors.id}</div>}
+                    name="cod_articulo"
+                    component={() => (
+                      <div className="error">{errors.cod_articulo}</div>
+                    )}
                   />
                 </div>
               </div>
 
-              <div className="col-sm-6">
+              <div className="col-sm-4">
                 <div className="mb-3">
-                  <label htmlFor="descripcionSucursal" className="form-label">
+                  <label htmlFor="tipoArticulo" className="form-label">
                     Tipo:
+                  </label>
+                  <Field
+                    as="select"
+                    className="form-select"
+                    id="tipoArticulo"
+                    name="tipo"
+                  >
+                    <option value="">Seleccionar...</option>
+                    <option value="V">Venta</option>
+                    <option value="I">Inventario</option>
+                  </Field>
+
+                  <ErrorMessage
+                    name="tipo"
+                    component={() => <div className="error">{errors.tipo}</div>}
+                  />
+                </div>
+              </div>
+
+              <div className="col-sm-4">
+                <div className="mb-3">
+                  <label htmlFor="descripcionArticulo" className="form-label">
+                    Descripción del Articulo:
                   </label>
                   <Field
                     type="text"
                     className="form-control"
-                    id="descripcionSucursal"
-                    name="Tipo"
-                    placeholder="Tipo de artículo..."
+                    id="descripcionArticulo"
+                    name="descripcion_articulo"
+                    placeholder="Descripción..."
+                    onKeyUp={cambiarAMayusculasDescripArticulo(values)}
                   />
 
                   <ErrorMessage
-                    name="descripcion"
-                    component={() => <div className="error">{errors.tipo}</div>}
+                    name="descripcion_articulo"
+                    component={() => (
+                      <div className="error">{errors.descripcion_articulo}</div>
+                    )}
                   />
                 </div>
               </div>
             </div>
 
             <div className="row g-3">
-              <div className="col-sm-6">
+              <div className="col-sm-4">
                 <div className="mb-3">
-                  <label htmlFor="direccionSucursal" className="form-label">
-                    Descripción:
-                  </label>
-                  <Field
-                    type="text"
-                    className="form-control"
-                    id="direccionSucursal"
-                    name="descripcion"
-                    placeholder="Descripción..."
-                  />
-
-                  <ErrorMessage
-                    name="descripcion"
-                    component={() => (
-                      <div className="error">{errors.descripcion}</div>
-                    )}
-                  />
-                </div>
-              </div>
-
-              <div className="col-sm-6">
-                <div className="mb-3">
-                  <label htmlFor="telefonoSucursal" className="form-label">
+                  <label htmlFor="descripcortaArticulo" className="form-label">
                     Descripción corta:
                   </label>
                   <Field
                     type="text"
                     className="form-control"
-                    id="telefonoSucursal"
+                    id="descripcortaArticulo"
                     name="descripcion_corta"
                     placeholder="Descripción corta..."
+                    onKeyUp={cambiarAMayusculasDescripCorta(values)}
                   />
 
                   <ErrorMessage
@@ -169,48 +348,58 @@ const Formulario = () => {
                   />
                 </div>
               </div>
-            </div>
 
-            <div className="row g-3">
-              <div className="col-sm-6">
+              <div className="col-sm-4">
                 <div className="mb-3">
-                  <label htmlFor="rtnSucursal" className="form-label">
+                  <label htmlFor="impuestoArticulo" className="form-label">
                     Impuesto:
                   </label>
                   <Field
-                    type="text"
-                    className="form-control"
-                    id="rtnSucursal"
-                    name="impuesto"
-                    placeholder="Impuesto..."
-                  />
+                    as="select"
+                    className="form-select"
+                    id="impuestoArticulo"
+                    name="id_impuesto"
+                  >
+                    <option value="">Seleccionar...</option>
+                    {impuestos.map((item, i) => (
+                      <option key={i} value={item.id_impuesto}>
+                        {item.descripcion}
+                      </option>
+                    ))}
+                  </Field>
 
                   <ErrorMessage
-                    name="impuesto"
+                    name="id_impuesto"
                     component={() => (
-                      <div className="error">{errors.impuesto}</div>
+                      <div className="error">{errors.id_impuesto}</div>
                     )}
                   />
                 </div>
               </div>
 
-              <div className="col-sm-6">
+              <div className="col-sm-4">
                 <div className="mb-3">
-                  <label htmlFor="centroCostoSucursal" className="form-label">
+                  <label htmlFor="categoriaArticulo" className="form-label">
                     Categoría:
                   </label>
                   <Field
-                    type="text"
-                    className="form-control"
-                    id="centroCostoSucursal"
-                    name="categoria"
-                    placeholder="Categoría del artículo..."
-                  />
+                    as="select"
+                    className="form-select"
+                    id="categoriaArticulo"
+                    name="id_categoria"
+                  >
+                    <option value="">Seleccionar...</option>
+                    {categorias.map((item, i) => (
+                      <option key={i} value={item.id_categoria}>
+                        {item.descripcion}
+                      </option>
+                    ))}
+                  </Field>
 
                   <ErrorMessage
-                    name="categoria"
+                    name="id_categoria"
                     component={() => (
-                      <div className="error">{errors.categoria}</div>
+                      <div className="error">{errors.id_categoria}</div>
                     )}
                   />
                 </div>
@@ -218,51 +407,131 @@ const Formulario = () => {
             </div>
 
             <div className="row g-3">
-              <div className="col-sm-6">
+              <div className="col-sm-4">
                 <div className="mb-3">
-                  <label htmlFor="rtnSucursal" className="form-label">
-                    Unidad de Venta:
+                  <label htmlFor="precioArticulo" className="form-label">
+                    Precio:
                   </label>
                   <Field
                     type="text"
                     className="form-control"
-                    id="rtnSucursal"
-                    name="unidadventa"
-                    placeholder="Unidad de Venta..."
+                    id="precioArticulo"
+                    name="precio"
+                    placeholder="Precio de venta..."
                   />
 
                   <ErrorMessage
-                    name="unidadventa"
+                    name="precio"
                     component={() => (
-                      <div className="error">{errors.unidadventa}</div>
+                      <div className="error">{errors.precio}</div>
                     )}
                   />
                 </div>
               </div>
 
-              <div className="col-sm-6">
+              <div className="col-sm-4">
                 <div className="mb-3">
-                  <label htmlFor="centroCostoSucursal" className="form-label">
+                  <label htmlFor="socionegocioArticulo" className="form-label">
+                    Socio Negocio:
+                  </label>
+                  <Field
+                    as="select"
+                    className="form-select"
+                    id="socionegocioArticulo"
+                    name="id_socio_negocio"
+                  >
+                    <option value="">Seleccionar...</option>
+                    {socios.map((item, i) => (
+                      <option key={i} value={item.id_socio_negocio}>
+                        {item.descripcion}
+                      </option>
+                    ))}
+                  </Field>
+
+                  <ErrorMessage
+                    name="id_socio_negocio"
+                    component={() => (
+                      <div className="error">{errors.id_socio_negocio}</div>
+                    )}
+                  />
+                </div>
+              </div>
+              <div className="col-sm-4">
+                <div className="mb-3">
+                  <label htmlFor="codigobarraArticulo" className="form-label">
                     Código de Barra:
                   </label>
                   <Field
                     type="text"
                     className="form-control"
-                    id="centroCostoSucursal"
-                    name="codigobarra"
-                    placeholder="Código de barra del artículo..."
+                    id="codigobarraArticulo"
+                    name="codigo_barra"
+                    placeholder="Código de Barra..."
                   />
 
                   <ErrorMessage
-                    name="codigobarra"
+                    name="codigo_barra"
                     component={() => (
-                      <div className="error">{errors.codigobarra}</div>
+                      <div className="error">{errors.codigo_barra}</div>
                     )}
                   />
                 </div>
               </div>
             </div>
 
+            <div className="row g-3">
+              <div className="col-sm-4">
+                <div className="mb-3">
+                  <label htmlFor="unidadmedidaArticulo" className="form-label">
+                    ID Unidad Medida:
+                  </label>
+                  <Field
+                    as="select"
+                    className="form-select"
+                    id="unidadmedidaArticulo"
+                    name="id_unidad_medida"
+                  >
+                    <option value="">Seleccionar...</option>
+                    {unidades.map((item, i) => (
+                      <option key={i} value={item.id_unidad_medida}>
+                        {item.descripcion}
+                      </option>
+                    ))}
+                  </Field>
+
+                  <ErrorMessage
+                    name="id_unidad_medida"
+                    component={() => (
+                      <div className="error">{errors.id_unidad_medida}</div>
+                    )}
+                  />
+                </div>
+              </div>
+              <div className="col-sm-4">
+                <div className="mb-3">
+                  <label htmlFor="estadoArticulo" className="form-label">
+                    Estado:
+                  </label>
+                  <Field
+                    as="select"
+                    className="form-select"
+                    id="estadoArticulo"
+                    name="activo"
+                  >
+                    <option value="">Seleccionar...</option>
+                    <option value="1">Activo</option>
+                    <option value="0">Inactivo</option>
+                  </Field>
+
+                  <ErrorMessage
+                    name="activo"
+                    component={() => (
+                      <div className="error">{errors.activo}</div>
+                    )}
+                  />
+                </div>
+              </div>
+            </div>
             <button className="btn btn-success mb-3 me-2" type="submit">
               Guardar
             </button>
@@ -273,11 +542,6 @@ const Formulario = () => {
             >
               Cancelar
             </Link>
-
-            {/*Mostrar mensaje de exito al enviar formulario */}
-            {formularioEnviado && (
-              <p className="exito">Formulario enviado con exito!</p>
-            )}
           </Form>
         )}
       </Formik>

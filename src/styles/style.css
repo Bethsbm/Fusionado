@@ -21,14 +21,21 @@ a:hover {
   text-decoration: none;
 }
 
+h1#Bienvenido {
+  margin-top: 50px;
+  margin-left: 200px;
+}
+
+img#LogoEmpresa {
+  margin-left: 200px;
+}
 h1,
 h2,
 h3,
 h4,
 h5,
 h6 {
-  /* font-family: "Nunito", sans-serif; */
-  font-family: inherit;
+  font-family: "Nunito", sans-serif;
 }
 
 /*--------------------------------------------------------------
@@ -209,10 +216,7 @@ h6 {
 
 /* Card */
 .card {
-  margin-bottom: 30px;
-  border: none;
-  border-radius: 5px;
-  box-shadow: 0px 0 30px rgba(1, 41, 112, 0.1);
+
 }
 
 .card-header,
@@ -332,54 +336,48 @@ h6 {
 /*--------------------------------------------------------------
   # Header
   --------------------------------------------------------------*/
-.logo {
+.logoGeneral {
   line-height: 1;
 }
 
 @media (min-width: 1200px) {
-  .logo {
+  .logoGeneral {
     width: 280px;
   }
 }
-.logo img {
-  max-height: 65px;
-  margin-right: 6px;
-  margin: 0px auto;
+.logoGeneral img {
+  max-height: 65px !important;
+  margin-left: 40px !important;
 }
-#header .logo img {
-  filter: blur(0px);
-  width: 100px;
-  height: 100%;
-}
-.logo span {
+.logoGeneral span {
   font-size: 26px;
   font-weight: 700;
   color: #012970;
   font-family: "Nunito", sans-serif;
 }
 
-.header {
+.headerGeneral {
   transition: all 0.5s;
   z-index: 997;
   height: 60px;
   box-shadow: 0px 2px 20px rgba(1, 41, 112, 0.1);
-  background-color: #fff;
+  background-color: #c3d1ff;
   padding-left: 20px;
   /* Toggle Sidebar Button */
   /* Search Bar */
 }
-.header .toggle-sidebar-btn {
+.headerGeneral .toggle-sidebar-btn {
   font-size: 32px;
   padding-left: 10px;
   cursor: pointer;
   color: #012970;
 }
-.header .search-bar {
+.headerGeneral .search-bar {
   min-width: 360px;
   padding: 0 20px;
 }
 @media (max-width: 1199px) {
-  .header .search-bar {
+  .headerGeneral .search-bar {
     position: fixed;
     top: 50px;
     left: 0;
@@ -392,16 +390,16 @@ h6 {
     visibility: hidden;
     opacity: 0;
   }
-  .header .search-bar-show {
+  .headerGeneral .search-bar-show {
     top: 60px;
     visibility: visible;
     opacity: 1;
   }
 }
-.header .search-form {
+.headerGeneral .search-form {
   width: 100%;
 }
-.header .search-form input {
+.headerGeneral .search-form input {
   border: 0;
   font-size: 14px;
   color: #012970;
@@ -411,19 +409,19 @@ h6 {
   transition: 0.3s;
   width: 100%;
 }
-.header .search-form input:focus,
-.header .search-form input:hover {
+.headerGeneral .search-form input:focus,
+.headerGeneral .search-form input:hover {
   outline: none;
   box-shadow: 0 0 10px 0 rgba(1, 41, 112, 0.15);
   border: 1px solid rgba(1, 41, 112, 0.3);
 }
-.header .search-form button {
+.headerGeneral .search-form button {
   border: 0;
   padding: 0;
   margin-left: -30px;
   background: none;
 }
-.header .search-form button i {
+.headerGeneral .search-form button i {
   color: #012970;
 }
 
@@ -445,7 +443,7 @@ h6 {
   color: #012970;
 }
 .header-nav .nav-profile img {
-  max-height: 36px;
+  max-height: 36px !important;
 }
 .header-nav .nav-profile span {
   font-size: 14px;
@@ -489,8 +487,8 @@ h6 {
   display: flex;
 }
 .header-nav .messages .message-item img {
-  margin: 0 20px 0 10px;
-  max-height: 40px;
+  margin: 0 20px 0 10px !important;
+  max-height: 40px !important;
 }
 .header-nav .messages .message-item h4 {
   font-size: 16px;
@@ -533,14 +531,6 @@ h6 {
   background-color: #f6f9ff;
 }
 
-.header-nav img{
-
-  position: unset;
-  filter: blur(0px);
-  width: 100%;
-  height: 110%;
-}
-
 /*--------------------------------------------------------------
   # Sidebar
   --------------------------------------------------------------*/
@@ -571,14 +561,11 @@ h6 {
 
 .colapse_footer {
   margin-left: 0px !important;
-    /* position: fixed; */
-    left: 0;
-    bottom: 0;
-    width: 100%;
-    text-align: center;
-    padding: 20px 0;
-    border-top: 1px solid #cddfff;
-    font-size: 14px;
+  text-align: center;
+  padding: 20px 0;
+  border-top: 1px solid #cddfff;
+  font-size: 14px;
+  transition: all 0.3s;
 }
 
 .colapse_footer .copyright {
@@ -616,7 +603,6 @@ h6 {
   #main,
   #footer {
     margin-left: 300px;
-    transition: all .3s ease-in;
   }
 }
 @media (max-width: 1199px) {
@@ -707,7 +693,7 @@ h6 {
   transition: 0.3s;
 }
 .sidebar-nav .nav-content a i {
-  font-size: 18px;
+  font-size: 6px;
   margin-right: 8px;
   line-height: 0;
   border-radius: 50%;
@@ -834,9 +820,9 @@ h6 {
   margin-top: 15px;
 }
 .dashboard .news img {
-  width: 80px;
-  float: left;
-  border-radius: 5px;
+  width: 80px !important;
+  float: left !important;
+  border-radius: 5px !important;
 }
 .dashboard .news h4 {
   font-size: 15px;
@@ -888,8 +874,8 @@ h6 {
   vertical-align: middle;
 }
 .dashboard .top-selling img {
-  border-radius: 5px;
-  max-width: 60px;
+  border-radius: 5px !important;
+  max-width: 60px !important;
 }
 
 /*--------------------------------------------------------------
@@ -929,7 +915,7 @@ h6 {
   # Profie Page
   --------------------------------------------------------------*/
 .profile .profile-card img {
-  max-width: 120px;
+  max-width: 120px !important;
 }
 .profile .profile-card h2 {
   font-size: 24px;
@@ -967,7 +953,7 @@ h6 {
   color: rgba(1, 41, 112, 0.6);
 }
 .profile .profile-edit img {
-  max-width: 120px;
+  max-width: 120px !important;
 }
 
 /*--------------------------------------------------------------
@@ -1116,7 +1102,7 @@ h6 {
 }
 @media (min-width: 992px) {
   .error-404 img {
-    max-width: 50%;
+    max-width: 50% !important;
   }
 }
 
@@ -1124,14 +1110,10 @@ h6 {
   # Footer
   --------------------------------------------------------------*/
 .footer {
-     /* position: fixed; */
-     /* bottom: 0; */
-     /* left: -10%; */
-     /* width: 100%; */
-     padding: 20px 0;
-     font-size: 14px;
-     transition: all 0.3s;
-     border-top: 1px solid #cddfff;
+  padding: 20px 0;
+  font-size: 14px;
+  transition: all 0.3s;
+  border-top: 1px solid #cddfff;
 }
 .footer .copyright {
   text-align: center;
@@ -1146,22 +1128,20 @@ h6 {
 
 /*Diseño tablas*/
 .rdt_TableCol {
-  background-color: #e3e7e3;
+  background-color: #e3e7e3f3;
   color: #000000;
   font-weight: bold;
   font-size: larger;
 }
 
 .rdt_TableCell {
-  background-color: rgba(253, 253, 253, 0.198);
+  background-color: rgba(255, 255, 255, 0.664);
 }
 
 /*Diseño error en formulario*/
 .error {
   color: #e03125;
 }
-
-
 .titleCompany{
   font-size: 20px;
     padding-left: 10px;
@@ -1170,4 +1150,8 @@ h6 {
 .hbotQl ,
 .dtqzBx{
   text-overflow: unset !important;
+}
+.bottom-aligned {
+  display: flex;
+  align-items: flex-end;
 }

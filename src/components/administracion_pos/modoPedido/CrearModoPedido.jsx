@@ -1,78 +1,143 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { Formik, Form, Field, ErrorMessage } from "formik";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import Swal from "sweetalert2";
+import { cambiarAMayusculasDescripcion } from "../../../utils/cambiarAMayusculas";
+
+const URLCrear = "http://190.53.243.69:3001/modo_pedido/actualizar-insertar/";
+const URLMostrarUno = "http://190.53.243.69:3001/modo_pedido/getone/";
+
 
 const Formulario = () => {
-  const [formularioEnviado, setFormularioEnviado] = useState(false);
+
+  const navigate = useNavigate();
+
+
+  //Alertas de éxito o error
+  const mostrarAlertas = (alerta) =>{
+    switch (alerta){
+      case 'guardado':
+        Swal.fire({
+          title: '¡Guardado!',
+          text: "El modo pedido se creó con éxito",
+          icon: 'success',
+          confirmButtonColor: '#3085d6',
+          confirmButtonText: 'Ok'
+        });
+
+      break;
+
+      case 'error': 
+      Swal.fire({
+        title: 'Error',
+        text:  'No se pudo crear el modo pedido',
+        icon: 'error',
+        confirmButtonColor: '#3085d6',
+        confirmButtonText: 'Ok'
+      });
+      break;
+
+      case 'duplicado':
+        Swal.fire({
+          text:  'Ya existe un modo pedido con el código ingresado',
+          icon: 'warning',
+          confirmButtonColor: '#3085d6',
+          confirmButtonText: 'Ok'
+        });
+
+      break;
+
+      default: break;
+    }
+  };
+
 
   return (
     <div className="container">
       <Formik
         //valores iniciales
         initialValues={{
-          id_modo_pedido: "",
+          cod_modo_pedido: "",
           descripcion: "",
-          creado_por: "",
-          fecha_creacion: "",
-          modificado_por: "",
-          fecha_modificacion: "",
-          estado: "Activo",
+          activo: "1",
+          creado_por: "autorPrueba",
+          fecha_creacion: "2022/10/27",         
         }}
-
         //Funcion para validar
         validate={(valores) => {
-          let errores = {};
+            let errores = {};
 
-          // Validacion id
-          if (!valores.id) {
-            errores.id = "Por favor ingresa un id";
-          } else if (!/^^[0-9]+$/.test(valores.id)) {
-            errores.id = "El id solo puede contener números";
-          }
+            // Validacion de código
+            if (!valores.cod_modo_pedido) {
+              errores.cod_modo_pedido = "Por favor ingresa un código";
+            } else if (!/^[0-9]+$/.test(valores.cod_modo_pedido)) {
+              errores.cod_modo_pedido = "Escribir solo números";
+            }
 
-          // Validacion descripción
-          if (!valores.descripcion) {
-            errores.descripcion = "Por favor ingresa una descripción";
-          } 
-
-          // Validacion estado
-          if (!valores.estado) {
-            errores.estado = "Por favor ingresa un estado";
-          } 
-
-
-          return errores;
+  
+            // Validacion descripción
+            if (!valores.descripcion) {
+              errores.descripcion = "Por favor ingresa una descripción";
+            } //else if (!/^^[A-Z-0-9-ÑÁÉÍÓÚ#* ]+$/.test(valores.descripcion)) {
+              //errores.descripcion = "Escribir solo en MAYÚSCULAS";
+            //}
+  
+            // Validacion estado
+            if (!valores.activo) {
+              errores.activo = "Por favor selecciona un estado";
+            }
+  
+            return errores;
+          
         }}
-        onSubmit={(valores, { resetForm }) => {
-          //Enviar los datos (petición Post)
-          // console.log("Formulario enviado");
-
-
-          resetForm();
-          setFormularioEnviado(true);
+        onSubmit={async (valores) => {
+          //validar si existe un registro con el codigo ingresado
+              try {
+                const res = await axios.get(`${URLMostrarUno}${valores.cod_modo_pedido}`);
+                console.log(res)
+                if (res.data === ""){
+                  //procedimineto para guardar el nuevo registro en el caso de que no exista
+                      const res = await axios.put(`${URLCrear}${valores.cod_modo_pedido}`, valores);
+                      if (res.status === 200) {
+                        mostrarAlertas("guardado");
+                        navigate("/mostrarmodopedido");
+                    } else {
+                      mostrarAlertas("error");
+                    }
+                    
+                }else{ 
+                  mostrarAlertas("duplicado");
+                }
+              } catch (error) {
+                console.log(error);
+                mostrarAlertas("error");
+                navigate("/mostrarmodopedido");
+              }
         }}
       >
-        {({ errors }) => (
-          <Form className="formulario">
-            <h3 className="mb-3">Nuevo Modo Pedido</h3>
+        {({ errors, values }) => (
+          <Form>
+            <h3 className="mb-3">Nuevo Modo de Pedido</h3>
             <div className="row g-3">
               <div className="col-sm-6">
                 <div className="mb-3">
-                  <label htmlFor="idModoPedido" className="form-label">
-                    ID de Modo Pedido:
+                  <label htmlFor="codModoPedido" className="form-label">
+                    Código:
                   </label>
                   <Field
                     type="text"
                     className="form-control"
-                    id="idModoPedido"
-                    name="id"
-                    placeholder="ID de ModoPedido..."
+                    id="codModoPedido"
+                    name="cod_modo_pedido"
+                    placeholder="Código..."
                   />
 
                   <ErrorMessage
-                    name="id"
+                    name="cod_modo_pedido"
                     component={() => (
-                      <div className="error">{errors.id}</div>
+                      <div className="error">{errors.cod_modo_pedido}</div>
                     )}
                   />
                 </div>
@@ -88,7 +153,8 @@ const Formulario = () => {
                     className="form-control"
                     id="descripcionModoPedido"
                     name="descripcion"
-                    placeholder="Descripcion..."
+                    placeholder="Descripción..."
+                    onKeyUp={cambiarAMayusculasDescripcion(values)}
                   />
 
                   <ErrorMessage
@@ -109,31 +175,32 @@ const Formulario = () => {
                 <Field
                   as="select"
                   className="form-select"
-                  id="estadoMetodoPedido"
-                  name="estado"
-                > 
-                  <option value="Activo">Activo</option>
-                  <option value="Inactivo">Inactivo</option>
+                  id="estadoModoPedido"
+                  name="activo"
+                >
+                  <option value="1">Activo</option>
+                  <option value="0">Inactivo</option>
                 </Field>
 
                 <ErrorMessage
-                  name="estado"
-                  component={() => (
-                    <div className="error">{errors.estado}</div>
-                  )}
+                  name="activo"
+                  component={() => <div className="error">{errors.activo}</div>}
                 />
               </div>
               <hr />
             </div>
 
+            <button className="btn btn-success mb-3 me-2" type="submit">
+              Guardar
+            </button>
+            <Link
+              to="/mostrarmodopedido"
+              type="button"
+              className="btn btn-danger mb-3 me-2"
+            >
+              Cancelar
+            </Link>
 
-            <button className="btn btn-success mb-3 me-2" type="submit">Guardar</button>
-            <Link to="/mostrarmodopedido" type="button" className='btn btn-danger mb-3 me-2'>Cancelar</Link>
-
-           {/*Mostrar mensaje de exito al enviar formulario */}
-            {formularioEnviado && (
-              <p className="exito">Formulario enviado con exito!</p>
-            )}
           </Form>
         )}
       </Formik>

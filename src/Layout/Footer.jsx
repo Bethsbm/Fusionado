@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { useGlobalState } from "./responseClass";
+import { useGlobalState } from "../globalStates/globalStates";
 
 function Footer() {
   const [footer_class] = useGlobalState("footer_class");
@@ -12,10 +12,6 @@ function Footer() {
           <span> BURRIDOGS</span>
         </strong>
         . Todos los derechos reservados
-      </div>
-      <div className="credits">
-        Sistema creado por: 
-        <Link to=""> Enigma y ...</Link>
       </div>
     </footer>
   );

@@ -3,72 +3,179 @@ import DataTable from "react-data-table-component";
 import axios from "axios";
 import { useState, useEffect } from "react";
 import { Modal, ModalBody, ModalFooter, ModalHeader, Button } from "reactstrap";
+import { setGlobalState } from "../../../globalStates/globalStates";
+import Swal from "sweetalert2";
 
-const URL = "https://jsonplaceholder.typicode.com/comments";
+const UrlMostrar = "http://190.53.243.69:3001/metodo_pago/getall/";
+const UrlEliminar = "http://190.53.243.69:3001/metodo_pago/eliminar/";
 
-const MostrarSucursales = () => {
+const MostrarRegistros = () => {
   //Configurar los hooks
+  const [registroDelete, setRegistroDelete] = useState("");
   const [registros, setRegistros] = useState([]);
   useEffect(() => {
     getRegistros();
   }, []);
 
-  //procedimineto para mostrar todos los registros
+  //procedimineto para obtener todos los registros
   const getRegistros = async () => {
     try {
-      const res = await axios.get(URL);
+      const res = await axios.get(UrlMostrar);
       setRegistros(res.data);
     } catch (error) {
-      // console.log(error);
-      alert("ERROR - No se ha podido conectar con el servidor :(");
+      console.log(error);
+      mostrarAlertas("errormostrar");
+    }
+  };
+
+  //Alertas de éxito o error al eliminar
+  const mostrarAlertas = (alerta) => {
+    switch (alerta) {
+      case "eliminado":
+        Swal.fire({
+          title: "¡Eliminado!",
+          text: "El método de pago se eliminó con éxito",
+          icon: "success",
+          confirmButtonColor: "#3085d6",
+          confirmButtonText: "Ok",
+        });
+
+        break;
+
+      case "error":
+        Swal.fire({
+          title: "Error",
+          text: "No se pudo eliminar el método de pago",
+          icon: "error",
+          confirmButtonColor: "#3085d6",
+          confirmButtonText: "Ok",
+        });
+
+        break;
+
+      case "errormostrar":
+        Swal.fire({
+          title: "Error al Mostrar",
+          text: "En este momento no se pueden mostrar los datos, puede ser por un error de red o con el servidor. Intente más tarde.",
+          icon: "error",
+          confirmButtonColor: "#3085d6",
+          confirmButtonText: "Ok",
+        });
+
+        break;
+
+      default:
+        break;
     }
   };
 
   //procedimineto para eliminar un registro
-  const deleteRegistro = async (id) => {
-    await axios.delete(`${URL}${id}`);
-    getRegistros();
+  const deleteRegistro = async () => {
+    try {
+      console.log(registroDelete);
+      const res = await axios.delete(`${UrlEliminar}${registroDelete}`);
+      getRegistros();
+      if (res.status === 200) {
+        mostrarAlertas("eliminado");
+      } else {
+        mostrarAlertas("error");
+      }
+    } catch (error) {
+      console.log(error);
+      mostrarAlertas("error");
+    }
   };
+
+  //Barra de busqueda
+  const [busqueda, setBusqueda] = useState("");
+  //capturar valor a buscar
+  const valorBuscar = (e) => {
+    setBusqueda(e.target.value);
+  };
+  //metodo de filtrado
+  let results = [];
+  if (!busqueda) {
+    results = registros;
+  } else {
+    results = registros.filter(
+      (dato) =>
+        dato.cod_metodo_pago
+          .toString()
+          .includes(busqueda.toLocaleLowerCase()) ||
+        dato.descripcion.toLowerCase().includes(busqueda.toLocaleLowerCase())
+    );
+  }
+
   //Ventana modal de confirmación de eliminar
   const [modalEliminar, setModalEliminar] = useState(false);
   const abrirModalEliminar = () => setModalEliminar(!modalEliminar);
 
+  //Ventana modal para mostrar mas
+  const [modalVerMas, setVerMas] = useState(false);
+  const abrirModalVerMas = () => setVerMas(!modalVerMas);
+  const [registroVerMas, setRegistroVerMas] = useState({});
+
   //Configuramos las columnas de la tabla
   const columns = [
     {
-      name: "ID",
-      selector: (row) => row.id,
+      name: "CÓDIGO",
+      selector: (row) => row.cod_metodo_pago,
       sortable: true,
-      maxWidth: "1px", //ancho de la columna
     },
     {
-      name: "NOMBRE",
-      selector: (row) => row.name,
+      name: "DESCRIPCIÓN",
+      selector: (row) => row.descripcion,
       sortable: true,
-      maxWidth: "350px",
     },
     {
-      name: "EMAIL",
-      selector: (row) => row.email,
+      name: "TIPO",
+      selector: (row) => (row.tipo === "E" ? "EFECTIVO":"" || row.tipo ==="T"? "TARJETA DE CRÉDITO": "" || row.tipo ==="C"? "CLIENTES": ""),
       sortable: true,
-      maxWidth: "250px",
     },
     {
-      name: "CONTENIDO",
-      selector: (row) => row.body,
+      name: "CUENTA CONTABLE",
+      selector: (row) => row.cuenta_contable,
       sortable: true,
-      maxWidth: "500px",
+    },
+    {
+      name: "ESTADO",
+      selector: (row) => (row.activo === "1" ? "ACTIVO" : "INACTIVO"),
+      sortable: true,
     },
     {
       name: "ACCIONES",
       cell: (row) => (
         <>
-          <Link to={`/editarsucursal/${row.id}/edit`} type="button" className="btn btn-light" title="Editar">
+          <Link
+            type="button"
+            className="btn btn-light"
+            title="Ver Más..."
+            onClick={() => {
+              abrirModalVerMas();
+              setRegistroVerMas(row);
+            }}
+          >
+            <i className="fa-solid fa-eye"></i>
+          </Link>
+          &nbsp;
+          <Link
+            to="/editarmetodopago"
+            type="button"
+            className="btn btn-light"
+            title="Editar"
+            onClick={() => setGlobalState("registroEdit", row)}
+          >
             <i className="fa-solid fa-pen-to-square"></i>
           </Link>
-
           &nbsp;
-          <button className="btn btn-light" title="Eliminar" onClick={abrirModalEliminar}>
+          <button
+            className="btn btn-light"
+            title="Eliminar"
+            onClick={() => {
+              setRegistroDelete(row.cod_metodo_pago);
+              abrirModalEliminar();
+            }}
+          >
             <i className="fa-solid fa-trash"></i>
           </button>
         </>
@@ -89,7 +196,7 @@ const MostrarSucursales = () => {
 
   return (
     <div className="container">
-      <h3>Lista de Métodos de Pago</h3>
+      <h3>Métodos de Pago</h3>
       <br />
       {/*Mostrar los botones: Nuevo, Excel y PDF */}
       <div className="row">
@@ -134,14 +241,6 @@ const MostrarSucursales = () => {
               >
                 <i className="fa-solid fa-file-pdf"></i>
               </Link>
-              <Link
-                to="/"
-                type="button"
-                className="btn btn-secondary"
-                title="?"
-              >
-                <i className="fa-solid fa-question"></i>
-              </Link>
             </div>
           </div>
         </div>
@@ -155,8 +254,10 @@ const MostrarSucursales = () => {
             <input
               className="form-control me-2"
               type="text"
-              placeholder="Buscar..."
+              placeholder="Buscar por código o descripción..."
               aria-label="Search"
+              value={busqueda}
+              onChange={valorBuscar}
             />
           </div>
         </div>
@@ -167,7 +268,7 @@ const MostrarSucursales = () => {
       <div className="row">
         <DataTable
           columns={columns}
-          data={registros}
+          data={results}
           pagination
           paginationComponentOptions={paginationComponentOptions}
           highlightOnHover
@@ -176,6 +277,61 @@ const MostrarSucursales = () => {
         />
       </div>
 
+      {/* Ventana Modal de ver más*/}
+      <Modal isOpen={modalVerMas} toggle={abrirModalVerMas} centered>
+        <ModalHeader toggle={abrirModalVerMas}>Detalles</ModalHeader>
+        <ModalBody>
+          <div className="row g-3">
+            <div className="col-sm-6">
+              <p className="colorText">CÓDIGO: </p>
+            </div>
+            <div className="col-sm-6">
+              <p> {registroVerMas.cod_impuesto} </p>
+            </div>
+          </div>
+
+          <div className="row g-3">
+            <div className="col-sm-6">
+              <p className="colorText">CREADO POR: </p>
+            </div>
+            <div className="col-sm-6">
+              <p> {registroVerMas.creado_por} </p>
+            </div>
+          </div>
+
+          <div className="row g-3">
+            <div className="col-sm-6">
+              <p className="colorText">FECHA DE CREACIÓN: </p>
+            </div>
+            <div className="col-sm-6">
+              <p> {registroVerMas.fecha_creacion} </p>
+            </div>
+          </div>
+
+          <div className="row g-3">
+            <div className="col-sm-6">
+              <p className="colorText">MODIFICADO POR: </p>
+            </div>
+            <div className="col-sm-6">
+              <p> {registroVerMas.modificado_por} </p>
+            </div>
+          </div>
+
+          <div className="row g-3">
+            <div className="col-sm-6">
+              <p className="colorText">FECHA DE MODIFICACIÓN: </p>
+            </div>
+            <div className="col-sm-6">
+              <p> {registroVerMas.fecha_modificacion} </p>
+            </div>
+          </div>
+        </ModalBody>
+        <ModalFooter>
+          <Button color="secondary" onClick={abrirModalVerMas}>
+            Cerrar
+          </Button>
+        </ModalFooter>
+      </Modal>
 
       {/* Ventana Modal de Eliminar*/}
       <Modal isOpen={modalEliminar} toggle={abrirModalEliminar} centered>
@@ -184,7 +340,13 @@ const MostrarSucursales = () => {
           <p>¿Está seguro de Eliminar este Registro?</p>
         </ModalBody>
         <ModalFooter>
-          <Button color="danger" onClick={abrirModalEliminar}>
+          <Button
+            color="danger"
+            onClick={() => {
+              deleteRegistro();
+              abrirModalEliminar();
+            }}
+          >
             Eliminar
           </Button>
           <Button color="secondary" onClick={abrirModalEliminar}>
@@ -196,4 +358,4 @@ const MostrarSucursales = () => {
   );
 };
 
-export default MostrarSucursales;
+export default MostrarRegistros;

@@ -1,94 +1,142 @@
-import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import Swal from "sweetalert2";
+import { cambiarAMayusculasDescripcion } from "../../../utils/cambiarAMayusculas";
 
-const URL = "http://190.53.243.69:3001/categoria/actualizar-insertar/";
+const URLCrear = "http://190.53.243.69:3001/categoria/actualizar-insertar/";
+const URLMostrarUno = "http://190.53.243.69:3001/categoria/getone/";
 
 const Formulario = () => {
-  const [formularioEnviado, setFormularioEnviado] = useState(false);
-
   const navigate = useNavigate();
+
+  //Alertas de éxito o error
+  const mostrarAlertas = (alerta) => {
+    switch (alerta) {
+      case "guardado":
+        Swal.fire({
+          title: "¡Guardado!",
+          text: "La categoría se creó con éxito",
+          icon: "success",
+          confirmButtonColor: "#3085d6",
+          confirmButtonText: "Ok",
+        });
+
+        break;
+
+      case "error":
+        Swal.fire({
+          title: "Error",
+          text: "No se pudo crear la nueva categoría",
+          icon: "error",
+          confirmButtonColor: "#3085d6",
+          confirmButtonText: "Ok",
+        });
+        break;
+
+      case "duplicado":
+        Swal.fire({
+          text: "Ya existe una categoría con el código ingresado",
+          icon: "warning",
+          confirmButtonColor: "#3085d6",
+          confirmButtonText: "Ok",
+        });
+
+        break;
+
+      default:
+        break;
+    }
+  };
 
   return (
     <div className="container">
       <Formik
         //valores iniciales
         initialValues={{
-          id_categoria: "",
+          id_categoria: null,
+          cod_categoria: "",
           descripcion: "",
-          creado_por: null,
-          fecha_creacion: null,
-          modificado_por: null,
-          fecha_modificacion: null,
           activo: "1",
+          creado_por: "autorPrueba",
+          fecha_creacion: "2022/10/27",
         }}
         //Funcion para validar
         validate={(valores) => {
           let errores = {};
 
-          // Validacion id
-          if (!valores.id_categoria) {
-            errores.id_categoria = "Por favor ingresa un id";
-          } else if (!/^^[0-9]+$/.test(valores.id_categoria)) {
-            errores.id_categoria = "El id solo puede contener números";
+          // Validacion de código
+          if (!valores.cod_categoria) {
+            errores.cod_categoria = "Por favor ingresa un código";
+          } else if (!/^[0-9]+$/.test(valores.cod_categoria)) {
+            errores.cod_categoria = "Escribir solo números";
           }
 
           // Validacion descripción
           if (!valores.descripcion) {
             errores.descripcion = "Por favor ingresa una descripción";
-          }
+          } //else if (!/^^[A-Z-0-9-ÑÁÉÍÓÚ#* ]+$/.test(valores.descripcion)) {
+          //errores.descripcion = "Escribir solo en MAYÚSCULAS";
+          //}
 
           // Validacion estado
           if (!valores.activo) {
-            errores.activo = "Por favor ingresa un estado";
+            errores.activo = "Por favor selecciona un estado";
           }
 
           return errores;
         }}
         onSubmit={async (valores) => {
-          //Enviar los datos (petición Post)
-          //procedimineto para guardar el nuevo registro
+          //validar si existe un registro con el codigo ingresado
           try {
-            const res = await axios.put(URL + valores.id_categoria, valores);
-            // console.log(valores);
-            if (res.status === 200) {
-              alert("Guardado!");
+            const res = await axios.get(
+              `${URLMostrarUno}${valores.cod_categoria}`
+            );
+            console.log(res);
+            if (res.data === "") {
+              //procedimineto para guardar el nuevo registro en el caso de que no exista
+              const res = await axios.put(
+                `${URLCrear}${valores.cod_categoria}`,
+                valores
+              );
+              if (res.status === 200) {
+                mostrarAlertas("guardado");
+                navigate("/mostrarcategorias");
+              } else {
+                mostrarAlertas("error");
+              }
             } else {
-              alert("ERROR al Guardar :(");
+              mostrarAlertas("duplicado");
             }
-            navigate("/mostrarcategorias");
           } catch (error) {
-            // console.log(error);
-            alert("ERROR - No se ha podido insertar :(");
+            console.log(error);
+            mostrarAlertas("error");
+            navigate("/mostrarcategorias");
           }
-
-          // console.log("Formulario enviado");
-          setFormularioEnviado(true);
         }}
       >
-        {({ errors }) => (
-          <Form className="formulario">
-            <h3 className="mb-3">Nueva Categoria</h3>
+        {({ errors, values }) => (
+          <Form>
+            <h3 className="mb-3">Nueva Categoría</h3>
             <div className="row g-3">
               <div className="col-sm-6">
                 <div className="mb-3">
-                  <label htmlFor="idCategoria" className="form-label">
-                    ID de Categoria:
+                  <label htmlFor="codCategoria" className="form-label">
+                    Código:
                   </label>
                   <Field
                     type="text"
                     className="form-control"
-                    id="idCategoria"
-                    name="id_categoria"
-                    placeholder="ID de Categoria..."
+                    id="codCategoria"
+                    name="cod_categoria"
+                    placeholder="Código..."
                   />
 
                   <ErrorMessage
-                    name="id_categoria"
+                    name="cod_categoria"
                     component={() => (
-                      <div className="error">{errors.id_categoria}</div>
+                      <div className="error">{errors.cod_categoria}</div>
                     )}
                   />
                 </div>
@@ -105,6 +153,7 @@ const Formulario = () => {
                     id="descripcionCategoria"
                     name="descripcion"
                     placeholder="Descripción..."
+                    onKeyUp={cambiarAMayusculasDescripcion(values)}
                   />
 
                   <ErrorMessage
@@ -150,11 +199,6 @@ const Formulario = () => {
             >
               Cancelar
             </Link>
-
-            {/*Mostrar mensaje de exito al enviar formulario */}
-            {formularioEnviado && (
-              <p className="exito">Formulario enviado con exito!</p>
-            )}
           </Form>
         )}
       </Formik>
