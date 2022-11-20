@@ -87,8 +87,7 @@ useEffect(() => {
 
   return (
     <div>
-      <h1 id="Bienvenido">Bienvenido Al Sistema POS Burridogs</h1>
-      <img id="LogoEmpresa" src={logoEmpresa} alt="Logo Empresa" />
+
     </div>
   );
 }

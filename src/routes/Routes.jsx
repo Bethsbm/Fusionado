@@ -165,10 +165,8 @@ function Rutas() {
           <Route path="/unlockuser" element={<UnlockUser/>} />
       </Routes> 
 
-      <Header />
-      <Sidebar />
-      <main id="main" className={main_class}>
-        <section className="section dashboard">
+      
+      
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/admin" element={<Layout />}/>
@@ -336,7 +334,7 @@ function Rutas() {
             {/*Rutas seguridad*/}
             <Route path="/login" element={<Login />} />
             <Route path="/registro" element={<Registro />} />
-            <Route path="/usuarios" element={<Usuarios />} />
+            {/*<Route path="/usuarios" element={<Usuarios />} />*/}
             <Route path="/Preguntas" element={<Pregunta />} />
             <Route path="/cambio_contrasena" element={<CambioContra />} />
             <Route
@@ -362,9 +360,6 @@ function Rutas() {
 
             <Route path="*" element={<h1>404</h1>} />
           </Routes>
-        </section>
-      </main>
-      <Footer />
     </BrowserRouter>
   );
 }
