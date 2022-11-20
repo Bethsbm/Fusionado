@@ -44,7 +44,36 @@ var CategoriaController = require("../controllers/modulo_facturacion_inventario/
   router = express.Router();
 
 router
-  //.get('/agregar', CategoriaController.addForm)
+  .get('/', (req,res)=>{
+    res.status(200).json({
+      ok:true,
+      object:'API PROYECTO SEGURIDAD',
+      message:"API corriendo correctamente"
+    });
+  })
+
+// CONFIG OPTIONS
+.options('/', (req, res) => {
+  res.set('x-options', 'PROYECTO SEGURIDAD OPTIONS!!!')
+  res.status(204).send()
+})
+
+// CONFIG HEAD
+.head('/', (req, res) => {
+  res.set('x-headers', 'PROYECTO SEGURIDAD HEAD!!!')
+  res.status(200).send()
+})
+
+.use(
+  '/documentation',
+  express.static('public'),
+  (req, res) => {
+      res.set('Content-Type', 'text/html')
+      // res.sendFile(path.join(__dirname, '/public/index.html'))
+      res.sendFile(`${__dirname} '/public/index.html`)
+  }
+)
+
   //.post('/', CategoriaController.save)
   //****CATEGORIAS****
   .get("/categoria/getall", CategoriaController.getAll)
@@ -196,10 +225,10 @@ router
 
   //⮊⮊⮊⮊ SEGURIDAD SEGURIDAD SEGURIDAD ⮈⮈⮈⮈ 🖐
   //Login
-  .get("/ms_login/login", LoginController.login)
+  .post("/login", LoginController.login)
   //Registro
-  .get("/ms_registro/getall", UsuarioController.getAll)
-  .get("/ms_registro/getone/:id_usuario", UsuarioController.getOne)
+  .get("/registro/getall", UsuarioController.getAll)
+  .get("/getById/:id_usuario", UsuarioController.getOne)
   .put("/ms_registro/actualizar-insertar/:id_usuario", UsuarioController.save)
   .delete("/ms_registro/eliminar/:id_usuario", UsuarioController.delete)
   .post("/ms_registro/autoregistro", UsuarioController.autoregistro)
@@ -254,6 +283,7 @@ router
   .put("/ms_objetos/actualizar-insertar/:id_objeto", ObjetoController.save)
   .delete("/ms_objetos/eliminar/:id_objeto", ObjetoController.delete)
 
+  
   //⮊⮊⮊⮊ CONTABILIDAD ⮈⮈⮈⮈ 🖐
   //SUBCUENTA
   .get("/mc_subcuenta/getall", SubcuentaController.getAll)
@@ -366,5 +396,6 @@ router
   )
 
   .use(CategoriaController.error404);
+
 
 module.exports = router;

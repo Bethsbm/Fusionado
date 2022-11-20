@@ -2,10 +2,10 @@
   "name": "api-rest-mysql",
   "version": "0.0.1",
   "description": "Api REST MVC con MySQL, Express y Node.js",
-  "main": "server.js",
+  "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "supervisor server.js"
+    "start": "supervisor index.js"
   },
   "keywords": [
     "API",
