@@ -1,0 +1,33 @@
+.status{
+    padding: 7px;
+    width: 70px;
+    border-radius: 15px;
+    background: rgb(206, 216, 144);
+    min-width: 50px;
+    white-space: nowrap;
+    color: white;
+    text-align: center;
+    font-size: 10px;
+}
+
+
+.new{
+    background: blue;
+}
+.active{
+    background: green;
+}
+.inactive{
+    background: grey;
+}
+.lock{
+    background: red;
+}
+
+/* .btn{
+    margin: 5px 0 5px 0 !important;
+} */
+.colorText{
+    color: #684b4b;
+    font-weight: bolder;
+}
