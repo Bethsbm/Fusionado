@@ -1,7 +1,0 @@
-{
-	"host" : "190.53.243.69",
-	"port" : 5432,
-	"user" : "postgres",
-	"password" : "acelera",
-	"database" : "postgres"
-}
