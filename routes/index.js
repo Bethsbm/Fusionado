@@ -1,5 +1,9 @@
 "use strict";
 
+// const mw = require('../middlewares/autentication')
+const LogsController = require("../controllers/modulo_seguridad/logs-controller");
+
+
 var CategoriaController = require("../controllers/modulo_facturacion_inventario/categoria-controller"),
   DescuentoController = require("../controllers/modulo_facturacion_inventario/descuento-controller"),
   ImpuestoController = require("../controllers/modulo_facturacion_inventario/impuesto-controller"),
@@ -223,15 +227,26 @@ router
   .get("/venta/secuencia_enc_getone/", VentaController.secuencia_enc_getone)
   .get("/venta/secuencia_det_getone/", VentaController.secuencia_det_getone)
 
-  //⮊⮊⮊⮊ SEGURIDAD SEGURIDAD SEGURIDAD ⮈⮈⮈⮈ 🖐
+ //⮊⮊⮊⮊ SEGURIDAD SEGURIDAD SEGURIDAD ⮈⮈⮈⮈ 🖐
   //Login
   .post("/login", LoginController.login)
+  .post("/reset", LoginController.resetPassUser)
+  .post("/validateUser", LoginController.validateUser)
+  .post("/changePass", LoginController.changePassUser)
+  //bitacoras
+  .get("/logs/getall", LogsController.getAll)
+  .post("/logs/save", LogsController.save)
+
   //Registro
   .get("/registro/getall", UsuarioController.getAll)
   .get("/getById/:id_usuario", UsuarioController.getOne)
-  .put("/ms_registro/actualizar-insertar/:id_usuario", UsuarioController.save)
+  .put("/ms_registro/update/:id_usuario", UsuarioController.edit)
   .delete("/ms_registro/eliminar/:id_usuario", UsuarioController.delete)
   .post("/ms_registro/autoregistro", UsuarioController.autoregistro)
+  .post("/ms_registro/createUser", UsuarioController.save)
+  .post("/ms_registro/validateUserState", UsuarioController.validateUserState)
+  .post("/ms_registro/updateUserState", UsuarioController.updateUserState)
+  
   //Estado
   .get("/ms_estado/getall", EstadoController.getAll)
   .get("/ms_estado/getone/:id", EstadoController.getOne)
@@ -240,19 +255,21 @@ router
   //Preguntas
   .get("/ms_pregunta/getall", PreguntasController.getAll)
   .get("/ms_pregunta/getone/:id_pregunta", PreguntasController.getOne)
-  .put(
-    "/ms_pregunta/actualizar-insertar/:id_pregunta",
-    PreguntasController.save
-  )
+  .post("/ms_pregunta/save",PreguntasController.save)
   .delete("/ms_pregunta/eliminar/:id_pregunta", PreguntasController.delete)
+  
   //Preguntas Usuario
   .get("/ms_pregunta_usuario/getall", PreguntasUsuarioController.getAll)
   .get(
     "/ms_pregunta_usuario/getone/:id_preguntas_usuario",
     PreguntasUsuarioController.getOne
   )
-  .put(
-    "/ms_pregunta_usuario/actualizar-insertar/:id_preguntas_usuario",
+  // .put(
+  //   "/ms_pregunta_usuario/actualizar-insertar/:id_preguntas_usuario",
+  //   PreguntasUsuarioController.save
+  // )
+  .post(
+    "/ms_pregunta_usuario/save",
     PreguntasUsuarioController.save
   )
   .delete(
@@ -282,7 +299,6 @@ router
   .get("/ms_objetos/getone/:id_objeto", ObjetoController.getOne)
   .put("/ms_objetos/actualizar-insertar/:id_objeto", ObjetoController.save)
   .delete("/ms_objetos/eliminar/:id_objeto", ObjetoController.delete)
-
   
   //⮊⮊⮊⮊ CONTABILIDAD ⮈⮈⮈⮈ 🖐
   //SUBCUENTA
@@ -396,6 +412,5 @@ router
   )
 
   .use(CategoriaController.error404);
-
 
 module.exports = router;
