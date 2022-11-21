@@ -56,30 +56,33 @@ PreguntasUsuarioController.getOne = (req, res, next) => {
 
 PreguntasUsuarioController.save = (req, res, next) => {
 	let pregunta_usuario = {
-         id_preguntas_usuario : req.body.id_preguntas_usuario,
-         id_usuario : req.body.id_usuario,
-		 id_pregunta : req.body.id_pregunta,
+        //  id_preguntas_usuario : req.body.id_preguntas_usuario,
+         id_usuario : Number(req.body.id_usuario),
+		 id_pregunta : Number(req.body.id_pregunta),
 		 respuesta : req.body.respuesta
 
 	}
 
-	console.log(pregunta_usuario)
+	console.log("pregunta_usuario",pregunta_usuario)
 
-	PreguntasUsuarioModel.save(pregunta_usuario, (err) => {
+	PreguntasUsuarioModel.save(pregunta_usuario, (err,rows) => {
 		if(err)
 		{
-			let locals = {
-				title : `Error al salvar el registro con el id: ${pregunta_usuario.id_preguntas_usuario}`,
-				description : "Error de Sintaxis SQL",
-				error : err
-			}
-
-			res.render('error', locals)
+			res.status(400).json({
+				status: false,
+				code: 400,
+				message: "Ha ocurrido un error al crear preguntas",
+				object:[],
+			  });
 		}
 		else
 		{
-			res.send('Success')
-			//res.redirect('/')
+			res.status(200).json({
+				status: true,
+				code: 200,
+				message: "Información encontrada exitosamente",
+				object: rows.rows[0],
+			  });
 		}
 	})
 }

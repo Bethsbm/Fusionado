@@ -5,8 +5,10 @@ var express = require('express'),
 	bodyParser = require('body-parser'),
 	morgan = require('morgan'),
 	restFul = require('express-method-override')('_method'),
-	routes = require('./routes/router'),
-    	cors = require('cors'),
+	routes = require('./routes'),
+	middlewareParamsSettings = require('./middlewares/paramsSettings'),
+	// middlewareFunction = require('./middlewares/autentication'),
+    cors = require('cors'),
 	faviconURL = `${__dirname}/public/img/node-favicon.png`,
 	publicDir = express.static(`${__dirname}/public`),
 	viewDir = `${__dirname}/views`,
@@ -25,7 +27,8 @@ app
 	.use( bodyParser.urlencoded({extended: false}) )
 	.use(restFul)
 	.use( morgan('dev') )
-	.use(publicDir)
+	// .use(middlewareFunction)
+	.use(middlewareParamsSettings)
 	.use(routes)
 	
 	
