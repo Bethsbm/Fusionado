@@ -161,8 +161,6 @@ function Rutas() {
         <Route path="/unlockuser" element={<UnlockUser />} />
       </Routes>
 
-
-
       <Routes>
         {/*<Route path="/" element={<Home />} />*/}
         <Route path="/admin" element={<Layout />} > 
@@ -176,101 +174,80 @@ function Rutas() {
         <Route path="permits" element={<Permits />} />
         <Route path="logs" element={<Logs />} />
         <Route path="questions" element={<Pregunta />} />
-        </Route>
-       
 
         {/*Rutas Administración POS*/}
-        <Route path="/punto-de-ventas" element={<PuntoDeVentas />} />
+        <Route path="punto-de-ventas" element={<PuntoDeVentas />} />
 
-        <Route path="/mostrarsucursales" element={<MostrarSucursales />} />
-        <Route path="/crearsucursal" element={<CrearSucursal />} />
-        <Route path="/editarsucursal" element={<EditarSucursal />} />
+        <Route path="mostrarsucursales" element={<MostrarSucursales />} />
+        <Route path="crearsucursal" element={<CrearSucursal />} />
+        <Route path="editarsucursal" element={<EditarSucursal />} />
 
-        <Route path="/mostrarsocios" element={<MostrarSociosNegocio />} />
-        <Route path="/crearsocio" element={<CrearSocioNegocio />} />
-        <Route path="/editarsocio" element={<EditarSocioNegocio />} />
+        <Route path="mostrarsocios" element={<MostrarSociosNegocio />} />
+        <Route path="crearsocio" element={<CrearSocioNegocio />} />
+        <Route path="editarsocio" element={<EditarSocioNegocio />} />
 
-        <Route path="/mostrarcategorias" element={<MostrarCategorias />} />
-        <Route path="/crearcategoria" element={<CrearCategoria />} />
-        <Route path="/editarcategoria" element={<EditarCategoria />} />
+        <Route path="mostrarcategorias" element={<MostrarCategorias />} />
+        <Route path="crearcategoria" element={<CrearCategoria />} />
+        <Route path="editarcategoria" element={<EditarCategoria />} />
 
-        <Route path="/mostrardescuentos" element={<MostrarDescuentos />} />
-        <Route path="/creardescuento" element={<CrearDescuento />} />
-        <Route path="/editardescuento" element={<EditarDescuento />} />
+        <Route path="mostrardescuentos" element={<MostrarDescuentos />} />
+        <Route path="creardescuento" element={<CrearDescuento />} />
+        <Route path="editardescuento" element={<EditarDescuento />} />
 
-        <Route path="/mostrarimpuestos" element={<MostrarImpuestos />} />
-        <Route path="/crearimpuesto" element={<CrearImpuestos />} />
-        <Route path="/editarimpuesto" element={<EditarImpuestos />} />
+        <Route path="mostrarimpuestos" element={<MostrarImpuestos />} />
+        <Route path="crearimpuesto" element={<CrearImpuestos />} />
+        <Route path="editarimpuesto" element={<EditarImpuestos />} />
 
-        <Route
-          path="/mostrarmetodospago"
-          element={<MostrarMetodosPagos />}
-        />
-        <Route path="/crearmetodopago" element={<CrearMetodoPago />} />
-        <Route path="/editarmetodopago" element={<EditarMetodoPago />} />
+        <Route path="mostrarmetodospago" element={<MostrarMetodosPagos />} />
+        <Route path="crearmetodopago" element={<CrearMetodoPago />} />
+        <Route path="editarmetodopago" element={<EditarMetodoPago />} />
 
-        <Route path="/mostrarmodopedido" element={<MostrarModoPedido />} />
-        <Route path="/crearmodopedido" element={<CrearModoPedido />} />
-        <Route path="/editarmodopedido" element={<EditarModoPedido />} />
-        <Route path="/creartalonarioSAR" element={<CrearTalonarioSAR />} />
-        <Route path="/editarTaSAR" element={<EditarTalonarioSAR />} />
-        <Route
-          path="/mostrartalonarioSAR"
-          element={<MostrarTalonarioSAR />}
-        />
-        <Route path="/crearPOS" element={<CrearPOS />} />
+        <Route path="mostrarmodopedido" element={<MostrarModoPedido />} />
+        <Route path="crearmodopedido" element={<CrearModoPedido />} />
+        <Route path="editarmodopedido" element={<EditarModoPedido />} />
+        <Route path="creartalonarioSAR" element={<CrearTalonarioSAR />} />
+        <Route path="editarTaSAR" element={<EditarTalonarioSAR />} />
+        <Route path="mostrartalonarioSAR" element={<MostrarTalonarioSAR />}/>
+        <Route path="crearPOS" element={<CrearPOS />} />
+        <Route path="mostrarPOS" element={<MostrarPOS />} />
+        <Route path="editarPOS" element={<EditarPOS />} />
 
-        <Route path="/mostrarPOS" element={<MostrarPOS />} />
-        <Route path="/editarPOS" element={<EditarPOS />} />
-        <Route path="/crearMesas" element={<CrearMesas />} />
+        <Route path="crearMesas" element={<CrearMesas />} />
+        <Route path="mostrarMesas" element={<MostrarMesas />} />
+        <Route path="editarMesas" element={<EditarMesas />} />
 
-        <Route path="/mostrarMesas" element={<MostrarMesas />} />
-        <Route path="/editarMesas" element={<EditarMesas />} />
+        <Route path="productos" element={<Productos />} />
 
-        <Route path="/productos" element={<Productos />} />
         {/*Rutas inventario*/}
-        <Route
-          path="/mostrarcentrocosto"
-          element={<MostrarCentroCosto />}
-        />
-        <Route path="/crearcentrocosto" element={<CrearCentroCosto />} />
-        <Route path="/editarcentrocosto" element={<EditarCentroCosto />} />
+        <Route path="mostrarcentrocosto" element={<MostrarCentroCosto />} />
+        <Route path="crearcentrocosto" element={<CrearCentroCosto />} />
+        <Route path="editarcentrocosto" element={<EditarCentroCosto />} />
 
-        <Route path="/mostrararticulos" element={<MostrarArticulos />} />
-        <Route path="/creararticulo" element={<CrearArticulo />} />
-        <Route path="/editararticulo" element={<EditarArticulo />} />
-        <Route path="/mostrarmateriales" element={<MostrarMateriales />} />
-        <Route path="/crearmaterial" element={<CrearMaterial />} />
-        <Route path="/editarmaterial" element={<EditarMaterial />} />
+        <Route path="mostrararticulos" element={<MostrarArticulos />} />
+        <Route path="creararticulo" element={<CrearArticulo />} />
+        <Route path="editararticulo" element={<EditarArticulo />} />
 
-        <Route
-          path="/mostrarunidadesmedida"
-          element={<MostrarUnidadesMedida />}
-        />
-        <Route path="/crearunidadmedida" element={<CrearUnidadMedida />} />
-        <Route
-          path="/editarunidadmedida"
-          element={<EditarUnidadMedida />}
-        />
+        <Route path="mostrarmateriales" element={<MostrarMateriales />} />
+        <Route path="crearmaterial" element={<CrearMaterial />} />
+        <Route path="editarmaterial" element={<EditarMaterial />} />
 
-        <Route path="/mostraringresomds" element={<MostrarIngresoMds />} />
-        <Route path="/crearingresomds" element={<CrearIngresoMds />} />
-        <Route path="/editaringresomds" element={<EditarIngresoMds />} />
+        <Route path="mostrarunidadesmedida" element={<MostrarUnidadesMedida />}/>
+        <Route path="crearunidadmedida" element={<CrearUnidadMedida />} />
+        <Route path="editarunidadmedida" element={<EditarUnidadMedida />} />
 
-        <Route path="/mostrarsalidamds" element={<MostrarSalidaMds />} />
-        <Route path="/crearsalidamds" element={<CrearSalidaMds />} />
-        <Route path="/editarsalidamds" element={<EditarSalidaMds />} />
+        <Route path="mostraringresomds" element={<MostrarIngresoMds />} />
+        <Route path="crearingresomds" element={<CrearIngresoMds />} />
+        <Route path="editaringresomds" element={<EditarIngresoMds />} />
+
+        <Route path="mostrarsalidamds" element={<MostrarSalidaMds />} />
+        <Route path="crearsalidamds" element={<CrearSalidaMds />} />
+        <Route path="editarsalidamds" element={<EditarSalidaMds />} />
+
         {/*Rutas contabilidad*/}
         {/*-----------------------------------RUTAS CONTABILIDAD-----------------------------------------------*/}
         <Route path="crearcategoriacont" element={<CrearCategoriaCont />} />
-        <Route
-          path="mostrarcategoriacont"
-          element={<MostrarCategoriasCont />}
-        />
-        <Route
-          path="editarcategoriacont"
-          element={<EditarCategoriaCont />}
-        />
+        <Route path="mostrarcategoriacont" element={<MostrarCategoriasCont />}/>
+        <Route path="editarcategoriacont" element={<EditarCategoriaCont />} />
 
         <Route path="crearcatalogo" element={<CrearCuenta />} />
         <Route path="mostrarcatalogo" element={<MostrarCuentas />} />
@@ -296,67 +273,67 @@ function Rutas() {
         <Route path="mostrarlibromayor" element={<MostrarLibroMayor />} />
 
         {/*SUBCUENTA*/}
-        <Route path="/mostrarsubcuenta" element={<MostrarSubCuentas />} />
-        <Route path="/editarsubcuenta" element={<EditarSubCuenta />} />
-        <Route path="/crearsubcuenta" element={<CrearSubCuenta />} />
+        <Route path="mostrarsubcuenta" element={<MostrarSubCuentas />} />
+        <Route path="editarsubcuenta" element={<EditarSubCuenta />} />
+        <Route path="crearsubcuenta" element={<CrearSubCuenta />} />
 
         {/*ESTADO*/}
-        <Route path="/mostrarestado" element={<MostrarEstado />} />
-        <Route path="/editarestado" element={<EditarEstado />} />
-        <Route path="/crearestado" element={<CrearEstado />} />
+        <Route path="mostrarestado" element={<MostrarEstado />} />
+        <Route path="editarestado" element={<EditarEstado />} />
+        <Route path="crearestado" element={<CrearEstado />} />
 
         {/*DETALLE LIBRO DIARIO*/}
         <Route
-          path="/mostrarlibrodetalle"
+          path="mostrarlibrodetalle"
           element={<MostrarLibroDetalle />}
         />
-        <Route path="/" element={<EditarLibroDetalle />} />
-        <Route path="/" element={<CrearLibroDetalle />} />
+        <Route path="" element={<EditarLibroDetalle />} />
+        <Route path="" element={<CrearLibroDetalle />} />
 
         {/*ENCABEZADO LIBRO DIARIO*/}
         <Route
-          path="/mostrarlibroencabezado"
+          path="mostrarlibroencabezado"
           element={<MostrarLibroEncabezado />}
         />
-        <Route path="/" element={<EditarLibroEncabezado />} />
-        <Route path="/" element={<CrearLibroEncabezado />} />
+        <Route path="" element={<EditarLibroEncabezado />} />
+        <Route path="" element={<CrearLibroEncabezado />} />
 
         {/*PERIODO CONTABLE*/}
         <Route
-          path="/mostrarperiodo"
+          path="mostrarperiodo"
           element={<MostrarPeriodoContable />}
         />
-        <Route path="/editarperiodo" element={<EditarPeriodoContable />} />
-        <Route path="/crearperiodo" element={<CrearPeriodoContable />} />
+        <Route path="editarperiodo" element={<EditarPeriodoContable />} />
+        <Route path="crearperiodo" element={<CrearPeriodoContable />} />
 
         {/*Rutas seguridad*/}
-        <Route path="/login" element={<Login />} />
-        <Route path="/registro" element={<Registro />} />
-        {/*<Route path="/usuarios" element={<Usuarios />} />*/}
-        <Route path="/Preguntas" element={<Pregunta />} />
-        <Route path="/cambio_contrasena" element={<CambioContra />} />
+        <Route path="login" element={<Login />} />
+        <Route path="registro" element={<Registro />} />
+        {/*<Route path="usuarios" element={<Usuarios />} />*/}
+        <Route path="Preguntas" element={<Pregunta />} />
+        <Route path="cambio_contrasena" element={<CambioContra />} />
         <Route
-          path="/recuperacion_contrasena"
+          path="recuperacion_contrasena"
           element={<RecuperacionContra />}
         />
         <Route
-          path="/recuperacion_correo"
+          path="recuperacion_correo"
           element={<RecuperacionCorreo />}
         />
         <Route
-          path="/recuperacion_preguntas"
+          path="recuperacion_preguntas"
           element={<RecuperacionPreguntas />}
         />
-        <Route path="/usuarios" element={<MostrarUsuarios />} />
+        <Route path="usuarios" element={<MostrarUsuarios />} />
 
         {/*Rutas reportes*/}
         {/*reportes POS*/}
         <Route
-          path="/reporte-venta-resumen"
+          path="reporte-venta-resumen"
           element={<ReporteVentaResumen />}
         />
-
-        <Route path="*" element={<h1>404</h1>} />
+        <Route path="*" element={<Login />} />
+        </Route>
       </Routes>
     </BrowserRouter>
   );

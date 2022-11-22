@@ -87,25 +87,25 @@ function Sidebar() {
             data-bs-parent="#sidebar-nav"
           >
             <li>
-              <Link to="/punto-de-ventas">
+              <Link to="/admin/punto-de-ventas">
                 <i className="bi bi-circle"></i>
                 <span>Punto de venta</span>
               </Link>
             </li>
             <li>
-              <Link to="/">
+              <Link to="/admin/">
                 <i className="bi bi-circle"></i>
                 <span>Opción 2</span>
               </Link>
             </li>
             <li>
-              <Link to="/">
+              <Link to="/admin/">
                 <i className="bi bi-circle"></i>
                 <span>Opción 3</span>
               </Link>
             </li>
             <li>
-              <Link to="/">
+              <Link to="/admin/">
                 <i className="bi bi-circle"></i>
                 <span>Opción 4</span>
               </Link>
@@ -130,55 +130,55 @@ function Sidebar() {
             data-bs-parent="#sidebar-nav"
           >
             <li>
-              <Link to="/mostrarcategorias">
+              <Link to="/admin/mostrarcategorias">
                 <i className="bi bi-circle"></i>
                 <span>Categorías</span>
               </Link>
             </li>
             <li>
-              <Link to="/mostrarsucursales">
+              <Link to="/admin/mostrarsucursales">
                 <i className="bi bi-circle"></i>
                 <span>Sucursales</span>
               </Link>
             </li>
             <li>
-              <Link to="/mostrarsocios">
+              <Link to="/admin/mostrarsocios">
                 <i className="bi bi-circle"></i>
                 <span>Socios de Negocio</span>
               </Link>
             </li>
             <li>
-              <Link to="/mostrarimpuestos">
+              <Link to="/admin/mostrarimpuestos">
                 <i className="bi bi-circle"></i>
                 <span>Impuestos</span>
               </Link>
             </li>
             <li>
-              <Link to="/mostrardescuentos">
+              <Link to="/admin/mostrardescuentos">
                 <i className="bi bi-circle"></i>
                 <span>Descuentos</span>
               </Link>
             </li>
             <li>
-              <Link to="/mostrarmetodospago">
+              <Link to="/admin/mostrarmetodospago">
                 <i className="bi bi-circle"></i>
                 <span>Métodos de Pago</span>
               </Link>
             </li>
             <li>
-              <Link to="/mostrarmodopedido">
+              <Link to="/admin/mostrarmodopedido">
                 <i className="bi bi-circle"></i>
                 <span>Modo Pedido</span>
               </Link>
             </li>
             <li>
-              <Link to="/mostrartalonarioSAR">
+              <Link to="/admin/mostrartalonarioSAR">
                 <i className="bi bi-circle"></i>
                 <span>Correlativo</span>
               </Link>
             </li>
             <li>
-              <Link to="/mostrarPOS">
+              <Link to="/admin/mostrarPOS">
                 <i className="bi bi-circle"></i>
                 <span>POS</span>
               </Link>
@@ -203,39 +203,39 @@ function Sidebar() {
             data-bs-parent="#sidebar-nav"
           >
             <li>
-              <Link to="/mostrararticulos">
+              <Link to="/admin/mostrararticulos">
                 <i className="bi bi-circle"></i>
                 <span>Artículos</span>
               </Link>
             </li>
 
             <li>
-              <Link to="/MostrarCentroCosto">
+              <Link to="/admin/MostrarCentroCosto">
                 <i className="bi bi-circle"></i>
                 <span>Bodega</span>
               </Link>
             </li>
 
             <li>
-              <Link to="/mostrarmateriales">
+              <Link to="/admin/mostrarmateriales">
                 <i className="bi bi-circle"></i>
                 <span>Materiales</span>
               </Link>
             </li>
             <li>
-              <Link to="/mostrarunidadesmedida">
+              <Link to="/admin/mostrarunidadesmedida">
                 <i className="bi bi-circle"></i>
                 <span>Unidades de Medida</span>
               </Link>
             </li>
             <li>
-              <Link to="/mostraringresomds">
+              <Link to="/admin/mostraringresomds">
                 <i className="bi bi-circle"></i>
                 <span>Ingreso de Mercadería</span>
               </Link>
             </li>
             <li>
-              <Link to="/mostrarsalidamds">
+              <Link to="/admin/mostrarsalidamds">
                 <i className="bi bi-circle"></i>
                 <span>Salida de Mercadería</span>
               </Link>
@@ -260,61 +260,61 @@ function Sidebar() {
             data-bs-parent="#sidebar-nav"
           >
             <li>
-              <Link to="/mostrarcatalogo">
+              <Link to="/admin/mostrarcatalogo">
                 <i className="bi bi-circle"></i>
                 <span>Catalogo de cuentas</span>
               </Link>
             </li>
             <li>
-              <Link to="/mostrarcategoriacont">
+              <Link to="/admin/mostrarcategoriacont">
                 <i className="bi bi-circle"></i>
                 <span>Categoria contable</span>
               </Link>
             </li>
             <li>
-              <Link to="/mostrardestino">
+              <Link to="/admin/mostrardestino">
                 <i className="bi bi-circle"></i>
                 <span>Destino de cuenta</span>
               </Link>
             </li>
             <li>
-              <Link to="/mostrarinformefinanciero">
+              <Link to="/admin/mostrarinformefinanciero">
                 <i className="bi bi-circle"></i>
                 <span>Informe Financiero</span>
               </Link>
             </li>
             <li>
-              <Link to="/mostrarlibromayor">
+              <Link to="/admin/mostrarlibromayor">
                 <i className="bi bi-circle"></i>
                 <span>Libro Mayor</span>
               </Link>
             </li>
             <li>
-              <Link to="/mostrarsubcuenta">
+              <Link to="/admin/mostrarsubcuenta">
                 <i className="bi bi-circle"></i>
                 <span>SubCuentas</span>
               </Link>
             </li>
             <li>
-              <Link to="/mostrarestado">
+              <Link to="/admin/mostrarestado">
                 <i className="bi bi-circle"></i>
                 <span>Estado Libro Diario</span>
               </Link>
             </li>
             <li>
-              <Link to="/mostrarlibrodetalle">
+              <Link to="/admin/mostrarlibrodetalle">
                 <i className="bi bi-circle"></i>
                 <span>Libro Diario Detalle</span>
               </Link>
             </li>
             <li>
-              <Link to="/mostrarlibroencabezado">
+              <Link to="/admin/mostrarlibroencabezado">
                 <i className="bi bi-circle"></i>
                 <span>Libro Diario Encabezado</span>
               </Link>
             </li>
             <li>
-              <Link to="/mostrarperiodo">
+              <Link to="/admin/mostrarperiodo">
                 <i className="bi bi-circle"></i>
                 <span>Periodo Contable</span>
               </Link>
@@ -339,43 +339,43 @@ function Sidebar() {
             data-bs-parent="#sidebar-nav"
           >
             <li>
-              <Link to="/reporte-venta-resumen">
+              <Link to="/admin/reporte-venta-resumen">
                 <i className="bi bi-circle"></i>
                 <span>Resumen de Ventas</span>
               </Link>
             </li>
             <li>
-              <Link to="/">
+              <Link to="/admin/">
                 <i className="bi bi-circle"></i>
                 <span>Reporte 2</span>
               </Link>
             </li>
             <li>
-              <Link to="/">
+              <Link to="/admin/">
                 <i className="bi bi-circle"></i>
                 <span>Reporte 3</span>
               </Link>
             </li>
             <li>
-              <Link to="/">
+              <Link to="/admin/">
                 <i className="bi bi-circle"></i>
                 <span>Reporte 4</span>
               </Link>
             </li>
             <li>
-              <Link to="/">
+              <Link to="/admin/">
                 <i className="bi bi-circle"></i>
                 <span>Reporte 5</span>
               </Link>
             </li>
             <li>
-              <Link to="/">
+              <Link to="/admin/">
                 <i className="bi bi-circle"></i>
                 <span>Reporte 6</span>
               </Link>
             </li>
             <li>
-              <Link to="/">
+              <Link to="/admin/">
                 <i className="bi bi-circle"></i>
                 <span>Reporte 7</span>
               </Link>
